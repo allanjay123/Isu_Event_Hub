@@ -16,13 +16,17 @@
         td { padding: 12px; border: 1px solid #ddd; font-size: 14px; color: #333; }
         input, select { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; }
         .btn-submit { background-color: #2d5a27; color: white; padding: 12px; width: 100%; border: none; border-radius: 5px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        
+        /* New styles for the Registration Log */
+        .log-section { margin-top: 40px; border-top: 2px solid #eee; pt: 20px; }
+        .btn-delete { background-color: #d9534f; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="header">ISU Event Registration</div>
     <div class="container">
         <div class="top-bar">
-            <button class="btn-add">+ Register Student</button>
+            <button class="btn-add" onclick="clearForm()">+ New Registration</button>
             <a href="index.html" class="btn-back">← Back to Dashboard</a>
         </div>
         <table>
@@ -35,16 +39,16 @@
             <tbody>
                 <tr>
                     <td><b>Student Name</b></td>
-                    <td><input type="text" placeholder="Enter Full Name"></td>
+                    <td><input type="text" id="studentName" placeholder="Enter Full Name"></td>
                 </tr>
                 <tr>
                     <td><b>Student ID</b></td>
-                    <td><input type="text" placeholder="Enter ID (e.g. 21-0001)"></td>
+                    <td><input type="text" id="studentID" placeholder="Enter ID (e.g. 21-0001)"></td>
                 </tr>
                 <tr>
                     <td><b>Chosen Event</b></td>
                     <td>
-                        <select>
+                        <select id="chosenEvent">
                             <option>Intramurals 2026</option>
                             <option>Foundation Day</option>
                             <option>ICT Seminar</option>
@@ -53,7 +57,82 @@
                 </tr>
             </tbody>
         </table>
-        <button class="btn-submit" onclick="alert('Student Registered!')">SUBMIT REGISTRATION</button>
+        <button class="btn-submit" onclick="submitRegistration()">SUBMIT REGISTRATION</button>
+
+        <div class="log-section">
+            <h3>Registered Students</h3>
+            <table id="logTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Student ID</th>
+                        <th>Event</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="logBody">
+                    </tbody>
+            </table>
+        </div>
     </div>
+
+    <script>
+        // 1. Kuhanin ang data mula sa localStorage o gumawa ng empty array
+        let registrations = JSON.parse(localStorage.getItem('isuRegistrations')) || [];
+
+        // 2. Function para i-save ang bagong registration
+        function submitRegistration() {
+            const name = document.getElementById('studentName').value;
+            const id = document.getElementById('studentID').value;
+            const event = document.getElementById('chosenEvent').value;
+
+            if (name && id) {
+                const newEntry = { name, id, event };
+                registrations.push(newEntry);
+                
+                // I-save sa localStorage
+                localStorage.setItem('isuRegistrations', JSON.stringify(registrations));
+                
+                alert('Student Registered Successfully!');
+                clearForm();
+                displayRegistrations();
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+
+        // 3. Function para i-display ang listahan
+        function displayRegistrations() {
+            const logBody = document.getElementById('logBody');
+            logBody.innerHTML = registrations.map((reg, index) => `
+                <tr>
+                    <td>${reg.name}</td>
+                    <td>${reg.id}</td>
+                    <td>${reg.event}</td>
+                    <td>
+                        <button class="btn-delete" onclick="deleteRegistration(${index})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 4. Function para mag-delete
+        function deleteRegistration(index) {
+            if (confirm("Delete this registration?")) {
+                registrations.splice(index, 1);
+                localStorage.setItem('isuRegistrations', JSON.stringify(registrations));
+                displayRegistrations();
+            }
+        }
+
+        // 5. Function para linisin ang form
+        function clearForm() {
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentID').value = '';
+        }
+
+        // Patakbuhin sa simula
+        displayRegistrations();
+    </script>
 </body>
 </html>
