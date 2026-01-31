@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Calendar | ISU Event Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    
+    <style>
+        :root {
+            --isu-green: #2d5a27;
+            --isu-gold: #facc15;
+            --bg-gray: #f0f2f5;
+        }
+
+        body { 
+            background-color: var(--bg-gray); 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        /* Dark Green Header gaya ng sa Registration */
+        .header { 
+            background-color: var(--isu-green); 
+            color: white; 
+            padding: 25px; 
+            text-align: center; 
+            font-size: 24px; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Main White Box */
+        .container { 
+            max-width: 1000px; 
+            margin: 30px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        }
+
+        .top-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid var(--bg-gray);
+            padding-bottom: 15px;
+        }
+
+        .btn-add { 
+            background-color: var(--isu-green); 
+            color: white; 
+            padding: 10px 15px; 
+            border-radius: 5px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 14px; 
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-back { 
+            color: var(--isu-green); 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 14px; 
+        }
+
+        /* Calendar Styling */
+        #calendar {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+
+        /* Customizing FullCalendar to match ISU Theme */
+        .fc-header-toolbar {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .fc-col-header-cell {
+            background-color: var(--isu-gold) !important;
+            color: var(--isu-green) !important;
+            padding: 10px 0 !important;
+        }
+
+        .fc-button-primary {
+            background-color: var(--isu-green) !important;
+            border-color: var(--isu-green) !important;
+        }
+
+        .fc-daygrid-event {
+            background-color: var(--isu-green) !important;
+            border: none !important;
+            color: white !important;
+            padding: 2px 5px;
+        }
+
+        .footer-info {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">ISU University Event Calendar</div>
+
+    <div class="container">
+        <div class="top-bar">
+            <button class="btn-add"><i class="fas fa-plus"></i> Add Event</button>
+            <a href="index.html" class="btn-back">← Back to Dashboard</a>
+        </div>
+
+        <div id="calendar"></div>
+
+        <div class="footer-info">
+            <p><b>Note:</b> Click on any date to see specific activity details for the Isabela State University - Cabagan Campus.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek'
+                },
+                events: [
+                    {
+                        title: 'Intramurals 2026',
+                        start: '2026-02-10',
+                        end: '2026-02-14',
+                        description: 'Annual Sports Event'
+                    },
+                    {
+                        title: 'Foundation Day',
+                        start: '2026-02-14',
+                        color: '#facc15',
+                        textColor: '#2d5a27'
+                    },
+                    {
+                        title: 'ICT Seminar',
+                        start: '2026-02-20'
+                    }
+                ],
+                eventClick: function(info) {
+                    alert('Event: ' + info.event.title);
+                }
+            });
+            calendar.render();
+        });
+    </script>
+
+</body>
+</html>
