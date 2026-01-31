@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found | ISU Event Hub</title>
+    <style>
+        /* ISU Theme Colors */
+        :root {
+            --isu-green: #2d5a27;
+            --isu-gold: #facc15;
+            --bg-gray: #f0f2f5;
+        }
+
+        body { 
+            background-color: var(--bg-gray); 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        /* Dark Green Header gaya ng sa Candidate List */
+        .header { 
+            background-color: var(--isu-green); 
+            color: white; 
+            padding: 25px; 
+            text-align: center; 
+            font-size: 24px; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* White Container Box */
+        .container { 
+            max-width: 1000px; 
+            margin: 30px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        }
+
+        /* Control Bar */
+        .top-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+
+        .btn-add { 
+            background-color: var(--isu-green); 
+            color: white; 
+            padding: 10px 15px; 
+            border-radius: 5px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 14px; 
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-back { 
+            color: var(--isu-green); 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 14px; 
+        }
+
+        /* Table Styling */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 10px; 
+        }
+
+        /* Gold Header Row */
+        th { 
+            background-color: var(--isu-gold); 
+            color: var(--isu-green); 
+            text-align: left; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            text-transform: uppercase; 
+            font-size: 13px; 
+        }
+
+        td { 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            font-size: 14px; 
+            color: #333; 
+        }
+
+        /* Action Buttons */
+        .btn-claim { 
+            background-color: #2d5a27; 
+            color: white; 
+            border: none; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-remove { 
+            background-color: #d9534f; 
+            color: white; 
+            border: none; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .footer-link {
+            display: block;
+            margin-top: 25px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">ISU Lost & Found Records</div>
+
+    <div class="container">
+        <div class="top-bar">
+            <button class="btn-add" onclick="alert('Opening Report Form...')">+ Add New Item</button>
+            <a href="index.html" class="btn-back">← Back to Dashboard</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Item Description</th>
+                    <th>Location Found</th>
+                    <th>Date Reported</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td><b>Blue Leather Wallet</b> (May lamang ID)</td>
+                    <td>Student Canteen</td>
+                    <td>Jan 31, 2026</td>
+                    <td>
+                        <button class="btn-claim" onclick="alert('Claiming process initiated.')">Claim</button>
+                        <button class="btn-remove" onclick="confirm('Are you sure?')">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td><b>Silver Lanyard</b> (CCSICT Logo)</td>
+                    <td>Library Hallway</td>
+                    <td>Jan 30, 2026</td>
+                    <td>
+                        <button class="btn-claim" onclick="alert('Claiming process initiated.')">Claim</button>
+                        <button class="btn-remove" onclick="confirm('Are you sure?')">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td><b>Casio Calculator</b> (Black)</td>
+                    <td>Room 204 - Admin Bldg</td>
+                    <td>Jan 28, 2026</td>
+                    <td>
+                        <button class="btn-claim" onclick="alert('Claiming process initiated.')">Claim</button>
+                        <button class="btn-remove" onclick="confirm('Are you sure?')">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer-link">
+            <a href="index.html" style="color: #2d5a27; font-weight: bold; text-decoration: none;">← Back to Dashboard</a>
+        </div>
+    </div>
+
+</body>
+</html>
