@@ -21,7 +21,6 @@
             padding: 0; 
         }
 
-        /* Dark Green Header gaya ng sa Registration */
         .header { 
             background-color: var(--isu-green); 
             color: white; 
@@ -33,7 +32,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* Main White Box */
         .container { 
             max-width: 1000px; 
             margin: 30px auto; 
@@ -71,35 +69,16 @@
             font-size: 14px; 
         }
 
-        /* Calendar Styling */
-        #calendar {
-            margin-top: 20px;
-            max-width: 100%;
-        }
-
-        /* Customizing FullCalendar to match ISU Theme */
-        .fc-header-toolbar {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-        }
+        #calendar { margin-top: 20px; max-width: 100%; }
 
         .fc-col-header-cell {
             background-color: var(--isu-gold) !important;
             color: var(--isu-green) !important;
-            padding: 10px 0 !important;
         }
 
         .fc-button-primary {
             background-color: var(--isu-green) !important;
             border-color: var(--isu-green) !important;
-        }
-
-        .fc-daygrid-event {
-            background-color: var(--isu-green) !important;
-            border: none !important;
-            color: white !important;
-            padding: 2px 5px;
         }
 
         .footer-info {
@@ -117,20 +96,28 @@
 
     <div class="container">
         <div class="top-bar">
-            <button class="btn-add"><i class="fas fa-plus"></i> Add Event</button>
+            <button class="btn-add" id="addEventBtn"><i class="fas fa-plus"></i> Add Event</button>
             <a href="index.html" class="btn-back">← Back to Dashboard</a>
         </div>
 
         <div id="calendar"></div>
 
         <div class="footer-info">
-            <p><b>Note:</b> Click on any date to see specific activity details for the Isabela State University - Cabagan Campus.</p>
+            <p><b>Note:</b> Click on any event to delete it. Click "Add Event" to post new schedules.</p>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
+            
+            // 1. Kuhanin ang saved events o gamitin ang defaults
+            let savedEvents = JSON.parse(localStorage.getItem('isuEvents')) || [
+                { title: 'Intramurals 2026', start: '2026-02-10', end: '2026-02-15' },
+                { title: 'Foundation Day', start: '2026-02-14', color: '#facc15', textColor: '#2d5a27' },
+                { title: 'ICT Seminar', start: '2026-02-20' }
+            ];
+
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 headerToolbar: {
@@ -138,29 +125,45 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek'
                 },
-                events: [
-                    {
-                        title: 'Intramurals 2026',
-                        start: '2026-02-10',
-                        end: '2026-02-14',
-                        description: 'Annual Sports Event'
-                    },
-                    {
-                        title: 'Foundation Day',
-                        start: '2026-02-14',
-                        color: '#facc15',
-                        textColor: '#2d5a27'
-                    },
-                    {
-                        title: 'ICT Seminar',
-                        start: '2026-02-20'
-                    }
-                ],
+                events: savedEvents,
+                
+                // 2. Click event para mag-delete
                 eventClick: function(info) {
-                    alert('Event: ' + info.event.title);
+                    if (confirm("Delete event: " + info.event.title + "?")) {
+                        info.event.remove();
+                        updateLocalStorage();
+                    }
                 }
             });
+
             calendar.render();
+
+            // 3. Function para sa Add Event button
+            document.getElementById('addEventBtn').addEventListener('click', function() {
+                const title = prompt("Enter Event Title:");
+                const date = prompt("Enter Date (YYYY-MM-DD):", new Date().toISOString().split('T')[0]);
+
+                if (title && date) {
+                    calendar.addEvent({
+                        title: title,
+                        start: date,
+                        allDay: true
+                    });
+                    updateLocalStorage();
+                    alert("Event added!");
+                }
+            });
+
+            // 4. Helper function para i-sync ang Calendar sa LocalStorage
+            function updateLocalStorage() {
+                const allEvents = calendar.getEvents().map(e => ({
+                    title: e.title,
+                    start: e.startStr,
+                    end: e.endStr,
+                    color: e.backgroundColor
+                }));
+                localStorage.setItem('isuEvents', JSON.stringify(allEvents));
+            }
         });
     </script>
 
