@@ -44,10 +44,11 @@
 
         /* Emergency Contacts */
         .emergency-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-        .contact-card { background: #fff5f5; border: 1px solid #ffcccc; padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 12px; }
+        .contact-card { background: #fff5f5; border: 1px solid #ffcccc; padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 12px; position: relative; }
         .contact-card i { color: #d9534f; font-size: 20px; }
         .contact-card b { display: block; font-size: 14px; color: #333; }
         .contact-card a { color: #d9534f; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .edit-hotline { position: absolute; top: 5px; right: 8px; font-size: 10px; color: #999; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -71,7 +72,7 @@
         <div class="grid-main">
             <a href="calendar.html" class="box-link"><i class="fas fa-calendar-alt"></i><span>Calendar</span></a>
             <a href="registration.html" class="box-link"><i class="fas fa-user-edit"></i><span>Registration</span></a>
-            <a href="Leaderboard.html" class="box-link"><i class="fas fa-trophy"></i><span>Leaderboard</span></a>
+            <a href="leaderboard.html" class="box-link"><i class="fas fa-trophy"></i><span>leaderboard</span></a>
             <a href="voting.html" class="box-link"><i class="fas fa-vote-yea"></i><span>Voting</span></a>
             <a href="attendance.html" class="box-link"><i class="fas fa-id-card"></i><span>Attendance</span></a>
             <a href="lostfound.html" class="box-link"><i class="fas fa-box-open"></i><span>Lost & Found</span></a>
@@ -96,10 +97,26 @@
         <div class="section-box">
             <div class="section-title"><i class="fas fa-phone-alt"></i> Emergency & Hotline Directory</div>
             <div class="emergency-grid">
-                <div class="contact-card"><i class="fas fa-ambulance"></i><div><b>Campus Clinic</b><a href="tel:09123456789">0912-345-6789</a></div></div>
-                <div class="contact-card"><i class="fas fa-shield-alt"></i><div><b>Campus Security</b><a href="tel:09223334444">0922-333-4444</a></div></div>
-                <div class="contact-card"><i class="fas fa-fire-extinguisher"></i><div><b>BFP Cabagan</b><a href="tel:117">117 / (078) 123-4567</a></div></div>
-                <div class="contact-card"><i class="fas fa-user-secret"></i><div><b>PNP Cabagan</b><a href="tel:09887776655">0988-777-6655</a></div></div>
+                <div class="contact-card">
+                    <span class="edit-hotline" onclick="editHotline('clinic')">edit</span>
+                    <i class="fas fa-ambulance"></i>
+                    <div><b>Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                </div>
+                <div class="contact-card">
+                    <span class="edit-hotline" onclick="editHotline('security')">edit</span>
+                    <i class="fas fa-shield-alt"></i>
+                    <div><b>Campus Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
+                </div>
+                <div class="contact-card">
+                    <span class="edit-hotline" onclick="editHotline('bfp')">edit</span>
+                    <i class="fas fa-fire-extinguisher"></i>
+                    <div><b>BFP Cabagan</b><a id="num-bfp" href="tel:117">117 / (078) 123-4567</a></div>
+                </div>
+                <div class="contact-card">
+                    <span class="edit-hotline" onclick="editHotline('pnp')">edit</span>
+                    <i class="fas fa-user-secret"></i>
+                    <div><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
+                </div>
             </div>
         </div>
     </div>
@@ -110,11 +127,32 @@
             if(localStorage.getItem('adminLogo')) document.getElementById('logo-preview').src = localStorage.getItem('adminLogo');
             renderChart();
             loadShouts();
+            loadHotlines(); // Kinukuha ang mga numbers mula sa storage
         };
 
-        // --- CHART LOGIC (GUMAGANA NA BASE SA LEADERBOARD) ---
+        // --- EMERGENCY HOTLINE LOGIC ---
+        function editHotline(key) {
+            const newNum = prompt("Enter new phone number for " + key + ":");
+            if(newNum) {
+                localStorage.setItem('hotline-' + key, newNum);
+                loadHotlines();
+            }
+        }
+
+        function loadHotlines() {
+            const keys = ['clinic', 'security', 'bfp', 'pnp'];
+            keys.forEach(key => {
+                const stored = localStorage.getItem('hotline-' + key);
+                if(stored) {
+                    const el = document.getElementById('num-' + key);
+                    el.innerText = stored;
+                    el.href = "tel:" + stored;
+                }
+            });
+        }
+
+        // --- CHART LOGIC ---
         function renderChart() {
-            // Kinukuha ang data mula sa Leaderboard.html records
             const records = JSON.parse(localStorage.getItem('isuLeaderboard')) || [
                 { dept: 'CCSICT', score: 0 },
                 { dept: 'CTE', score: 0 },
@@ -143,7 +181,7 @@
             });
         }
 
-        // --- EMERGENCY & ADMIN LOGIC ---
+        // --- ADMIN & LOGO LOGIC ---
         function triggerUpload() { document.getElementById('image-input').click(); }
         function previewImage(input) {
             const reader = new FileReader();
@@ -174,5 +212,4 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
