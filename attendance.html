@@ -2,41 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Log | ISU Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root { --isu-green: #2d5a27; --isu-gold: #facc15; }
         body { background: #f0f2f5; font-family: Arial; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
-        input { width: 70%; padding: 10px; margin-bottom: 10px; }
-        button { padding: 10px; background: #2d5a27; color: white; border: none; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h3 { color: #333; text-transform: uppercase; margin-top: 0; }
+        .back-link { color: blue; text-decoration: none; font-size: 13px; display: block; margin-bottom: 15px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        .btn-in { background: var(--isu-green); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #f9f9f9; text-align: left; padding: 12px; border-bottom: 2px solid #ddd; font-size: 13px; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .btn-out { background: #d9534f; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h3>DIGITAL ATTENDANCE</h3>
-        <a href="index.html">← Back</a><br><br>
-        <input type="text" id="stuID" placeholder="Enter Student ID">
-        <button onclick="logIn()">TIME IN</button>
+        <h3>Digital Attendance</h3>
+        <a href="index.html" class="back-link">← Back</a>
+        <div class="input-group">
+            <input type="text" id="stuID" placeholder="Enter Student ID">
+            <button class="btn-in" onclick="recordAttendance()">TIME IN</button>
+        </div>
         <table id="logs">
-            <thead><tr><th>ID</th><th>Time</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
             <tbody id="logBody"></tbody>
         </table>
     </div>
+
     <script>
-        let logs = JSON.parse(localStorage.getItem('isuLogs')) || [];
-        function logIn() {
+        let attendanceData = JSON.parse(localStorage.getItem('isuAttendance')) || [];
+
+        function recordAttendance() {
             const id = document.getElementById('stuID').value;
-            if(!id) return;
-            logs.unshift({ id, time: new Date().toLocaleTimeString() });
-            localStorage.setItem('isuLogs', JSON.stringify(logs));
+            if(!id) return alert("Please enter Student ID");
+            
+            // Check kung naka-time in na at wala pang time out
+            const existing = attendanceData.find(log => log.id === id && log.timeOut === '---');
+            if(existing) return alert("Student is already timed in!");
+
+            attendanceData.unshift({
+                id: id,
+                timeIn: new Date().toLocaleTimeString(),
+                timeOut: '---'
+            });
+            saveAndRender();
             document.getElementById('stuID').value = '';
-            render();
         }
-        function render() {
-            document.getElementById('logBody').innerHTML = logs.map(l => `<tr><td>${l.id}</td><td>${l.time}</td></tr>`).join('');
+
+        function timeOut(index) {
+            attendanceData[index].timeOut = new Date().toLocaleTimeString();
+            saveAndRender();
         }
-        render();
+
+        function saveAndRender() {
+            localStorage.setItem('isuAttendance', JSON.stringify(attendanceData));
+            const body = document.getElementById('logBody');
+            body.innerHTML = attendanceData.map((log, index) => `
+                <tr>
+                    <td>${log.id}</td>
+                    <td>${log.timeIn}</td>
+                    <td>${log.timeOut}</td>
+                    <td>
+                        ${log.timeOut === '---' ? `<button class="btn-out" onclick="timeOut(${index})">Time Out</button>` : '<small>Completed</small>'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+        saveAndRender();
     </script>
 </body>
 </html>
