@@ -9,53 +9,37 @@
     <style>
         :root { --isu-green: #2d5a27; --isu-gold: #facc15; --bg-gray: #f0f2f5; }
         body { background-color: var(--bg-gray); font-family: Arial, sans-serif; margin: 0; padding: 0; }
-
         .header-section { background-color: var(--isu-green); color: white; padding: 30px 10px; text-align: center; }
-        .header-section h1 { margin: 0; font-size: 22px; text-transform: uppercase; }
-        .back-link { color: var(--isu-gold); text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; margin-top: 10px; }
-
         .container { max-width: 1100px; margin: 20px auto; padding: 10px; }
-
-        /* Results Chart Area */
-        .chart-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .chart-title { font-weight: bold; color: var(--isu-green); margin-bottom: 15px; text-align: center; font-size: 18px; }
-
-        .admin-controls { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
-        input[type="text"] { padding: 12px; border: 1px solid #ddd; border-radius: 8px; flex: 1; min-width: 200px; }
-        .btn-add-ui { background-color: var(--isu-green); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-
-        .candidate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; justify-items: center; }
-        .candidate-card { background: white; border-radius: 15px; width: 100%; max-width: 220px; text-align: center; overflow: hidden; box-shadow: 0 6px 12px rgba(0,0,0,0.08); transition: 0.3s; }
-        .image-box { width: 100%; height: 200px; background-color: #f8f9fa; }
+        .chart-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .admin-controls { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        input[type="text"] { padding: 10px; border: 1px solid #ddd; border-radius: 5px; flex: 1; }
+        .btn-add-ui { background-color: var(--isu-green); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .candidate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .candidate-card { background: white; border-radius: 12px; overflow: hidden; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .image-box { width: 100%; height: 200px; background: #eee; }
         .image-box img { width: 100%; height: 100%; object-fit: cover; }
-
         .info-box { padding: 15px; }
-        .info-box h3 { margin: 5px 0; font-size: 18px; color: var(--isu-green); }
-        .vote-count { font-size: 22px; font-weight: bold; color: #333; }
-
-        .btn-vote { background-color: var(--isu-gold); color: var(--isu-green); border: none; width: 85%; padding: 12px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
-        .btn-vote:disabled { background-color: #ccc; color: #666; cursor: not-allowed; }
-        .btn-delete { background: none; color: #d9534f; border: none; font-size: 11px; cursor: pointer; text-decoration: underline; margin-bottom: 10px; }
+        .btn-vote { background-color: var(--isu-gold); color: var(--isu-green); border: none; width: 85%; padding: 10px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-vote:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-delete { background: none; color: #d9534f; border: none; cursor: pointer; text-decoration: underline; margin-bottom: 10px; font-size: 11px; }
     </style>
 </head>
 <body>
 
     <div class="header-section">
-        <h1>Election Results & Voting</h1>
-        <a href="index.html" class="back-link">← Back to Dashboard</a>
+        <h1>Voting System</h1>
+        <a href="index.html" style="color:var(--isu-gold); text-decoration:none; font-size:12px;">← Back to Dashboard</a>
     </div>
 
     <div class="container">
-        <div class="chart-box" id="chartContainer">
-            <div class="chart-title"><i class="fas fa-chart-pie"></i> Real-Time Standing</div>
-            <canvas id="voteChart" height="100"></canvas>
-        </div>
+        <div class="chart-box"><canvas id="voteChart" height="80"></canvas></div>
 
         <div class="admin-controls">
             <input type="text" id="cand-name" placeholder="Candidate Name">
             <input type="file" id="cand-img" accept="image/*">
-            <button class="btn-add-ui" onclick="addNewCandidate()">+ Add Candidate</button>
-            <button onclick="resetMyVote()" style="font-size: 10px; background: none; border: 1px solid #ccc; cursor: pointer;">Reset My Vote (Admin)</button>
+            <button class="btn-add-ui" onclick="addNewCandidate()">+ Add</button>
+            <button onclick="localStorage.removeItem('hasVoted'); location.reload();" style="font-size:10px;">Reset My Vote</button>
         </div>
 
         <div class="candidate-grid" id="candidateGrid"></div>
@@ -68,100 +52,87 @@
         function renderCandidates() {
             const grid = document.getElementById('candidateGrid');
             const hasVoted = localStorage.getItem('hasVoted');
-
-            if (candidates.length === 0) {
-                grid.innerHTML = "<p>No candidates available.</p>";
-                updateChart();
-                return;
-            }
-
             grid.innerHTML = candidates.map((c, index) => `
                 <div class="candidate-card">
-                    <div class="image-box"><img src="${c.img}" alt="Candidate"></div>
+                    <div class="image-box"><img src="${c.img}"></div>
                     <div class="info-box">
                         <h3>${c.name}</h3>
-                        <div class="vote-count">${c.votes}</div>
-                        <p style="font-size:12px; color:#666; margin:0;">Total Votes</p>
+                        <p>Votes: <b>${c.votes}</b></p>
                     </div>
                     <button class="btn-vote" ${hasVoted ? 'disabled' : ''} onclick="vote(${index})">
-                        ${hasVoted ? 'Voted' : 'Vote Now'}
-                    </button>
-                    <br>
+                        ${hasVoted ? 'Voted' : 'Vote'}
+                    </button><br>
                     <button class="btn-delete" onclick="removeCandidate(${index})">Remove</button>
                 </div>
             `).join('');
-
-            localStorage.setItem('isuVotes', JSON.stringify(candidates));
+            
+            // Subukan i-save. Kapag nag-error (QuotaExceeded), mag-aalert ang browser.
+            try {
+                localStorage.setItem('isuVotes', JSON.stringify(candidates));
+            } catch (e) {
+                alert("Storage full! Try using a smaller image or delete some candidates.");
+            }
             updateChart();
         }
 
         function updateChart() {
             const ctx = document.getElementById('voteChart').getContext('2d');
-            const labels = candidates.map(c => c.name);
-            const data = candidates.map(c => c.votes);
-
-            if (voteChart) { voteChart.destroy(); }
-
+            if (voteChart) voteChart.destroy();
             voteChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Votes',
-                        data: data,
-                        backgroundColor: '#2d5a27',
-                        borderRadius: 5
-                    }]
+                    labels: candidates.map(c => c.name),
+                    datasets: [{ label: 'Votes', data: candidates.map(c => c.votes), backgroundColor: '#2d5a27' }]
                 },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } },
-                    plugins: { legend: { display: false } }
-                }
+                options: { indexAxis: 'y', plugins: { legend: { display: false } } }
             });
         }
 
         function addNewCandidate() {
-            const name = document.getElementById('cand-name');
-            const imgFile = document.getElementById('cand-img');
+            const nameInput = document.getElementById('cand-name');
+            const fileInput = document.getElementById('cand-img');
 
-            if (!name.value) return alert("Enter name!");
+            if (!nameInput.value) return alert("Enter name");
 
-            if (imgFile.files && imgFile.files[0]) {
+            if (fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    candidates.push({ name: name.value, votes: 0, img: e.target.result });
-                    renderCandidates();
-                    name.value = ""; imgFile.value = "";
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        // IMAGE COMPRESSION: Ginagawa nating 300px lang ang width para tipid sa space
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = 300; 
+                        canvas.height = 300;
+                        ctx.drawImage(img, 0, 0, 300, 300);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7); // 70% quality
+
+                        candidates.push({ name: nameInput.value, votes: 0, img: compressedBase64 });
+                        renderCandidates();
+                        nameInput.value = ""; fileInput.value = "";
+                    };
                 };
-                reader.readAsDataURL(imgFile.files[0]);
+                reader.readAsDataURL(fileInput.files[0]);
             } else {
-                candidates.push({ name: name.value, votes: 0, img: "https://via.placeholder.com/200" });
+                candidates.push({ name: nameInput.value, votes: 0, img: "https://via.placeholder.com/300" });
                 renderCandidates();
-                name.value = "";
+                nameInput.value = "";
             }
         }
 
         function vote(index) {
-            if (localStorage.getItem('hasVoted')) return alert("You already voted!");
+            if (localStorage.getItem('hasVoted')) return;
             candidates[index].votes++;
             localStorage.setItem('hasVoted', 'true');
             renderCandidates();
         }
 
         function removeCandidate(index) {
-            if(confirm("Delete candidate?")) {
+            if (confirm("Delete?")) {
                 candidates.splice(index, 1);
                 renderCandidates();
             }
-        }
-
-        // Para lang sa testing ng admin
-        function resetMyVote() {
-            localStorage.removeItem('hasVoted');
-            renderCandidates();
-            alert("Voting access restored for this browser.");
         }
 
         renderCandidates();
