@@ -12,10 +12,11 @@
         .header { background: var(--isu-green); color: white; padding: 25px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
         
-        /* Profile & Layout */
+        /* Profile Section */
         .profile-card { background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        #logo-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; }
+        #logo-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
         
+        /* Grid Menu */
         .grid-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .box-link { background: white; padding: 25px 15px; border-radius: 12px; text-decoration: none; text-align: center; border-bottom: 5px solid var(--isu-gold); transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .box-link i { font-size: 32px; color: var(--isu-green); margin-bottom: 10px; }
@@ -25,10 +26,11 @@
         .section-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .section-title { font-weight: bold; color: var(--isu-green); margin-bottom: 15px; border-bottom: 2px solid #f0f2f5; padding-bottom: 8px; display: flex; align-items: center; gap: 10px; }
 
-        /* Hotline */
+        /* Hotline Grid */
         .emergency-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
         .contact-card { background: #fff5f5; border: 1px solid #ffcccc; padding: 15px; border-radius: 8px; position: relative; display: flex; align-items: center; gap: 12px; }
-        .edit-hotline { position: absolute; top: 5px; right: 8px; font-size: 10px; color: #999; cursor: pointer; }
+        .contact-card i { color: #d9534f; font-size: 20px; }
+        .edit-hotline { position: absolute; top: 5px; right: 8px; font-size: 10px; color: #999; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -42,7 +44,7 @@
             <div class="profile-info">
                 <h2 id="admin-display-name">Admin Dashboard</h2>
                 <p>Isabela State University - Cabagan</p>
-                <span style="color:blue; cursor:pointer;" onclick="editAdminName()">Edit Name</span>
+                <span style="color:blue; cursor:pointer; font-size:13px;" onclick="editAdminName()">Edit Name</span>
             </div>
         </div>
 
@@ -63,26 +65,36 @@
 
             <div class="section-box">
                 <div class="section-title"><i class="fas fa-bullhorn"></i> Freedom Wall</div>
-                <div id="shoutbox" style="height:150px; overflow-y:auto; background:#f9f9f9; padding:10px; margin-bottom:10px;"></div>
+                <div id="shoutbox" style="height:150px; overflow-y:auto; background:#f9f9f9; padding:10px; margin-bottom:10px; border-radius:8px;"></div>
                 <div style="display:flex; gap:5px;">
-                    <input type="text" id="shoutMsg" style="flex:1; padding:8px;" placeholder="Say something...">
-                    <button onclick="postShout()" style="background:var(--isu-green); color:white; border:none; padding:8px;">Post</button>
+                    <input type="text" id="shoutMsg" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:4px;" placeholder="Cheer for your team!">
+                    <button onclick="postShout()" style="background:var(--isu-green); color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Post</button>
                 </div>
             </div>
         </div>
 
         <div class="section-box">
-            <div class="section-title"><i class="fas fa-phone-alt"></i> Emergency & Hotline</div>
+            <div class="section-title"><i class="fas fa-phone-alt"></i> Emergency & Hotline Directory</div>
             <div class="emergency-grid">
                 <div class="contact-card">
                     <span class="edit-hotline" onclick="editHotline('clinic')">edit</span>
                     <i class="fas fa-ambulance"></i>
-                    <div><b>Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                    <div><b>Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
                 </div>
                 <div class="contact-card">
                     <span class="edit-hotline" onclick="editHotline('security')">edit</span>
                     <i class="fas fa-shield-alt"></i>
-                    <div><b>Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
+                    <div><b>Campus Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
+                </div>
+                <div class="contact-card">
+                    <span class="edit-hotline" onclick="editHotline('bfp')">edit</span>
+                    <i class="fas fa-fire-extinguisher"></i>
+                    <div><b>BFP Cabagan</b><a id="num-bfp" href="tel:117">117 / (078) 123-4567</a></div>
+                </div>
+                <div class="contact-card">
+                    <span class="edit-hotline" onclick="editHotline('pnp')">edit</span>
+                    <i class="fas fa-user-secret"></i>
+                    <div><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
                 </div>
             </div>
         </div>
@@ -90,47 +102,31 @@
 
     <script>
         window.onload = function() {
-            // Load Admin Data
             if(localStorage.getItem('adminName')) document.getElementById('admin-display-name').innerText = localStorage.getItem('adminName');
             if(localStorage.getItem('adminLogo')) document.getElementById('logo-preview').src = localStorage.getItem('adminLogo');
-            
             loadHotlines();
             loadShouts();
             renderChart();
         };
 
-        // --- LIVE CHART LOGIC ---
+        // --- CHART LOGIC ---
         function renderChart() {
-            // Kinukuha ang data mula sa localStorage key na 'isuLeaderboard'
             const savedData = JSON.parse(localStorage.getItem('isuLeaderboard')) || [
-                { dept: 'CCSICT', score: 0 },
-                { dept: 'CTE', score: 0 },
-                { dept: 'CBA', score: 0 },
-                { dept: 'CAES', score: 0 },
-                { dept: 'SOC', score: 0 }
+                { dept: 'CCSICT', score: 0 }, { dept: 'CTE', score: 0 },
+                { dept: 'CBA', score: 0 }, { dept: 'CAES', score: 0 }, { dept: 'SOC', score: 0 }
             ];
-
             const ctx = document.getElementById('scoreChart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: savedData.map(d => d.dept),
-                    datasets: [{
-                        label: 'Current Points',
-                        data: savedData.map(d => d.score),
-                        backgroundColor: '#2d5a27',
-                        borderRadius: 5
-                    }]
+                    datasets: [{ label: 'Points', data: savedData.map(d => d.score), backgroundColor: '#2d5a27', borderRadius: 5 }]
                 },
-                options: { 
-                    responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
-                }
+                options: { responsive: true, plugins: { legend: { display: false } } }
             });
         }
 
-        // --- HOTLINE EDIT LOGIC ---
+        // --- FULL FIXED HOTLINE LOGIC ---
         function editHotline(key) {
             const n = prompt("Enter new number for " + key + ":");
             if(n) {
@@ -139,7 +135,8 @@
             }
         }
         function loadHotlines() {
-            ['clinic', 'security'].forEach(k => {
+            const keys = ['clinic', 'security', 'bfp', 'pnp'];
+            keys.forEach(k => {
                 const s = localStorage.getItem('hotline-' + k);
                 if(s) { 
                     document.getElementById('num-' + k).innerText = s;
@@ -148,7 +145,7 @@
             });
         }
 
-        // --- OTHER LOGICS ---
+        // --- MISC LOGIC ---
         function editAdminName() {
             const n = prompt("New Admin Name:");
             if(n) { document.getElementById('admin-display-name').innerText = n; localStorage.setItem('adminName', n); }
@@ -162,14 +159,14 @@
             const m = document.getElementById('shoutMsg').value;
             if(!m) return;
             let s = JSON.parse(localStorage.getItem('isuShouts')) || [];
-            s.unshift({ text: m, time: new Date().toLocaleTimeString() });
+            s.unshift({ text: m });
             localStorage.setItem('isuShouts', JSON.stringify(s));
             document.getElementById('shoutMsg').value = '';
             loadShouts();
         }
         function loadShouts() {
             const s = JSON.parse(localStorage.getItem('isuShouts')) || [];
-            document.getElementById('shoutbox').innerHTML = s.map(x => `<div style="background:white; padding:5px; margin-bottom:5px; border-left:3px solid var(--isu-gold); font-size:13px;">${x.text}</div>`).join('');
+            document.getElementById('shoutbox').innerHTML = s.map(x => `<div style="background:white; padding:8px; margin-bottom:5px; border-left:4px solid var(--isu-gold); border-radius:4px; font-size:13px;"><b>User:</b> ${x.text}</div>`).join('');
         }
     </script>
 </body>
