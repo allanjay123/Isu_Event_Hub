@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Log | ISU Hub</title>
+    <style>
+        body { background: #f0f2f5; font-family: Arial; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        input { width: 70%; padding: 10px; margin-bottom: 10px; }
+        button { padding: 10px; background: #2d5a27; color: white; border: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>DIGITAL ATTENDANCE</h3>
+        <a href="index.html">← Back</a><br><br>
+        <input type="text" id="stuID" placeholder="Enter Student ID">
+        <button onclick="logIn()">TIME IN</button>
+        <table id="logs">
+            <thead><tr><th>ID</th><th>Time</th></tr></thead>
+            <tbody id="logBody"></tbody>
+        </table>
+    </div>
+    <script>
+        let logs = JSON.parse(localStorage.getItem('isuLogs')) || [];
+        function logIn() {
+            const id = document.getElementById('stuID').value;
+            if(!id) return;
+            logs.unshift({ id, time: new Date().toLocaleTimeString() });
+            localStorage.setItem('isuLogs', JSON.stringify(logs));
+            document.getElementById('stuID').value = '';
+            render();
+        }
+        function render() {
+            document.getElementById('logBody').innerHTML = logs.map(l => `<tr><td>${l.id}</td><td>${l.time}</td></tr>`).join('');
+        }
+        render();
+    </script>
+</body>
+</html>
