@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ISU Event Hub | Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
             --isu-green: #2d5a27;
@@ -15,7 +14,6 @@
             --card-bg: #ffffff;
         }
 
-        /* DARK MODE STYLES */
         body.dark-mode {
             --bg-gray: #1a1a1a;
             --text-color: #f0f2f5;
@@ -69,7 +67,7 @@
         }
         #logo-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; }
 
-        /* GRID */
+        /* GRID SYSTEM */
         .grid-container {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;
         }
@@ -80,7 +78,7 @@
         }
         .feature-box:hover { transform: translateY(-5px); background-color: rgba(250, 204, 21, 0.1); }
         .feature-box i { font-size: 30px; color: var(--isu-green); margin-bottom: 10px; }
-        .feature-box span { font-weight: bold; color: var(--text-color); font-size: 13px; text-transform: uppercase; }
+        .feature-box span { font-weight: bold; color: var(--text-color); font-size: 12px; text-transform: uppercase; text-align: center;}
 
         .footer-text { margin-top: 40px; text-align: center; font-size: 11px; color: #888; }
     </style>
@@ -93,9 +91,11 @@
         <a href="calendar.html"><i class="fas fa-calendar"></i> Calendar</a>
         <a href="registration.html"><i class="fas fa-user-plus"></i> Registration</a>
         <a href="leaderboard.html"><i class="fas fa-medal"></i> Leaderboard</a>
+        <a href="voting.html"><i class="fas fa-vote-yea"></i> Candidate Voting</a>
+        <a href="attendance.html"><i class="fas fa-id-badge"></i> Attendance Log</a>
         <a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a>
         <a href="feedback.html"><i class="fas fa-comment-dots"></i> Feedback</a>
-        <a href="#" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Toggle Dark Mode</a>
+        <a href="#" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</a>
     </div>
 
     <div class="header">
@@ -105,7 +105,7 @@
 
     <div class="container">
         <div class="countdown-container">
-            <div>INTRAMURALS 2026 STARTS IN:</div>
+            <div>INTRAMURALS 2026 COUNTDOWN</div>
             <div id="timer">Loading...</div>
         </div>
 
@@ -114,7 +114,7 @@
             <input type="file" id="img-input" style="display:none" onchange="saveImg(this)">
             <div>
                 <h2 id="admin-name" style="margin:0">Admin Dashboard</h2>
-                <small onclick="editName()" style="color:var(--isu-green); cursor:pointer">Edit Profile Name</small>
+                <small onclick="editName()" style="color:var(--isu-green); cursor:pointer">Change Display Name</small>
             </div>
         </div>
 
@@ -122,31 +122,25 @@
             <a href="calendar.html" class="feature-box"><i class="fas fa-calendar-alt"></i><span>Calendar</span></a>
             <a href="registration.html" class="feature-box"><i class="fas fa-user-edit"></i><span>Registration</span></a>
             <a href="leaderboard.html" class="feature-box"><i class="fas fa-trophy"></i><span>Leaderboards</span></a>
+            <a href="voting.html" class="feature-box"><i class="fas fa-vote-yea"></i><span>Voting System</span></a>
+            <a href="attendance.html" class="feature-box"><i class="fas fa-id-card"></i><span>Attendance Log</span></a>
             <a href="lostfound.html" class="feature-box"><i class="fas fa-box-open"></i><span>Lost & Found</span></a>
             <a href="feedback.html" class="feature-box"><i class="fas fa-star"></i><span>Feedback</span></a>
-            <a href="#" class="feature-box" onclick="exportData()"><i class="fas fa-file-export"></i><span>Export Data</span></a>
+            <a href="#" class="feature-box" onclick="alert('Exporting data to CSV...')"><i class="fas fa-file-export"></i><span>Export Reports</span></a>
         </div>
 
-        <div class="footer-text">© 2026 ISU-CABAGAN EVENT MANAGEMENT</div>
+        <div class="footer-text">© 2026 ISU-CABAGAN ONLINE EVENT MANAGEMENT</div>
     </div>
 
     <script>
         function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
         function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
 
-        // DARK MODE TOGGLE (FEATURE 2)
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         }
 
-        // EXPORT DATA (FEATURE 3)
-        function exportData() {
-            alert("Generating Excel/CSV report for Registration and Scores...");
-            // Dito ilalagay ang CSV logic
-        }
-
-        // COUNTDOWN LOGIC (FEATURE 4)
         const targetDate = new Date("Feb 10, 2026 08:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
@@ -157,7 +151,6 @@
             document.getElementById("timer").innerHTML = `${d}d ${h}h ${m}m Remaining`;
         }, 1000);
 
-        // PERSISTENCE
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
             if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
