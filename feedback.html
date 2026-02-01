@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback | ISU Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #f0f2f5; font-family: Arial; }
+        .header { background: #2d5a27; color: white; padding: 20px; text-align: center; }
+        .container { max-width: 600px; margin: 30px auto; background: white; padding: 25px; border-radius: 8px; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; padding: 10px; }
+        .btn-submit { background: #2d5a27; color: white; width: 100%; border: none; padding: 12px; cursor: pointer; font-weight: bold; }
+        .feedback-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">EVENT FEEDBACK</div>
+    <div class="container">
+        <a href="index.html" style="text-decoration:none; color:#2d5a27">← Back</a>
+        <h3>How was the event?</h3>
+        <select id="rate" style="width:100%; padding: 10px;">
+            <option>⭐⭐⭐⭐⭐ Excellent</option>
+            <option>⭐⭐⭐⭐ Very Good</option>
+            <option>⭐⭐⭐ Good</option>
+        </select>
+        <textarea id="comment" placeholder="Your suggestions..."></textarea>
+        <button class="btn-submit" onclick="submitFeedback()">SEND FEEDBACK</button>
+        <hr>
+        <div id="list"></div>
+    </div>
+
+    <script>
+        function submitFeedback() {
+            const rate = document.getElementById('rate').value;
+            const msg = document.getElementById('comment').value;
+            if(!msg) return alert("Please write a comment.");
+            let data = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            data.unshift({ rate, msg, date: new Date().toLocaleDateString() });
+            localStorage.setItem('feedbacks', JSON.stringify(data));
+            alert("Feedback Sent!");
+            location.reload();
+        }
+
+        window.onload = () => {
+            let data = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            document.getElementById('list').innerHTML = data.map(f => `
+                <div class="feedback-item">
+                    <b>${f.rate}</b> <small>${f.date}</small><br>
+                    <p>${f.msg}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
