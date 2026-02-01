@@ -5,57 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leaderboard | ISU Standings</title>
     <style>
+        :root { --isu-green: #2d5a27; --isu-gold: #facc15; }
         body { background-color: #f0f2f5; font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        .header { background-color: #2d5a27; color: white; padding: 25px; text-align: center; font-size: 24px; font-weight: bold; text-transform: uppercase; }
+        .header { background-color: var(--isu-green); color: white; padding: 25px; text-align: center; font-size: 24px; font-weight: bold; text-transform: uppercase; }
         .container { max-width: 1000px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-add { background-color: #2d5a27; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; cursor: pointer; border: none; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background-color: #facc15; color: #2d5a27; text-align: left; padding: 12px; border: 1px solid #ddd; }
-        td { padding: 12px; border: 1px solid #ddd; }
-        .btn-edit { background-color: #2d5a27; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .btn-delete { background-color: #d9534f; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .back-link { display: block; margin-top: 20px; color: #2d5a27; font-weight: bold; text-decoration: none; }
+        .btn-add { background-color: var(--isu-green); color: white; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; cursor: pointer; border: none; transition: 0.3s; }
+        .btn-add:hover { background-color: #1e3d1a; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background-color: var(--isu-gold); color: var(--isu-green); text-align: left; padding: 12px; border: 1px solid #ddd; text-transform: uppercase; font-size: 14px; }
+        td { padding: 12px; border: 1px solid #ddd; color: #333; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+
+        .btn-edit { background-color: var(--isu-green); color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; margin-right: 5px; }
+        .btn-delete { background-color: #d9534f; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; }
+        .back-link { display: inline-block; margin-top: 25px; color: var(--isu-green); font-weight: bold; text-decoration: none; border-bottom: 2px solid transparent; }
+        .back-link:hover { border-bottom: 2px solid var(--isu-green); }
+
+        .rank-circle { background: var(--isu-gold); color: var(--isu-green); font-weight: bold; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 12px; }
     </style>
 </head>
 <body>
+
     <div class="header">ISU Leaderboard List</div>
+
     <div class="container">
-        <button class="btn-add" onclick="addScore()">+ Add Score</button>
+        <button class="btn-add" onclick="addScore()">+ Add New Standing</button>
         
         <table>
             <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Department</th>
-                    <th>Points</th>
-                    <th>Action</th>
+                    <th style="width: 50px;">Rank</th>
+                    <th>Department / Team</th>
+                    <th>Points Scored</th>
+                    <th style="width: 150px;">Actions</th>
                 </tr>
             </thead>
             <tbody id="leaderboard-body">
                 </tbody>
         </table>
-        <a href="index.html" class="back-link">← Back to Dashboard</a>
+
+        <a href="index.html" class="back-link">← Back to Admin Dashboard</a>
     </div>
 
     <script>
-        // 1. Kuhanin ang data mula sa localStorage o gumamit ng default data kung wala pa
-        let scores = JSON.parse(localStorage.getItem('isuScores')) || [
-            { dept: 'CCSICT (Crows)', points: 1250 },
-            { dept: 'CTE (Tigers)', points: 1100 }
+        /**
+         * IMPORTANTE: Ginamit natin ang key na 'isuLeaderboard' 
+         * para mag-sync ito sa Chart sa index.html
+         **/
+        const STORAGE_KEY = 'isuLeaderboard';
+
+        // 1. Load data from LocalStorage
+        let scores = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
+            { dept: 'CCSICT (Crows)', score: 1250 },
+            { dept: 'CTE (Tigers)', score: 1100 },
+            { dept: 'CBA (Eagles)', score: 900 },
+            { dept: 'CAES (Warriors)', score: 850 }
         ];
 
-        // 2. Function para i-display ang data sa table
+        // 2. Display function
         function displayScores() {
             const tbody = document.getElementById('leaderboard-body');
             
-            // I-sort ang scores mula mataas pababa para sa Ranking
-            scores.sort((a, b) => b.points - a.points);
+            // Sort: Highest to Lowest
+            scores.sort((a, b) => b.score - a.score);
             
             tbody.innerHTML = scores.map((item, index) => `
                 <tr>
-                    <td>${index + 1}</td>
-                    <td>${item.dept}</td>
-                    <td>${Number(item.points).toLocaleString()}</td>
+                    <td><div class="rank-circle">${index + 1}</div></td>
+                    <td><b>${item.dept}</b></td>
+                    <td>${Number(item.score).toLocaleString()} pts</td>
                     <td>
                         <button class="btn-edit" onclick="editScore(${index})">Edit</button>
                         <button class="btn-delete" onclick="deleteScore(${index})">Delete</button>
@@ -63,46 +82,46 @@
                 </tr>
             `).join('');
 
-            // I-save ang updated list sa localStorage
-            localStorage.setItem('isuScores', JSON.stringify(scores));
+            // Save back to localStorage
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
         }
 
-        // 3. Function para mag-ADD ng bagong score
+        // 3. Add function
         function addScore() {
-            const dept = prompt("Enter Department Name:");
-            const points = prompt("Enter Points:");
+            const dept = prompt("Enter Department/Team Name:");
+            const pts = prompt("Enter Initial Points:");
             
-            if (dept && points && !isNaN(points)) {
-                scores.push({ dept: dept, points: parseInt(points) });
+            if (dept && pts !== null && !isNaN(pts)) {
+                scores.push({ dept: dept, score: parseInt(pts) });
                 displayScores();
-            } else {
-                alert("Please enter a valid department name and numeric points.");
+            } else if (dept !== null) {
+                alert("Please provide a valid name and numeric points.");
             }
         }
 
-        // 4. Function para mag-DELETE
+        // 4. Edit function
+        function editScore(index) {
+            const newDept = prompt("Edit Department Name:", scores[index].dept);
+            const newPoints = prompt("Edit Points:", scores[index].score);
+            
+            if (newDept && newPoints !== null && !isNaN(newPoints)) {
+                scores[index].dept = newDept;
+                scores[index].score = parseInt(newPoints);
+                displayScores();
+            } else if (newDept !== null) {
+                alert("Invalid input detected.");
+            }
+        }
+
+        // 5. Delete function
         function deleteScore(index) {
-            if (confirm(`Are you sure you want to delete ${scores[index].dept}?`)) {
+            if (confirm(`Remove ${scores[index].dept} from the leaderboard?`)) {
                 scores.splice(index, 1);
                 displayScores();
             }
         }
 
-        // 5. Function para mag-EDIT
-        function editScore(index) {
-            const newDept = prompt("Edit Department Name:", scores[index].dept);
-            const newPoints = prompt("Edit Points:", scores[index].points);
-            
-            if (newDept && newPoints && !isNaN(newPoints)) {
-                scores[index].dept = newDept;
-                scores[index].points = parseInt(newPoints);
-                displayScores();
-            } else {
-                alert("Invalid input. Please try again.");
-            }
-        }
-
-        // Patakbuhin ang displayScores sa pag-load ng page
+        // Initialize table on load
         displayScores();
     </script>
 </body>
