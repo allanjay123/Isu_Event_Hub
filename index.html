@@ -11,247 +11,172 @@
             --isu-green: #2d5a27;
             --isu-gold: #facc15;
             --bg-gray: #f0f2f5;
-            --sidebar-width: 250px;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+
+        /* DARK MODE STYLES */
+        body.dark-mode {
+            --bg-gray: #1a1a1a;
+            --text-color: #f0f2f5;
+            --card-bg: #2d2d2d;
         }
 
         body { 
             background-color: var(--bg-gray); 
             font-family: Arial, sans-serif; 
-            margin: 0; 
-            padding: 0; 
+            margin: 0; padding: 0; 
             transition: 0.3s;
+            color: var(--text-color);
         }
 
-        /* --- HAMBURGER SIDEBAR --- */
+        /* SIDEBAR */
         .sidebar {
-            height: 100%;
-            width: 0; /* Hidden by default */
-            position: fixed;
-            z-index: 1000;
-            top: 0;
-            left: 0;
-            background-color: var(--isu-green);
-            overflow-x: hidden;
-            transition: 0.3s;
-            padding-top: 60px;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.3);
+            height: 100%; width: 0; position: fixed; z-index: 1000;
+            top: 0; left: 0; background-color: var(--isu-green);
+            overflow-x: hidden; transition: 0.3s; padding-top: 60px;
         }
-
         .sidebar a {
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            display: block;
-            transition: 0.3s;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 25px; text-decoration: none; font-size: 18px;
+            color: white; display: block; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
+        .sidebar a:hover { background-color: var(--isu-gold); color: var(--isu-green); }
+        .close-btn { position: absolute; top: 10px; right: 25px; font-size: 36px; cursor: pointer; color: white; }
 
-        .sidebar a:hover {
-            background-color: var(--isu-gold);
-            color: var(--isu-green);
-        }
-
-        .sidebar .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            font-size: 36px;
-            cursor: pointer;
-        }
-
-        /* --- HEADER & MENU BUTTON --- */
+        /* HEADER */
         .header { 
-            background-color: var(--isu-green); 
-            color: white; 
-            padding: 20px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            background-color: var(--isu-green); color: white; padding: 20px; 
+            display: flex; align-items: center; justify-content: center; position: relative;
         }
+        .menu-icon { position: absolute; left: 20px; font-size: 24px; cursor: pointer; color: var(--isu-gold); }
 
-        .menu-icon {
-            position: absolute;
-            left: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--isu-gold);
+        /* COUNTDOWN BANNER */
+        .countdown-container {
+            background: linear-gradient(45deg, var(--isu-green), #3d7a35);
+            color: white; text-align: center; padding: 15px; margin-bottom: 20px;
+            border-radius: 8px; font-weight: bold;
         }
+        #timer { font-size: 20px; color: var(--isu-gold); }
 
-        .header h1 {
-            margin: 0;
-            font-size: 22px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* --- MAIN CONTENT --- */
         .container { 
-            max-width: 1000px; 
-            margin: 30px auto; 
-            background: white; 
-            padding: 40px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+            max-width: 1000px; margin: 20px auto; background: var(--card-bg); 
+            padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
         }
 
         .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #f0f2f5;
-            padding-bottom: 20px;
+            display: flex; align-items: center; gap: 20px; margin-bottom: 25px;
+            border-bottom: 2px solid #ddd; padding-bottom: 20px;
         }
+        #logo-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; }
 
-        #logo-preview {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--isu-gold);
-            cursor: pointer;
-        }
-
+        /* GRID */
         .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;
         }
-
         .feature-box {
-            background: white;
-            border: 1px solid #ddd;
-            border-top: 8px solid var(--isu-gold);
-            border-radius: 8px;
-            padding: 30px 15px;
-            text-decoration: none;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+            background: var(--card-bg); border: 1px solid #ddd; border-top: 5px solid var(--isu-gold);
+            border-radius: 8px; padding: 20px; text-decoration: none;
+            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
         }
+        .feature-box:hover { transform: translateY(-5px); background-color: rgba(250, 204, 21, 0.1); }
+        .feature-box i { font-size: 30px; color: var(--isu-green); margin-bottom: 10px; }
+        .feature-box span { font-weight: bold; color: var(--text-color); font-size: 13px; text-transform: uppercase; }
 
-        .feature-box:hover {
-            transform: translateY(-5px);
-            background-color: #f9f9f9;
-        }
-
-        .feature-box i {
-            font-size: 35px;
-            color: var(--isu-green);
-            margin-bottom: 10px;
-        }
-
-        .footer-text {
-            margin-top: 50px;
-            text-align: center;
-            color: #888;
-            font-size: 11px;
-        }
+        .footer-text { margin-top: 40px; text-align: center; font-size: 11px; color: #888; }
     </style>
 </head>
 <body>
 
     <div id="mySidebar" class="sidebar">
         <span class="close-btn" onclick="closeNav()">&times;</span>
-        <a href="index.html"><i class="fas fa-home"></i> Home</a>
-        <a href="calendar.html"><i class="fas fa-calendar"></i> Event Calendar</a>
+        <a href="index.html"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="calendar.html"><i class="fas fa-calendar"></i> Calendar</a>
         <a href="registration.html"><i class="fas fa-user-plus"></i> Registration</a>
-        <a href="leaderboard.html"><i class="fas fa-medal"></i> Leaderboards</a>
+        <a href="leaderboard.html"><i class="fas fa-medal"></i> Leaderboard</a>
         <a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a>
-        <a href="#" onclick="alert('Logged out successfully!')"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="feedback.html"><i class="fas fa-comment-dots"></i> Feedback</a>
+        <a href="#" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Toggle Dark Mode</a>
     </div>
 
     <div class="header">
         <i class="fas fa-bars menu-icon" onclick="openNav()"></i>
-        <h1>ISU Online Event System</h1>
+        <h1>ISU EVENT HUB</h1>
     </div>
 
     <div class="container">
+        <div class="countdown-container">
+            <div>INTRAMURALS 2026 STARTS IN:</div>
+            <div id="timer">Loading...</div>
+        </div>
+
         <div class="profile-section">
-            <div class="logo-container">
-                <img id="logo-preview" src="https://via.placeholder.com/100?text=PHOTO" alt="Logo" onclick="triggerUpload()">
-                <input type="file" id="image-input" style="display:none;" accept="image/*" onchange="previewImage(this)">
-            </div>
-            <div class="welcome-text">
-                <h2 id="admin-name">Admin Dashboard</h2>
-                <p>Isabela State University - Cabagan</p>
-                <small onclick="changeName()" style="color: blue; cursor: pointer; font-size: 11px;">Edit Name</small>
+            <img id="logo-preview" src="https://via.placeholder.com/80" alt="Admin" onclick="document.getElementById('img-input').click()">
+            <input type="file" id="img-input" style="display:none" onchange="saveImg(this)">
+            <div>
+                <h2 id="admin-name" style="margin:0">Admin Dashboard</h2>
+                <small onclick="editName()" style="color:var(--isu-green); cursor:pointer">Edit Profile Name</small>
             </div>
         </div>
 
         <div class="grid-container">
-            <a href="calendar.html" class="feature-box">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Event Calendar</span>
-            </a>
-            <a href="registration.html" class="feature-box">
-                <i class="fas fa-user-edit"></i>
-                <span>Registration</span>
-            </a>
-            <a href="leaderboard.html" class="feature-box">
-                <i class="fas fa-trophy"></i>
-                <span>Leaderboards</span>
-            </a>
-            <a href="lostfound.html" class="feature-box">
-                <i class="fas fa-box-open"></i>
-                <span>Lost & Found</span>
-            </a>
+            <a href="calendar.html" class="feature-box"><i class="fas fa-calendar-alt"></i><span>Calendar</span></a>
+            <a href="registration.html" class="feature-box"><i class="fas fa-user-edit"></i><span>Registration</span></a>
+            <a href="leaderboard.html" class="feature-box"><i class="fas fa-trophy"></i><span>Leaderboards</span></a>
+            <a href="lostfound.html" class="feature-box"><i class="fas fa-box-open"></i><span>Lost & Found</span></a>
+            <a href="feedback.html" class="feature-box"><i class="fas fa-star"></i><span>Feedback</span></a>
+            <a href="#" class="feature-box" onclick="exportData()"><i class="fas fa-file-export"></i><span>Export Data</span></a>
         </div>
 
-        <div class="footer-text">
-            © 2026 ISU-Cabagan Online Event Management Hub
-        </div>
+        <div class="footer-text">© 2026 ISU-CABAGAN EVENT MANAGEMENT</div>
     </div>
 
     <script>
-        // --- SIDEBAR FUNCTIONS ---
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
+        function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
+        function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+
+        // DARK MODE TOGGLE (FEATURE 2)
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         }
 
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
+        // EXPORT DATA (FEATURE 3)
+        function exportData() {
+            alert("Generating Excel/CSV report for Registration and Scores...");
+            // Dito ilalagay ang CSV logic
         }
 
-        // --- IMAGE PERSISTENCE ---
-        window.onload = function() {
-            const savedImg = localStorage.getItem('profileImg');
-            const savedName = localStorage.getItem('adminName');
-            if (savedImg) document.getElementById('logo-preview').src = savedImg;
-            if (savedName) document.getElementById('admin-name').innerText = savedName;
+        // COUNTDOWN LOGIC (FEATURE 4)
+        const targetDate = new Date("Feb 10, 2026 08:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("timer").innerHTML = `${d}d ${h}h ${m}m Remaining`;
+        }, 1000);
+
+        // PERSISTENCE
+        window.onload = () => {
+            if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+            if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
+            if(localStorage.getItem('profileImg')) document.getElementById('logo-preview').src = localStorage.getItem('profileImg');
         }
 
-        function triggerUpload() {
-            document.getElementById('image-input').click();
+        function editName() {
+            const n = prompt("Enter Name:");
+            if(n) { document.getElementById('admin-name').innerText = n; localStorage.setItem('adminName', n); }
         }
 
-        function previewImage(input) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Image = e.target.result;
-                    document.getElementById('logo-preview').src = base64Image;
-                    localStorage.setItem('profileImg', base64Image); // Save to browser
-                }
-                reader.readAsDataURL(file);
+        function saveImg(input) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('logo-preview').src = e.target.result;
+                localStorage.setItem('profileImg', e.target.result);
             }
-        }
-
-        // --- EDIT NAME FUNCTION ---
-        function changeName() {
-            const newName = prompt("Enter New Name:");
-            if(newName) {
-                document.getElementById('admin-name').innerText = newName;
-                localStorage.setItem('adminName', newName);
-            }
+            reader.readAsDataURL(input.files[0]);
         }
     </script>
-
 </body>
 </html>
