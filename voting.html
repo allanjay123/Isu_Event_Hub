@@ -5,191 +5,166 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Candidate Voting | ISU Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --isu-green: #2d5a27;
-            --isu-gold: #facc15;
-            --bg-gray: #f0f2f5;
-        }
-
+        :root { --isu-green: #2d5a27; --isu-gold: #facc15; --bg-gray: #f0f2f5; }
         body { background-color: var(--bg-gray); font-family: Arial, sans-serif; margin: 0; padding: 0; }
 
-        /* Header Design base sa screenshot */
-        .header-section {
-            background-color: var(--isu-green);
-            color: white;
-            padding: 30px 10px;
-            text-align: center;
-        }
-        .header-section h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .back-link { color: var(--isu-gold); text-decoration: none; font-size: 13px; font-weight: bold; display: block; margin-top: 10px; }
+        .header-section { background-color: var(--isu-green); color: white; padding: 30px 10px; text-align: center; }
+        .header-section h1 { margin: 0; font-size: 22px; text-transform: uppercase; }
+        .back-link { color: var(--isu-gold); text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; margin-top: 10px; }
 
-        .container { max-width: 1000px; margin: 20px auto; padding: 10px; }
+        .container { max-width: 1100px; margin: 20px auto; padding: 10px; }
 
-        /* Add Candidate Section */
-        .admin-controls {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .btn-add-ui { background-color: var(--isu-green); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        input[type="text"] { padding: 10px; border: 1px solid #ddd; border-radius: 5px; flex: 1; }
+        /* Results Chart Area */
+        .chart-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .chart-title { font-weight: bold; color: var(--isu-green); margin-bottom: 15px; text-align: center; font-size: 18px; }
 
-        /* Candidate Grid base sa screenshot */
-        .candidate-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-            justify-items: center;
-        }
+        .admin-controls { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        input[type="text"] { padding: 12px; border: 1px solid #ddd; border-radius: 8px; flex: 1; min-width: 200px; }
+        .btn-add-ui { background-color: var(--isu-green); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-        .candidate-card {
-            background: white;
-            border-radius: 10px;
-            width: 180px;
-            text-align: center;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: 0.3s;
-        }
-        .candidate-card:hover { transform: translateY(-5px); }
-
-        .image-box {
-            width: 100%;
-            height: 200px;
-            background-color: #eee;
-            position: relative;
-        }
+        .candidate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; justify-items: center; }
+        .candidate-card { background: white; border-radius: 15px; width: 100%; max-width: 220px; text-align: center; overflow: hidden; box-shadow: 0 6px 12px rgba(0,0,0,0.08); transition: 0.3s; }
+        .image-box { width: 100%; height: 200px; background-color: #f8f9fa; }
         .image-box img { width: 100%; height: 100%; object-fit: cover; }
 
         .info-box { padding: 15px; }
-        .info-box h3 { margin: 5px 0; font-size: 16px; color: #333; }
-        .info-box p { margin: 5px 0; color: #666; font-size: 14px; }
+        .info-box h3 { margin: 5px 0; font-size: 18px; color: var(--isu-green); }
+        .vote-count { font-size: 22px; font-weight: bold; color: #333; }
 
-        .btn-vote {
-            background-color: var(--isu-green);
-            color: white;
-            border: none;
-            width: 90%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .btn-delete {
-            background: #d9534f;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            font-size: 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
+        .btn-vote { background-color: var(--isu-gold); color: var(--isu-green); border: none; width: 85%; padding: 12px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        .btn-vote:disabled { background-color: #ccc; color: #666; cursor: not-allowed; }
+        .btn-delete { background: none; color: #d9534f; border: none; font-size: 11px; cursor: pointer; text-decoration: underline; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <div class="header-section">
-        <h1>Vote for your Candidate</h1>
+        <h1>Election Results & Voting</h1>
         <a href="index.html" class="back-link">← Back to Dashboard</a>
     </div>
 
     <div class="container">
-        <div class="admin-controls">
-            <input type="text" id="cand-name" placeholder="Enter Candidate Name">
-            <input type="file" id="cand-img" accept="image/*">
-            <button class="btn-add-ui" onclick="addNewCandidate()">+ Add Candidate</button>
+        <div class="chart-box" id="chartContainer">
+            <div class="chart-title"><i class="fas fa-chart-pie"></i> Real-Time Standing</div>
+            <canvas id="voteChart" height="100"></canvas>
         </div>
 
-        <div class="candidate-grid" id="candidateGrid">
-            </div>
+        <div class="admin-controls">
+            <input type="text" id="cand-name" placeholder="Candidate Name">
+            <input type="file" id="cand-img" accept="image/*">
+            <button class="btn-add-ui" onclick="addNewCandidate()">+ Add Candidate</button>
+            <button onclick="resetMyVote()" style="font-size: 10px; background: none; border: 1px solid #ccc; cursor: pointer;">Reset My Vote (Admin)</button>
+        </div>
+
+        <div class="candidate-grid" id="candidateGrid"></div>
     </div>
 
     <script>
-        // 1. Load data
-        let candidates = JSON.parse(localStorage.getItem('isuVotes')) || [
-            { name: "Candidate #1", votes: 0, img: "https://via.placeholder.com/200?text=C1" },
-            { name: "Candidate #2", votes: 0, img: "https://via.placeholder.com/200?text=C2" }
-            { name: "Candidate #3", votes: 0, img: "https://via.placeholder.com/200?text=C3" }
-            { name: "Candidate #4", votes: 0, img: "https://via.placeholder.com/200?text=C4" }
-        
-        ];
+        let candidates = JSON.parse(localStorage.getItem('isuVotes')) || [];
+        let voteChart = null;
 
         function renderCandidates() {
             const grid = document.getElementById('candidateGrid');
+            const hasVoted = localStorage.getItem('hasVoted');
+
+            if (candidates.length === 0) {
+                grid.innerHTML = "<p>No candidates available.</p>";
+                updateChart();
+                return;
+            }
+
             grid.innerHTML = candidates.map((c, index) => `
                 <div class="candidate-card">
-                    <div class="image-box">
-                        <img src="${c.img}" alt="Candidate">
-                    </div>
+                    <div class="image-box"><img src="${c.img}" alt="Candidate"></div>
                     <div class="info-box">
                         <h3>${c.name}</h3>
-                        <p>Votes: <b>${c.votes}</b></p>
+                        <div class="vote-count">${c.votes}</div>
+                        <p style="font-size:12px; color:#666; margin:0;">Total Votes</p>
                     </div>
-                    <button class="btn-vote" onclick="vote(${index})">Vote</button>
+                    <button class="btn-vote" ${hasVoted ? 'disabled' : ''} onclick="vote(${index})">
+                        ${hasVoted ? 'Voted' : 'Vote Now'}
+                    </button>
+                    <br>
                     <button class="btn-delete" onclick="removeCandidate(${index})">Remove</button>
                 </div>
             `).join('');
+
             localStorage.setItem('isuVotes', JSON.stringify(candidates));
+            updateChart();
         }
 
-        // 2. Add New Candidate with Picture
+        function updateChart() {
+            const ctx = document.getElementById('voteChart').getContext('2d');
+            const labels = candidates.map(c => c.name);
+            const data = candidates.map(c => c.votes);
+
+            if (voteChart) { voteChart.destroy(); }
+
+            voteChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Votes',
+                        data: data,
+                        backgroundColor: '#2d5a27',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
         function addNewCandidate() {
-            const nameInput = document.getElementById('cand-name');
-            const imgInput = document.getElementById('cand-img');
+            const name = document.getElementById('cand-name');
+            const imgFile = document.getElementById('cand-img');
 
-            if (nameInput.value === "") return alert("Please enter a name.");
+            if (!name.value) return alert("Enter name!");
 
-            if (imgInput.files && imgInput.files[0]) {
+            if (imgFile.files && imgFile.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    candidates.push({
-                        name: nameInput.value,
-                        votes: 0,
-                        img: e.target.result
-                    });
+                    candidates.push({ name: name.value, votes: 0, img: e.target.result });
                     renderCandidates();
-                    nameInput.value = "";
-                    imgInput.value = "";
+                    name.value = ""; imgFile.value = "";
                 };
-                reader.readAsDataURL(imgInput.files[0]);
+                reader.readAsDataURL(imgFile.files[0]);
             } else {
-                // Default image pag walang inupload
-                candidates.push({
-                    name: nameInput.value,
-                    votes: 0,
-                    img: "https://via.placeholder.com/200?text=No+Image"
-                });
+                candidates.push({ name: name.value, votes: 0, img: "https://via.placeholder.com/200" });
                 renderCandidates();
-                nameInput.value = "";
+                name.value = "";
             }
         }
 
-        // 3. Vote Logic
         function vote(index) {
+            if (localStorage.getItem('hasVoted')) return alert("You already voted!");
             candidates[index].votes++;
+            localStorage.setItem('hasVoted', 'true');
             renderCandidates();
         }
 
-        // 4. Delete Logic
         function removeCandidate(index) {
-            if(confirm("Delete this candidate?")) {
+            if(confirm("Delete candidate?")) {
                 candidates.splice(index, 1);
                 renderCandidates();
             }
         }
 
+        // Para lang sa testing ng admin
+        function resetMyVote() {
+            localStorage.removeItem('hasVoted');
+            renderCandidates();
+            alert("Voting access restored for this browser.");
+        }
+
         renderCandidates();
     </script>
-
 </body>
 </html>
