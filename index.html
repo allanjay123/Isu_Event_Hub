@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISU Event Hub | Final Gold Edition</title>
+    <title>ISU Event Hub | Elite Gold Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -14,12 +14,14 @@
 
         body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); }
         
+        /* HEADER */
         .header { 
             background: linear-gradient(135deg, var(--isu-green), #1e3d1a); color: white; 
             padding: 12px 40px; display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000;
         }
 
+        /* SIDEBAR */
         .sidebar {
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
             background: var(--card-bg); box-shadow: 5px 0 15px rgba(0,0,0,0.1);
@@ -30,8 +32,10 @@
         .sidebar-item { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; font-weight: 500; }
         .sidebar-item:hover { background: #f8f9fa; color: var(--isu-green); border-right: 4px solid var(--isu-gold); }
 
+        /* MAIN CONTAINER */
         .container { max-width: 98%; margin: 20px auto; padding: 0 15px; }
 
+        /* ADMIN CARD */
         .admin-card { 
             background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
             display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
@@ -39,8 +43,10 @@
         }
         #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
 
+        /* 3-COLUMN LAYOUT */
         .main-wrapper { display: grid; grid-template-columns: 200px 1fr 340px; gap: 20px; }
 
+        /* GOLD BORDER CARDS */
         .glass-card { 
             background: white; border-radius: 15px; padding: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
@@ -49,6 +55,7 @@
         }
         .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
 
+        /* NAV MENU */
         .nav-menu { display: flex; flex-direction: column; gap: 10px; }
         .nav-item { 
             background: white; padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
@@ -58,8 +65,10 @@
         .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
         .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
+        /* CHART AREA */
         .chart-container { height: 320px; position: relative; }
 
+        /* WALL & HOTLINES */
         .wall-box { height: 180px; overflow-y: auto; background: #fdfdfd; padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
         
         .hotline-item { 
@@ -67,20 +76,24 @@
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
         }
         .hotline-item i { color: #d9534f; font-size: 16px; }
-        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 20; }
+        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 100; }
         .hotline-info b { font-size: 12px; display: block; }
         
-        /* Pinaka-importante para sa Click-to-Call */
-        .hotline-link { 
-            font-size: 13px; color: #d9534f; font-weight: bold; text-decoration: none; 
-            display: block; padding: 2px 0;
+        /* Fixed Click-to-Call Style */
+        .hotline-info a { 
+            font-size: 13px; 
+            color: #d9534f; 
+            font-weight: bold; 
+            text-decoration: none; 
+            display: inline-block;
+            margin-top: 2px;
         }
-        .hotline-link:hover { text-decoration: underline; }
+        .hotline-info a:hover { text-decoration: underline; }
 
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
 </head>
-<body>
+<body onload="initAll()">
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
@@ -143,22 +156,22 @@
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
                         <i class="fas fa-ambulance"></i>
-                        <div class="hotline-info"><b>Campus Clinic</b><a id="link-clinic" href="tel:09123456789" class="hotline-link">0912-345-6789</a></div>
+                        <div class="hotline-info"><b>Campus Clinic</b><a id="link-clinic" href="tel:09123456789">0912-345-6789</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('security')">edit</span>
                         <i class="fas fa-shield-alt"></i>
-                        <div class="hotline-info"><b>Security</b><a id="link-security" href="tel:09223334444" class="hotline-link">0922-333-4444</a></div>
+                        <div class="hotline-info"><b>Security</b><a id="link-security" href="tel:09223334444">0922-333-4444</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
                         <i class="fas fa-user-shield"></i>
-                        <div class="hotline-info"><b>PNP Cabagan</b><a id="link-pnp" href="tel:09887776655" class="hotline-link">0988-777-6655</a></div>
+                        <div class="hotline-info"><b>PNP Cabagan</b><a id="link-pnp" href="tel:09887776655">0988-777-6655</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
                         <i class="fas fa-fire-extinguisher"></i>
-                        <div class="hotline-info"><b>BFP Cabagan</b><a id="link-bfp" href="tel:117" class="hotline-link">117 / (078) 123-4567</a></div>
+                        <div class="hotline-info"><b>BFP Cabagan</b><a id="link-bfp" href="tel:117">117 / (078) 123-4567</a></div>
                     </div>
                 </div>
             </div>
@@ -169,16 +182,21 @@
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        window.onload = function() {
-            // Load Admin Info
+        // PINAGSAMANG INITIALIZATION PARA SIGURADO
+        function initAll() {
+            // Admin Data
             if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             
-            // Initializing functions
-            loadNums(); 
-            loadShouts(); 
+            // Render Chart
             renderChart();
-        };
+            
+            // Hotline Load
+            loadNums();
+            
+            // Freedom Wall Load
+            loadShouts();
+        }
 
         function renderChart() {
             const ctx = document.getElementById('pointsChart').getContext('2d');
@@ -199,57 +217,65 @@
             });
         }
 
-        // HOTLINE CLICK-TO-CALL LOGIC
+        // HOTLINE FIX
         function editPhone(id) {
             const n = prompt("Enter new number for " + id + ":");
-            if(n) { 
+            if(n !== null && n !== "") { 
                 localStorage.setItem('num-'+id, n); 
                 loadNums(); 
             }
         }
 
         function loadNums() {
-            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
-                const savedNum = localStorage.getItem('num-'+k);
-                if(savedNum) {
-                    const linkEl = document.getElementById('link-'+k);
-                    linkEl.innerText = savedNum;
-                    // Inaalis ang spaces/hyphens para sa dialer
-                    linkEl.href = "tel:" + savedNum.replace(/[^0-9]/g, ''); 
+            const ids = ['clinic', 'security', 'pnp', 'bfp'];
+            ids.forEach(k => {
+                const saved = localStorage.getItem('num-'+k);
+                const linkEl = document.getElementById('link-'+k);
+                if(saved) {
+                    linkEl.innerText = saved;
+                    // Linisin ang number para sa tel link (alis dash at spaces)
+                    const cleanNum = saved.replace(/[^0-9]/g, '');
+                    linkEl.href = "tel:" + cleanNum;
                 }
             });
         }
 
-        // FREEDOM WALL PERSISTENCE LOGIC
+        // FREEDOM WALL FIX
         function sendShout() {
             const input = document.getElementById('shoutInput');
-            const val = input.value.trim();
-            if(!val) return;
-            
+            const msg = input.value.trim();
+            if(!msg) return;
+
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const newPost = { text: val, time: time };
-            
-            // Get current list, add new, and Save
+            const post = { text: msg, time: time };
+
+            // Kunin ang luma, idagdag ang bago
             let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            shouts.push(newPost);
+            shouts.push(post);
+            
+            // I-save ulit sa storage
             localStorage.setItem('shouts', JSON.stringify(shouts));
             
             input.value = '';
-            loadShouts(); 
+            loadShouts(); // Refresh display
         }
 
         function loadShouts() {
             const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
             const box = document.getElementById('shout-box');
             
-            // Render all saved shouts
+            if (shouts.length === 0) {
+                box.innerHTML = '<p style="color:#999; text-align:center; font-size:11px;">No cheers yet. Be the first!</p>';
+                return;
+            }
+
             box.innerHTML = shouts.map(s => `
-                <div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="background:white; padding:8px; border-radius:5px; margin-bottom:8px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                     <b>User:</b> ${s.text} <span style="float:right; font-size:9px; color:#999;">${s.time}</span>
                 </div>
             `).join('');
             
-            // Scroll to bottom
+            // Auto scroll sa pinakababa
             box.scrollTop = box.scrollHeight;
         }
 
