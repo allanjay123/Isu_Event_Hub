@@ -76,24 +76,22 @@
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
         }
         .hotline-item i { color: #d9534f; font-size: 16px; }
-        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 100; }
+        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; }
         .hotline-info b { font-size: 12px; display: block; }
-        
-        /* Fixed Click-to-Call Style */
-        .hotline-info a { 
-            font-size: 13px; 
-            color: #d9534f; 
-            font-weight: bold; 
+
+        /* HOTLINE NUMBER STYLE (BLUE & CLICKABLE) */
+        .hotline-number { 
+            font-size: 11px; 
+            color: blue; 
+            font-weight: 600; 
             text-decoration: none; 
-            display: inline-block;
-            margin-top: 2px;
         }
-        .hotline-info a:hover { text-decoration: underline; }
+        .hotline-number:hover { text-decoration: underline; }
 
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
 </head>
-<body onload="initAll()">
+<body>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
@@ -125,13 +123,13 @@
 
         <div class="main-wrapper">
             <div class="nav-menu">
-                <a href="#" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
-                <a href="#" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
-                <a href="#" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
-                <a href="#" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
-                <a href="#" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
-                <a href="#" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
-                <a href="#" class="nav-item"><i class="fas fa-search"></i><span>LOST & FOUND</span></a>
+                <a href="calendar.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
+                <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
+                <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
+                <a href="voting.html" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
+                <a href="attendance.html" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
+                <a href="lostfound.html" class="nav-item"><i class="fas fa-search"></i><span>LOST & FOUND</span></a>
             </div>
 
             <div class="glass-card">
@@ -156,22 +154,22 @@
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
                         <i class="fas fa-ambulance"></i>
-                        <div class="hotline-info"><b>Campus Clinic</b><a id="link-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                        <div class="hotline-info"><b>Campus Clinic</b><a href="tel:09123456789" id="num-clinic" class="hotline-number">0912-345-6789</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('security')">edit</span>
                         <i class="fas fa-shield-alt"></i>
-                        <div class="hotline-info"><b>Security</b><a id="link-security" href="tel:09223334444">0922-333-4444</a></div>
+                        <div class="hotline-info"><b>Security</b><a href="tel:09223334444" id="num-security" class="hotline-number">0922-333-4444</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
                         <i class="fas fa-user-shield"></i>
-                        <div class="hotline-info"><b>PNP Cabagan</b><a id="link-pnp" href="tel:09887776655">0988-777-6655</a></div>
+                        <div class="hotline-info"><b>PNP Cabagan</b><a href="tel:09887776655" id="num-pnp" class="hotline-number">0988-777-6655</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
                         <i class="fas fa-fire-extinguisher"></i>
-                        <div class="hotline-info"><b>BFP Cabagan</b><a id="link-bfp" href="tel:117">117 / (078) 123-4567</a></div>
+                        <div class="hotline-info"><b>BFP Cabagan</b><a href="tel:117" id="num-bfp" class="hotline-number">117 / (078) 123-4567</a></div>
                     </div>
                 </div>
             </div>
@@ -182,21 +180,21 @@
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        // PINAGSAMANG INITIALIZATION PARA SIGURADO
-        function initAll() {
-            // Admin Data
+        window.onload = function() {
+            // Restore Admin Info
             if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             
-            // Render Chart
+            // Restore Hotline Numbers
+            loadNums(); 
+            
+            // Restore Freedom Wall Messages
+            if(localStorage.getItem('freedomWall')) {
+                document.getElementById('shout-box').innerHTML = localStorage.getItem('freedomWall');
+            }
+            
             renderChart();
-            
-            // Hotline Load
-            loadNums();
-            
-            // Freedom Wall Load
-            loadShouts();
-        }
+        };
 
         function renderChart() {
             const ctx = document.getElementById('pointsChart').getContext('2d');
@@ -217,65 +215,41 @@
             });
         }
 
-        // HOTLINE FIX
+        // Fixed Hotline Logic
         function editPhone(id) {
             const n = prompt("Enter new number for " + id + ":");
-            if(n !== null && n !== "") { 
+            if(n) { 
                 localStorage.setItem('num-'+id, n); 
                 loadNums(); 
             }
         }
 
         function loadNums() {
-            const ids = ['clinic', 'security', 'pnp', 'bfp'];
-            ids.forEach(k => {
-                const saved = localStorage.getItem('num-'+k);
-                const linkEl = document.getElementById('link-'+k);
-                if(saved) {
-                    linkEl.innerText = saved;
-                    // Linisin ang number para sa tel link (alis dash at spaces)
-                    const cleanNum = saved.replace(/[^0-9]/g, '');
-                    linkEl.href = "tel:" + cleanNum;
+            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
+                const s = localStorage.getItem('num-'+k);
+                if(s) {
+                    const el = document.getElementById('num-'+k);
+                    el.innerText = s;
+                    el.href = "tel:" + s.replace(/[^0-9]/g, ""); // Clean non-digits for dialer
                 }
             });
         }
 
-        // FREEDOM WALL FIX
+        // Fixed Freedom Wall Logic
         function sendShout() {
-            const input = document.getElementById('shoutInput');
-            const msg = input.value.trim();
-            if(!msg) return;
-
+            const val = document.getElementById('shoutInput').value;
+            if(!val) return;
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const post = { text: msg, time: time };
-
-            // Kunin ang luma, idagdag ang bago
-            let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            shouts.push(post);
             
-            // I-save ulit sa storage
-            localStorage.setItem('shouts', JSON.stringify(shouts));
+            const messageHtml = `<div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><b>User:</b> ${val} <span style="float:right; font-size:9px; color:#999;">${time}</span></div>`;
             
-            input.value = '';
-            loadShouts(); // Refresh display
-        }
-
-        function loadShouts() {
-            const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
             const box = document.getElementById('shout-box');
+            box.innerHTML += messageHtml;
             
-            if (shouts.length === 0) {
-                box.innerHTML = '<p style="color:#999; text-align:center; font-size:11px;">No cheers yet. Be the first!</p>';
-                return;
-            }
-
-            box.innerHTML = shouts.map(s => `
-                <div style="background:white; padding:8px; border-radius:5px; margin-bottom:8px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                    <b>User:</b> ${s.text} <span style="float:right; font-size:9px; color:#999;">${s.time}</span>
-                </div>
-            `).join('');
+            // Save the entire box content to localStorage
+            localStorage.setItem('freedomWall', box.innerHTML);
             
-            // Auto scroll sa pinakababa
+            document.getElementById('shoutInput').value = '';
             box.scrollTop = box.scrollHeight;
         }
 
