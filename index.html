@@ -46,12 +46,10 @@
         /* 3-COLUMN LAYOUT */
         .main-wrapper { display: grid; grid-template-columns: 200px 1fr 340px; gap: 20px; }
 
-        /* GOLD BORDER CARDS */
         .glass-card { 
             background: white; border-radius: 15px; padding: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
             border: 2px solid var(--isu-gold); 
-            transition: transform 0.3s ease;
         }
         .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
 
@@ -65,12 +63,10 @@
         .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
         .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
-        /* CHART AREA */
-        .chart-container { height: 320px; position: relative; }
-
-        /* WALL & HOTLINES */
+        /* WALL BOX */
         .wall-box { height: 180px; overflow-y: auto; background: #fdfdfd; padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
         
+        /* HOTLINES */
         .hotline-item { 
             background: #fffdf5; border: 1px solid #f9f1d0; padding: 10px; border-radius: 10px; 
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
@@ -79,20 +75,18 @@
         .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; }
         .hotline-info b { font-size: 12px; display: block; }
 
-        /* HOTLINE NUMBER STYLE (BLUE & CLICKABLE) */
-        .hotline-number { 
-            font-size: 12px; 
-            color: #007bff; 
+        /* CLICK-TO-CALL BLUE LINK */
+        .phone-link { 
+            color: #0044ff !important; 
+            text-decoration: underline !important; 
             font-weight: bold; 
-            text-decoration: none; 
-            display: inline-block;
-            margin-top: 2px;
+            font-size: 13px;
         }
 
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
 </head>
-<body>
+<body onload="startup()">
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
@@ -124,18 +118,18 @@
 
         <div class="main-wrapper">
             <div class="nav-menu">
-                <a href="calendar.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
-                <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
-                <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
-                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
-                <a href="voting.html" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
-                <a href="attendance.html" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
-                <a href="lostfound.html" class="nav-item"><i class="fas fa-search"></i><span>LOST & FOUND</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-search"></i><span>LOST & FOUND</span></a>
             </div>
 
             <div class="glass-card">
                 <div class="section-title"><i class="fas fa-chart-line"></i> Live Department Standings</div>
-                <div class="chart-container">
+                <div class="chart-container" style="height:320px;">
                     <canvas id="pointsChart"></canvas>
                 </div>
             </div>
@@ -155,22 +149,22 @@
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
                         <i class="fas fa-ambulance"></i>
-                        <div class="hotline-info"><b>Campus Clinic</b><a href="tel:09123456789" id="num-clinic" class="hotline-number">0912-345-6789</a></div>
+                        <div class="hotline-info"><b>Campus Clinic</b><a id="num-clinic" href="tel:09123456789" class="phone-link">0912-345-6789</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('security')">edit</span>
                         <i class="fas fa-shield-alt"></i>
-                        <div class="hotline-info"><b>Security</b><a href="tel:09223334444" id="num-security" class="hotline-number">0922-333-4444</a></div>
+                        <div class="hotline-info"><b>Security</b><a id="num-security" href="tel:09223334444" class="phone-link">0922-333-4444</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
                         <i class="fas fa-user-shield"></i>
-                        <div class="hotline-info"><b>PNP Cabagan</b><a href="tel:09887776655" id="num-pnp" class="hotline-number">0988-777-6655</a></div>
+                        <div class="hotline-info"><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655" class="phone-link">0988-777-6655</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
                         <i class="fas fa-fire-extinguisher"></i>
-                        <div class="hotline-info"><b>BFP Cabagan</b><a href="tel:117" id="num-bfp" class="hotline-number">117 / (078) 123-4567</a></div>
+                        <div class="hotline-info"><b>BFP Cabagan</b><a id="num-bfp" href="tel:117" class="phone-link">117 / (078) 123-4567</a></div>
                     </div>
                 </div>
             </div>
@@ -178,78 +172,65 @@
     </div>
 
     <script>
-        // --- CORE FUNCTIONS ---
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        // --- 100% PERSISTENCE ENGINE ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Restore Admin Profile
+        // --- THE "FIX ALL" STARTUP ---
+        function startup() {
+            // Restore Admin
             if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             
-            // Restore Numbers
-            loadNums(); 
-            
-            // Restore Freedom Wall
-            renderWall();
-            
-            // Render Graph
+            loadNums();   // Restore Hotlines
+            loadShouts(); // Restore Freedom Wall
             renderChart();
-        });
+        }
 
-        // --- HOTLINE SYSTEM ---
+        // --- HOTLINE LOGIC ---
         function editPhone(id) {
-            const n = prompt("Enter new number for " + id + ":");
-            if(n) { 
-                localStorage.setItem('num-'+id, n); 
-                loadNums(); 
+            let n = prompt("Enter new number for " + id + ":");
+            if(n) {
+                localStorage.setItem('num-'+id, n);
+                loadNums();
             }
         }
 
         function loadNums() {
-            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
-                const savedValue = localStorage.getItem('num-'+k);
-                const element = document.getElementById('num-'+k);
-                if(savedValue) {
-                    element.innerText = savedValue;
-                    // Fix: Nililinis ang number para clickable tawag agad
-                    const cleanNum = savedValue.replace(/[^0-9]/g, "");
-                    element.href = "tel:" + cleanNum;
+            let keys = ['clinic', 'security', 'pnp', 'bfp'];
+            keys.forEach(k => {
+                let saved = localStorage.getItem('num-'+k);
+                if(saved) {
+                    let el = document.getElementById('num-'+k);
+                    el.innerText = saved;
+                    el.href = "tel:" + saved.replace(/\D/g,''); // Clean up number for calling
                 }
             });
         }
 
-        // --- FREEDOM WALL SYSTEM (ARRAY BASED) ---
+        // --- FREEDOM WALL PERSISTENCE (ARRAY STYLE) ---
         function sendShout() {
-            const input = document.getElementById('shoutInput');
-            const message = input.value.trim();
-            if(!message) return;
+            let input = document.getElementById('shoutInput');
+            let val = input.value.trim();
+            if(!val) return;
 
-            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            let time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
-            // Get existing array or create new
-            let wallData = JSON.parse(localStorage.getItem('wallArray')) || [];
-            
-            // Add new post to array
-            wallData.push({ text: message, time: time });
-            
-            // Save updated array
-            localStorage.setItem('wallArray', JSON.stringify(wallData));
-            
+            // Get data, push new, then save back
+            let wallData = JSON.parse(localStorage.getItem('shoutsArray')) || [];
+            wallData.push({ text: val, time: time });
+            localStorage.setItem('shoutsArray', JSON.stringify(wallData));
+
             input.value = '';
-            renderWall();
+            loadShouts();
         }
 
-        function renderWall() {
-            const box = document.getElementById('shout-box');
-            let wallData = JSON.parse(localStorage.getItem('wallArray')) || [];
+        function loadShouts() {
+            let wallData = JSON.parse(localStorage.getItem('shoutsArray')) || [];
+            let box = document.getElementById('shout-box');
             
-            // Build HTML
-            box.innerHTML = wallData.map(item => `
+            box.innerHTML = wallData.map(post => `
                 <div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                    <b>User:</b> ${item.text} 
-                    <span style="float:right; font-size:9px; color:#999;">${item.time}</span>
+                    <b>User:</b> ${post.text} <span style="float:right; font-size:9px; color:#999;">${post.time}</span>
                 </div>
             `).join('');
             
@@ -276,9 +257,8 @@
             });
         }
 
-        // --- ADMIN PROFILE ---
         function editAdmin() {
-            const name = prompt("Change Admin Name:");
+            let name = prompt("Change Admin Name:");
             if(name) { 
                 document.getElementById('admin-name').innerText = name; 
                 localStorage.setItem('adminName', name); 
@@ -286,16 +266,14 @@
         }
 
         function previewImg(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => { 
-                    document.getElementById('logo-preview').src = e.target.result; 
-                    localStorage.setItem('adminPic', e.target.result); 
-                }
-                reader.readAsDataURL(input.files[0]);
+            let reader = new FileReader();
+            reader.onload = e => { 
+                document.getElementById('logo-preview').src = e.target.result; 
+                localStorage.setItem('adminPic', e.target.result); 
             }
+            reader.readAsDataURL(input.files[0]);
         }
     </script>
 </body>
-                            </html>
-                            
+    </html>
+    
