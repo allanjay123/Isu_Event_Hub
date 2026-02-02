@@ -81,12 +81,13 @@
 
         /* HOTLINE NUMBER STYLE (BLUE & CLICKABLE) */
         .hotline-number { 
-            font-size: 11px; 
-            color: blue; 
-            font-weight: 600; 
+            font-size: 12px; 
+            color: #007bff; 
+            font-weight: bold; 
             text-decoration: none; 
+            display: inline-block;
+            margin-top: 2px;
         }
-        .hotline-number:hover { text-decoration: underline; }
 
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
@@ -177,25 +178,85 @@
     </div>
 
     <script>
+        // --- CORE FUNCTIONS ---
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        window.onload = function() {
-            // Restore Admin Info
+        // --- 100% PERSISTENCE ENGINE ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore Admin Profile
             if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             
-            // Restore Hotline Numbers
+            // Restore Numbers
             loadNums(); 
             
-            // Restore Freedom Wall Messages
-            if(localStorage.getItem('freedomWall')) {
-                document.getElementById('shout-box').innerHTML = localStorage.getItem('freedomWall');
-            }
+            // Restore Freedom Wall
+            renderWall();
             
+            // Render Graph
             renderChart();
-        };
+        });
 
+        // --- HOTLINE SYSTEM ---
+        function editPhone(id) {
+            const n = prompt("Enter new number for " + id + ":");
+            if(n) { 
+                localStorage.setItem('num-'+id, n); 
+                loadNums(); 
+            }
+        }
+
+        function loadNums() {
+            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
+                const savedValue = localStorage.getItem('num-'+k);
+                const element = document.getElementById('num-'+k);
+                if(savedValue) {
+                    element.innerText = savedValue;
+                    // Fix: Nililinis ang number para clickable tawag agad
+                    const cleanNum = savedValue.replace(/[^0-9]/g, "");
+                    element.href = "tel:" + cleanNum;
+                }
+            });
+        }
+
+        // --- FREEDOM WALL SYSTEM (ARRAY BASED) ---
+        function sendShout() {
+            const input = document.getElementById('shoutInput');
+            const message = input.value.trim();
+            if(!message) return;
+
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            // Get existing array or create new
+            let wallData = JSON.parse(localStorage.getItem('wallArray')) || [];
+            
+            // Add new post to array
+            wallData.push({ text: message, time: time });
+            
+            // Save updated array
+            localStorage.setItem('wallArray', JSON.stringify(wallData));
+            
+            input.value = '';
+            renderWall();
+        }
+
+        function renderWall() {
+            const box = document.getElementById('shout-box');
+            let wallData = JSON.parse(localStorage.getItem('wallArray')) || [];
+            
+            // Build HTML
+            box.innerHTML = wallData.map(item => `
+                <div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <b>User:</b> ${item.text} 
+                    <span style="float:right; font-size:9px; color:#999;">${item.time}</span>
+                </div>
+            `).join('');
+            
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // --- CHART ---
         function renderChart() {
             const ctx = document.getElementById('pointsChart').getContext('2d');
             new Chart(ctx, {
@@ -215,54 +276,26 @@
             });
         }
 
-        // Fixed Hotline Logic
-        function editPhone(id) {
-            const n = prompt("Enter new number for " + id + ":");
-            if(n) { 
-                localStorage.setItem('num-'+id, n); 
-                loadNums(); 
+        // --- ADMIN PROFILE ---
+        function editAdmin() {
+            const name = prompt("Change Admin Name:");
+            if(name) { 
+                document.getElementById('admin-name').innerText = name; 
+                localStorage.setItem('adminName', name); 
             }
         }
 
-        function loadNums() {
-            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
-                const s = localStorage.getItem('num-'+k);
-                if(s) {
-                    const el = document.getElementById('num-'+k);
-                    el.innerText = s;
-                    el.href = "tel:" + s.replace(/[^0-9]/g, ""); // Clean non-digits for dialer
-                }
-            });
-        }
-
-        // Fixed Freedom Wall Logic
-        function sendShout() {
-            const val = document.getElementById('shoutInput').value;
-            if(!val) return;
-            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
-            const messageHtml = `<div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><b>User:</b> ${val} <span style="float:right; font-size:9px; color:#999;">${time}</span></div>`;
-            
-            const box = document.getElementById('shout-box');
-            box.innerHTML += messageHtml;
-            
-            // Save the entire box content to localStorage
-            localStorage.setItem('freedomWall', box.innerHTML);
-            
-            document.getElementById('shoutInput').value = '';
-            box.scrollTop = box.scrollHeight;
-        }
-
-        function editAdmin() {
-            const name = prompt("Change Admin Name:");
-            if(name) { document.getElementById('admin-name').innerText = name; localStorage.setItem('adminName', name); }
-        }
-
         function previewImg(input) {
-            const reader = new FileReader();
-            reader.onload = e => { document.getElementById('logo-preview').src = e.target.result; localStorage.setItem('adminPic', e.target.result); }
-            reader.readAsDataURL(input.files[0]);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { 
+                    document.getElementById('logo-preview').src = e.target.result; 
+                    localStorage.setItem('adminPic', e.target.result); 
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 </body>
-</html>
+                            </html>
+                            
