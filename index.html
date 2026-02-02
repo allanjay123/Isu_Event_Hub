@@ -39,7 +39,7 @@
         .admin-card { 
             background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
             display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 10px solid var(--isu-gold); /* Kapal na Gold Border */
+            border-left: 10px solid var(--isu-gold);
         }
         #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
 
@@ -50,7 +50,7 @@
         .glass-card { 
             background: white; border-radius: 15px; padding: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
-            border: 2px solid var(--isu-gold); /* Solid Gold Border */
+            border: 2px solid var(--isu-gold); 
             transition: transform 0.3s ease;
         }
         .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
@@ -76,9 +76,10 @@
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
         }
         .hotline-item i { color: #d9534f; font-size: 16px; }
-        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; }
+        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 10; }
         .hotline-info b { font-size: 12px; display: block; }
-        .hotline-info span { font-size: 11px; color: #555; font-weight: 500; }
+        .hotline-info a { font-size: 11px; color: #555; font-weight: 500; text-decoration: none; display: block; }
+        .hotline-info a:hover { color: var(--isu-green); text-decoration: underline; }
 
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
@@ -146,22 +147,22 @@
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
                         <i class="fas fa-ambulance"></i>
-                        <div class="hotline-info"><b>Campus Clinic</b><span id="num-clinic">0912-345-6789</span></div>
+                        <div class="hotline-info"><b>Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('security')">edit</span>
                         <i class="fas fa-shield-alt"></i>
-                        <div class="hotline-info"><b>Security</b><span id="num-security">0922-333-4444</span></div>
+                        <div class="hotline-info"><b>Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
                         <i class="fas fa-user-shield"></i>
-                        <div class="hotline-info"><b>PNP Cabagan</b><span id="num-pnp">0988-777-6655</span></div>
+                        <div class="hotline-info"><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
                         <i class="fas fa-fire-extinguisher"></i>
-                        <div class="hotline-info"><b>BFP Cabagan</b><span id="num-bfp">117 / (078) 123-4567</span></div>
+                        <div class="hotline-info"><b>BFP Cabagan</b><a id="num-bfp" href="tel:117">117 / (078) 123-4567</a></div>
                     </div>
                 </div>
             </div>
@@ -175,7 +176,9 @@
         window.onload = function() {
             if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
-            loadNums(); renderChart();
+            loadNums(); 
+            loadShouts(); // Load previous posts
+            renderChart();
         };
 
         function renderChart() {
@@ -199,23 +202,50 @@
 
         function editPhone(id) {
             const n = prompt("Enter new number for " + id + ":");
-            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
+            if(n) { 
+                localStorage.setItem('num-'+id, n); 
+                loadNums(); 
+            }
         }
 
         function loadNums() {
             ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
                 const s = localStorage.getItem('num-'+k);
-                if(s) document.getElementById('num-'+k).innerText = s;
+                if(s) {
+                    const el = document.getElementById('num-'+k);
+                    el.innerText = s;
+                    el.href = "tel:" + s.replace(/\D/g,''); // Removes non-digits for tel link
+                }
             });
         }
 
+        // SAVE & LOAD FREEDOM WALL FUNCTIONS
         function sendShout() {
             const val = document.getElementById('shoutInput').value;
             if(!val) return;
+            
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('shout-box').innerHTML += `<div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><b>User:</b> ${val} <span style="float:right; font-size:9px; color:#999;">${time}</span></div>`;
+            const newPost = { text: val, time: time };
+            
+            // Get existing shouts
+            let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
+            shouts.push(newPost);
+            
+            // Save to localStorage
+            localStorage.setItem('shouts', JSON.stringify(shouts));
+            
             document.getElementById('shoutInput').value = '';
+            loadShouts();
+        }
+
+        function loadShouts() {
+            const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
             const box = document.getElementById('shout-box');
+            box.innerHTML = shouts.map(s => `
+                <div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <b>User:</b> ${s.text} <span style="float:right; font-size:9px; color:#999;">${s.time}</span>
+                </div>
+            `).join('');
             box.scrollTop = box.scrollHeight;
         }
 
