@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISU Event Hub | Elite Dashboard</title>
+    <title>ISU Event Hub | Elite Gold Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -35,58 +35,52 @@
         /* MAIN CONTAINER */
         .container { max-width: 98%; margin: 20px auto; padding: 0 15px; }
 
-        /* ADMIN DASHBOARD CARD (RESTORED) */
+        /* ADMIN CARD */
         .admin-card { 
             background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
             display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 8px solid var(--isu-gold);
+            border-left: 10px solid var(--isu-gold); /* Kapal na Gold Border */
         }
-        #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
+        #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
 
         /* 3-COLUMN LAYOUT */
-        .main-wrapper {
-            display: grid; grid-template-columns: 200px 1fr 340px; gap: 20px;
-        }
+        .main-wrapper { display: grid; grid-template-columns: 200px 1fr 340px; gap: 20px; }
 
-        /* CARDS / SECTIONS (AESTHETIC BORDER) */
+        /* GOLD BORDER CARDS */
         .glass-card { 
             background: white; border-radius: 15px; padding: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 2px solid var(--isu-gold); /* Solid Gold Border */
             transition: transform 0.3s ease;
         }
-        .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid #f1f1f1; padding-bottom: 5px; }
+        .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
 
         /* NAV MENU */
         .nav-menu { display: flex; flex-direction: column; gap: 10px; }
         .nav-item { 
             background: white; padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom: 3px solid var(--isu-gold);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom: 4px solid var(--isu-gold);
             font-size: 11px; font-weight: bold; color: var(--text); transition: 0.3s;
         }
-        .nav-item:hover { background: var(--isu-green); color: white; }
+        .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
         .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
-        /* CHART AREA (PALIIT) */
+        /* CHART AREA */
         .chart-container { height: 320px; position: relative; }
 
-        /* FREEDOM WALL & HOTLINES */
-        .wall-box { height: 180px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
+        /* WALL & HOTLINES */
+        .wall-box { height: 180px; overflow-y: auto; background: #fdfdfd; padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
         
         .hotline-item { 
-            background: #fffafa; border: 1px solid #ffebeb; padding: 10px; border-radius: 10px; 
+            background: #fffdf5; border: 1px solid #f9f1d0; padding: 10px; border-radius: 10px; 
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
         }
         .hotline-item i { color: #d9534f; font-size: 16px; }
-        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: blue; cursor: pointer; text-decoration: underline; }
+        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; }
         .hotline-info b { font-size: 12px; display: block; }
-        .hotline-info span { font-size: 11px; color: #555; }
+        .hotline-info span { font-size: 11px; color: #555; font-weight: 500; }
 
-        /* MOBILE RESPONSIVE */
-        @media (max-width: 1024px) {
-            .main-wrapper { grid-template-columns: 1fr; }
-            .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; }
-        }
+        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
 </head>
 <body>
@@ -162,7 +156,12 @@
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
                         <i class="fas fa-user-shield"></i>
-                        <div class="hotline-info"><b>PNP</b><span id="num-pnp">0988-777-6655</span></div>
+                        <div class="hotline-info"><b>PNP Cabagan</b><span id="num-pnp">0988-777-6655</span></div>
+                    </div>
+                    <div class="hotline-item">
+                        <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
+                        <i class="fas fa-fire-extinguisher"></i>
+                        <div class="hotline-info"><b>BFP Cabagan</b><span id="num-bfp">117 / (078) 123-4567</span></div>
                     </div>
                 </div>
             </div>
@@ -189,8 +188,8 @@
                         label: 'Live Points',
                         data: [1200, 1100, 900, 850, 150],
                         backgroundColor: 'rgba(45, 90, 39, 0.85)',
-                        borderColor: '#2d5a27',
-                        borderWidth: 1,
+                        borderColor: '#facc15',
+                        borderWidth: 2,
                         borderRadius: 5
                     }]
                 },
@@ -199,12 +198,12 @@
         }
 
         function editPhone(id) {
-            const n = prompt("Enter new number:");
+            const n = prompt("Enter new number for " + id + ":");
             if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
         }
 
         function loadNums() {
-            ['clinic', 'security', 'pnp'].forEach(k => {
+            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
                 const s = localStorage.getItem('num-'+k);
                 if(s) document.getElementById('num-'+k).innerText = s;
             });
@@ -213,12 +212,15 @@
         function sendShout() {
             const val = document.getElementById('shoutInput').value;
             if(!val) return;
-            document.getElementById('shout-box').innerHTML += `<div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px;"><b>User:</b> ${val}</div>`;
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('shout-box').innerHTML += `<div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><b>User:</b> ${val} <span style="float:right; font-size:9px; color:#999;">${time}</span></div>`;
             document.getElementById('shoutInput').value = '';
+            const box = document.getElementById('shout-box');
+            box.scrollTop = box.scrollHeight;
         }
 
         function editAdmin() {
-            const name = prompt("Enter Name:");
+            const name = prompt("Change Admin Name:");
             if(name) { document.getElementById('admin-name').innerText = name; localStorage.setItem('adminName', name); }
         }
 
