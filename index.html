@@ -364,4 +364,86 @@ Last Updated: Feb 2026
                     labels: ['CCSICT', 'CTE', 'CBA', 'CAES', 'CCJE'],
                     datasets: [{
                         label: 'Live Points',
-   
+                        data: [1200, 1100, 900, 850, 150],
+                        backgroundColor: 'rgba(45, 90, 39, 0.85)',
+                        borderColor: '#facc15',
+                        borderWidth: 2,
+                        borderRadius: 5
+                    }]
+                },
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { labels: { color: isDarkMode() ? '#fff' : '#333' } } },
+                    scales: { 
+                        y: { beginAtZero: true, ticks: { color: isDarkMode() ? '#bbb' : '#333' } },
+                        x: { ticks: { color: isDarkMode() ? '#bbb' : '#333' } }
+                    } 
+                }
+            });
+        }
+        function isDarkMode() { return document.body.classList.contains('dark-mode'); }
+
+        // --- FREEDOM WALL LOGIC ---
+        function sendShout() {
+            const val = document.getElementById('shoutInput').value;
+            if(!val) return;
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
+            shouts.push({ text: val, time: time });
+            localStorage.setItem('shouts', JSON.stringify(shouts));
+            document.getElementById('shoutInput').value = '';
+            loadShouts();
+        }
+
+        function loadShouts() {
+            const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
+            const box = document.getElementById('shout-box');
+            if(!box) return;
+            box.innerHTML = shouts.map(s => `
+                <div style="background:var(--card-bg); padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <b>User:</b> ${s.text} <span style="float:right; font-size:9px; color:#999;">${s.time}</span>
+                </div>
+            `).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // --- DIRECTORY & PROFILE LOGIC ---
+        function editPhone(id) {
+            const n = prompt("Enter new number:");
+            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
+        }
+
+        function loadNums() {
+            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
+                const s = localStorage.getItem('num-'+k);
+                if(s) {
+                    const el = document.getElementById('num-'+k);
+                    if(el) {
+                        el.innerText = s;
+                        el.href = "tel:" + s.replace(/\D/g,'');
+                    }
+                }
+            });
+        }
+
+        function editAdmin() {
+            const name = prompt("Change Admin Name:");
+            if(name) { 
+                document.getElementById('admin-name').innerText = name; 
+                localStorage.setItem('activeUser', name); 
+            }
+        }
+
+        function previewImg(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { 
+                    document.getElementById('logo-preview').src = e.target.result; 
+                    localStorage.setItem('adminPic', e.target.result); 
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
