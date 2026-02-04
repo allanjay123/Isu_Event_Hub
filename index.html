@@ -208,7 +208,12 @@
     </div>
 
     <script>
-        // --- LOGIN & REGISTER LOGIC ---
+        /* --- SESSION SECURITY CHECK --- */
+        // Itatago ang login UI agad kung may active session na
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            document.getElementById('auth-overlay').style.display = 'none';
+        }
+
         function toggleAuthForm() {
             document.getElementById('login-form').classList.toggle('hidden');
             document.getElementById('register-form').classList.toggle('hidden');
@@ -232,7 +237,7 @@
             if(savedPass && savedPass === pass) {
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('currentUser', user);
-                document.getElementById('auth-overlay').classList.add('hidden');
+                document.getElementById('auth-overlay').style.display = 'none';
                 document.getElementById('admin-name').innerText = user + " Dashboard";
             } else {
                 alert("Invalid Username or Password!");
@@ -241,10 +246,11 @@
 
         function handleLogout() {
             localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
             location.reload();
         }
 
-        // --- PRE-EXISTING FEATURES ---
+        /* --- DASHBOARD LOGIC --- */
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
@@ -281,8 +287,6 @@
             document.querySelector('.txt-vote').innerText = t.vote;
             document.querySelector('.txt-attn').innerText = t.attn;
             document.querySelector('.txt-lost').innerText = t.lost;
-
-            alert(isTagalog ? "Wika: Tagalog" : "Language: English");
         }
 
         function toggleDarkMode() {
@@ -291,18 +295,19 @@
         }
 
         function showInfo() {
-            alert("ISU Event Hub v2.7\nCabagan Campus Edition\nSecure Login Active.");
+            alert("ISU Event Hub v2.8\nSystem Status: Online\nSession: Active");
         }
 
         window.onload = function() {
-            // Check Session
+            // Restore Session View
             if(localStorage.getItem('isLoggedIn') === 'true') {
-                document.getElementById('auth-overlay').classList.add('hidden');
-                document.getElementById('admin-name').innerText = localStorage.getItem('currentUser') + " Dashboard";
+                const user = localStorage.getItem('currentUser');
+                document.getElementById('admin-name').innerText = user + " Dashboard";
             }
 
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+            
             loadNums(); 
             loadShouts();
             renderChart();
