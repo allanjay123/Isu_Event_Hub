@@ -48,7 +48,7 @@
         .glass-card { 
             background: white; border-radius: 15px; padding: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
-            border: 2px solid var(--isu-gold); 
+            border: 2px solid var(--isu-gold); margin-bottom: 20px;
         }
         .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
 
@@ -59,6 +59,7 @@
             font-size: 11px; font-weight: bold; color: var(--text); transition: 0.3s;
         }
         .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
+        .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
         .chart-container { height: 320px; position: relative; }
 
@@ -73,7 +74,7 @@
         .hotline-info b { font-size: 12px; display: block; }
         .hotline-info a { font-size: 11px; color: #0044ff; font-weight: bold; text-decoration: underline; display: block; }
 
-        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
+        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } .nav-item { width: 100px; } }
     </style>
 </head>
 <body>
@@ -112,6 +113,9 @@
                 <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span class="txt-reg">REGISTRATION</span></a>
                 <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span class="txt-act">ACTIVITIES</span></a>
                 <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i><span class="txt-lead">LEADERBOARD</span></a>
+                <a href="voting.html" class="nav-item"><i class="fas fa-poll"></i><span class="txt-vote">VOTING</span></a>
+                <a href="attendance.html" class="nav-item"><i class="fas fa-id-card"></i><span class="txt-attn">ATTENDANCE</span></a>
+                <a href="lostfound.html" class="nav-item"><i class="fas fa-search"></i><span class="txt-lost">LOST & FOUND</span></a>
             </div>
 
             <div class="glass-card">
@@ -162,7 +166,6 @@
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        // --- LANGUAGE TOGGLE LOGIC ---
         let isTagalog = false;
         function changeLang() {
             isTagalog = !isTagalog;
@@ -172,7 +175,14 @@
                 wall: isTagalog ? "Freedom Wall (Sulat Dito)" : "Freedom Wall",
                 directory: isTagalog ? "Direktoryo ng Emergency" : "Emergency Directory",
                 clinic: isTagalog ? "Klinika ng Campus" : "Campus Clinic",
-                security: isTagalog ? "Seguridad" : "Security"
+                security: isTagalog ? "Seguridad" : "Security",
+                cal: isTagalog ? "KALENDARYO" : "CALENDAR",
+                reg: isTagalog ? "REHISTRO" : "REGISTRATION",
+                act: isTagalog ? "AKTIBIDAD" : "ACTIVITIES",
+                lead: isTagalog ? "LEADERBOARD" : "LEADERBOARD",
+                vote: isTagalog ? "BOTOHAN" : "VOTING",
+                attn: isTagalog ? "ATENDANS" : "ATTENDANCE",
+                lost: isTagalog ? "NAWALA/NAKIT-AN" : "LOST & FOUND"
             };
             
             document.getElementById('main-title').innerText = t.title;
@@ -181,6 +191,15 @@
             document.getElementById('hotline-title').innerHTML = `<i class="fas fa-phone-alt"></i> ${t.directory}`;
             document.querySelector('.l-clinic').innerText = t.clinic;
             document.querySelector('.l-security').innerText = t.security;
+            
+            // Sidebar buttons translation
+            document.querySelector('.txt-cal').innerText = t.cal;
+            document.querySelector('.txt-reg').innerText = t.reg;
+            document.querySelector('.txt-act').innerText = t.act;
+            document.querySelector('.txt-lead').innerText = t.lead;
+            document.querySelector('.txt-vote').innerText = t.vote;
+            document.querySelector('.txt-attn').innerText = t.attn;
+            document.querySelector('.txt-lost').innerText = t.lost;
 
             alert(isTagalog ? "Wika: Tagalog" : "Language: English");
         }
@@ -191,7 +210,7 @@
         }
 
         function showInfo() {
-            alert("ISU Event Hub v2.5\nCabagan Campus Edition\nAll Systems Operational.");
+            alert("ISU Event Hub v2.6\nCabagan Campus Edition\nAll Modules Integrated.");
         }
 
         window.onload = function() {
