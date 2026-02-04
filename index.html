@@ -12,39 +12,38 @@
             --bg: #f0f2f5; --card-bg: #ffffff; --text: #2c3e50; 
         }
 
-        /* DARK MODE OVERRIDE */
         body.dark-mode {
             --bg: #121212; --card-bg: #1e1e1e; --text: #e0e0e0;
         }
 
-        body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); transition: 0.3s; overflow-x: hidden; }
+        body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); transition: 0.3s; }
         
-        /* LOGIN & REGISTER SCREEN STYLES */
+        /* LOGIN & REGISTER STYLES */
         #auth-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, var(--isu-green), #1e3d1a);
             z-index: 9999; display: flex; align-items: center; justify-content: center;
-            transition: 0.5s ease-in-out;
         }
         .auth-box {
-            background: white; padding: 30px; border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3); border-top: 8px solid var(--isu-gold);
+            background: white; padding: 35px; border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); border-top: 8px solid var(--isu-gold);
             width: 90%; max-width: 400px; text-align: center;
         }
-        .auth-box i { color: var(--isu-green); font-size: 50px; margin-bottom: 10px; }
+        .auth-box h2 { color: var(--isu-green); margin-bottom: 20px; font-weight: 800; }
         .auth-box input {
             width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd;
-            border-radius: 8px; box-sizing: border-box; outline: none;
+            border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s;
         }
+        .auth-box input:focus { border-color: var(--isu-gold); box-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
         .auth-box button {
             width: 100%; padding: 14px; background: var(--isu-green); color: white;
-            border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px;
+            border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s;
         }
         .auth-box button:hover { background: #1e3d1a; transform: translateY(-2px); }
         .switch-auth { margin-top: 15px; font-size: 13px; color: #666; cursor: pointer; text-decoration: underline; }
 
-        /* DASHBOARD CONTENT (Hidden until login) */
-        #dashboard-content { display: none; }
+        /* DASHBOARD (Hidden initially) */
+        #dashboard-wrapper { display: none; }
 
         /* HEADER */
         .header { 
@@ -67,7 +66,6 @@
         /* MAIN CONTAINER */
         .container { max-width: 98%; margin: 20px auto; padding: 0 15px; }
 
-        /* ADMIN CARD */
         .admin-card { 
             background: var(--card-bg); padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
             display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
@@ -75,20 +73,14 @@
         }
         #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
 
-        /* 3-COLUMN LAYOUT */
         .main-wrapper { display: grid; grid-template-columns: 200px 1fr 340px; gap: 20px; }
 
-        /* GOLD BORDER CARDS */
         .glass-card { 
             background: var(--card-bg); border-radius: 15px; padding: 20px; 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
-            border: 2px solid var(--isu-gold); 
-            transition: transform 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05); border: 2px solid var(--isu-gold); 
         }
         .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
-        body.dark-mode .section-title { color: var(--isu-gold); }
 
-        /* NAV MENU */
         .nav-menu { display: flex; flex-direction: column; gap: 10px; }
         .nav-item { 
             background: var(--card-bg); padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
@@ -98,12 +90,8 @@
         .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
         .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
-        /* CHART AREA */
         .chart-container { height: 320px; position: relative; }
-
-        /* WALL & HOTLINES */
         .wall-box { height: 180px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
-        body.dark-mode .wall-box { background: #252525; border-color: #444; }
         
         .hotline-item { 
             background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.2); padding: 10px; border-radius: 10px; 
@@ -111,72 +99,65 @@
         }
         .hotline-item i { color: #d9534f; font-size: 16px; }
         .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: var(--isu-green); cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 10; }
-        .hotline-info b { font-size: 12px; display: block; }
-        .hotline-info a { font-size: 11px; color: var(--text); font-weight: 500; text-decoration: none; display: block; opacity: 0.8; }
-        .hotline-info a:hover { color: var(--isu-green); text-decoration: underline; opacity: 1; }
 
-        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
+        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; } }
     </style>
 </head>
 <body>
 
     <div id="auth-overlay">
         <div class="auth-box" id="login-form">
-            <i class="fas fa-university"></i>
-            <h2 style="color: var(--isu-green); margin: 0;">ISU EVENT HUB</h2>
-            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Welcome back, Student!</p>
-            <input type="text" id="login-id" placeholder="Student ID or Full Name">
+            <i class="fas fa-university" style="font-size: 50px; color: var(--isu-green); margin-bottom: 10px;"></i>
+            <h2>ISU LOGIN</h2>
+            <input type="text" id="login-user" placeholder="Student ID or Full Name">
             <input type="password" id="login-pass" placeholder="Password">
             <button onclick="handleLogin()">LOGIN</button>
-            <div class="switch-auth" onclick="toggleAuth(true)">No account? Register here</div>
+            <div class="switch-auth" onclick="toggleAuth(true)">Walang account? Mag-register dito</div>
         </div>
 
         <div class="auth-box" id="register-form" style="display: none;">
-            <i class="fas fa-user-plus"></i>
-            <h2 style="color: var(--isu-green); margin: 0;">REGISTER</h2>
-            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Create your student account</p>
-            <input type="text" id="reg-fullname" placeholder="Full Name (e.g. Juan Dela Cruz)">
+            <i class="fas fa-user-plus" style="font-size: 50px; color: var(--isu-green); margin-bottom: 10px;"></i>
+            <h2>REGISTER</h2>
+            <input type="text" id="reg-name" placeholder="Full Name (e.g. Juan Dela Cruz)">
             <input type="text" id="reg-id" placeholder="Student ID (e.g. 21-0001)">
-            <input type="password" id="reg-pass" placeholder="Create Password">
+            <input type="password" id="reg-pass" placeholder="Password">
             <button onclick="handleRegister()">CREATE ACCOUNT</button>
-            <div class="switch-auth" onclick="toggleAuth(false)">Already have an account? Login</div>
+            <div class="switch-auth" onclick="toggleAuth(false)">May account na? Login dito</div>
         </div>
     </div>
 
-    <div id="dashboard-content">
+    <div id="dashboard-wrapper">
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
             <div class="sidebar-item" onclick="toggleDarkMode()"><i id="dm-icon" class="fas fa-moon"></i> <span id="dm-text">Dark Mode</span></div>
             <div class="sidebar-item" onclick="changeLanguage()"><i class="fas fa-language"></i> <span id="lang-text">Change Language</span></div>
             <div class="sidebar-item" onclick="showSystemInfo()"><i class="fas fa-info-circle"></i> System Info</div>
-            <div class="sidebar-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Dashboard</div>
-            <div class="sidebar-item" onclick="handleLogout()" style="color:red;"><i class="fas fa-sign-out-alt"></i> Logout</div>
+            <div class="sidebar-item" onclick="handleLogout()" style="color:red; font-weight:bold;"><i class="fas fa-sign-out-alt"></i> Logout</div>
+            <div class="sidebar-item" onclick="toggleMenu()"><i class="fas fa-times"></i> Close</div>
         </div>
 
         <div class="header">
             <div class="header-left">
                 <i class="fas fa-bars menu-btn" onclick="toggleMenu()" style="cursor:pointer;"></i>
-                <span id="nav-title" style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
+                <span id="nav-title" style="font-weight: bold; margin-left: 15px;">ISU ONLINE EVENT SYSTEM</span>
             </div>
             <div id="clock" style="font-family: monospace; font-weight: bold; font-size: 14px;">00:00:00 PM</div>
         </div>
 
         <div class="container">
             <div class="admin-card">
-                <img id="logo-preview" src="https://via.placeholder.com/65?text=LOGO" onclick="document.getElementById('img-input').click()">
+                <img id="logo-preview" src="https://via.placeholder.com/65?text=USER" onclick="document.getElementById('img-input').click()">
                 <input type="file" id="img-input" style="display:none;" onchange="previewImg(this)">
                 <div>
-                    <h3 id="admin-name" style="margin:0; font-size: 18px;">Student Dashboard</h3>
+                    <h3 id="admin-name" style="margin:0; font-size: 18px;">Welcome Student</h3>
                     <p id="admin-sub" style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
-                    <a href="#" onclick="editAdmin()" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Profile</a>
+                    <a href="#" onclick="editAdmin()" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Display Name</a>
                 </div>
             </div>
 
             <div class="main-wrapper">
                 <div class="nav-menu">
                     <a href="#" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
-                    <a href="#" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
-                    <a href="#" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
                     <a href="#" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
                     <a href="#" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
                     <a href="#" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
@@ -184,10 +165,8 @@
                 </div>
 
                 <div class="glass-card">
-                    <div class="section-title" id="title-standings"><i class="fas fa-chart-line"></i> Live Department Standings</div>
-                    <div class="chart-container">
-                        <canvas id="pointsChart"></canvas>
-                    </div>
+                    <div class="section-title" id="title-standings"><i class="fas fa-chart-line"></i> Live Standings</div>
+                    <div class="chart-container"><canvas id="pointsChart"></canvas></div>
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 15px;">
@@ -195,32 +174,22 @@
                         <div class="section-title" id="title-wall"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
                         <div id="shout-box" class="wall-box"></div>
                         <div style="display:flex; gap:5px;">
-                            <input type="text" id="shoutInput" style="flex:1; padding:8px; border-radius:5px; border:1px solid #ddd;" placeholder="Cheer here...">
-                            <button onclick="sendShout()" style="background:var(--isu-green); color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer;">Post</button>
+                            <input type="text" id="shoutInput" style="flex:1; padding:8px;" placeholder="Cheer here...">
+                            <button onclick="sendShout()" style="background:var(--isu-green); color:white; border:none; padding:8px 12px; cursor:pointer;">Post</button>
                         </div>
                     </div>
 
                     <div class="glass-card">
-                        <div class="section-title" id="title-hotline"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
+                        <div class="section-title" id="title-hotline"><i class="fas fa-phone-alt"></i> Emergency</div>
                         <div class="hotline-item">
                             <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
                             <i class="fas fa-ambulance"></i>
-                            <div class="hotline-info"><b>Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                            <div class="hotline-info"><b>Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
                         </div>
                         <div class="hotline-item">
                             <span class="edit-btn" onclick="editPhone('security')">edit</span>
                             <i class="fas fa-shield-alt"></i>
                             <div class="hotline-info"><b>Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
-                        </div>
-                        <div class="hotline-item">
-                            <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
-                            <i class="fas fa-user-shield"></i>
-                            <div class="hotline-info"><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
-                        </div>
-                        <div class="hotline-item">
-                            <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
-                            <i class="fas fa-fire-extinguisher"></i>
-                            <div class="hotline-info"><b>BFP Cabagan</b><a id="num-bfp" href="tel:117">117 / (078) 123-4567</a></div>
                         </div>
                     </div>
                 </div>
@@ -229,65 +198,53 @@
     </div>
 
     <script>
-        // --- AUTH LOGIC (LOGIN & REGISTER) ---
+        // --- AUTHENTICATION LOGIC ---
         function toggleAuth(showReg) {
             document.getElementById('login-form').style.display = showReg ? 'none' : 'block';
             document.getElementById('register-form').style.display = showReg ? 'block' : 'none';
         }
 
         function handleRegister() {
-            const name = document.getElementById('reg-fullname').value;
-            const id = document.getElementById('reg-id').value;
-            const pass = document.getElementById('reg-pass').value;
+            const name = document.getElementById('reg-name').value.trim();
+            const id = document.getElementById('reg-id').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
 
-            if(!name || !id || !pass) { alert("Please fill up all fields!"); return; }
+            if(!name || !id || !pass) { alert("Please fill all fields!"); return; }
 
-            let users = JSON.parse(localStorage.getItem('system_users')) || [];
-            
-            // Check if ID already exists
-            if(users.some(u => u.id === id)) { alert("Student ID already registered!"); return; }
+            let users = JSON.parse(localStorage.getItem('isu_accounts')) || [];
+            if(users.some(u => u.id === id)) { alert("ID already exists!"); return; }
 
-            users.push({ name: name, id: id, pass: pass });
-            localStorage.setItem('system_users', JSON.stringify(users));
+            users.push({ name, id, pass });
+            localStorage.setItem('isu_accounts', JSON.stringify(users));
             alert("Registration Successful! Please login.");
             toggleAuth(false);
         }
 
         function handleLogin() {
-            const input = document.getElementById('login-id').value;
-            const pass = document.getElementById('login-pass').value;
-            const users = JSON.parse(localStorage.getItem('system_users')) || [];
+            const userInput = document.getElementById('login-user').value.trim().toLowerCase();
+            const passInput = document.getElementById('login-pass').value.trim();
+            const users = JSON.parse(localStorage.getItem('isu_accounts')) || [];
 
-            // Pre-defined Admin account
-            if(input === "admin" && pass === "isu123") {
-                loginSuccess("Admin User");
+            // Admin Backdoor
+            if(userInput === "admin" && passInput === "isu123") {
+                loginSuccess("System Admin");
                 return;
             }
 
-            // Check registered students (ID or Name)
-            const user = users.find(u => (u.id === input || u.name.toLowerCase() === input.toLowerCase()) && u.pass === pass);
-
+            // User check
+            const user = users.find(u => (u.id.toLowerCase() === userInput || u.name.toLowerCase() === userInput) && u.pass === passInput);
+            
             if(user) {
                 loginSuccess(user.name);
             } else {
-                alert("Invalid Credentials! Did you register already?");
+                alert("Invalid Credentials!");
             }
         }
 
         function loginSuccess(name) {
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('adminName', name);
-            showDashboard();
-            document.getElementById('admin-name').innerText = name;
-        }
-
-        function showDashboard() {
-            document.getElementById('auth-overlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('auth-overlay').style.display = 'none';
-                document.getElementById('dashboard-content').style.display = 'block';
-                renderChart(); 
-            }, 500);
+            localStorage.setItem('currentUser', name);
+            checkLoginState();
         }
 
         function handleLogout() {
@@ -295,23 +252,27 @@
             location.reload();
         }
 
+        function checkLoginState() {
+            if(localStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('dashboard-wrapper').style.display = 'block';
+                document.getElementById('admin-name').innerText = localStorage.getItem('currentUser');
+                renderChart();
+            }
+        }
+
         // --- CORE FUNCTIONS ---
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
         window.onload = function() {
-            if(localStorage.getItem('isLoggedIn') === 'true') {
-                showDashboard();
-            }
-            if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
+            checkLoginState();
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             if(localStorage.getItem('darkMode') === 'true') applyDarkMode(true);
-            
-            loadNums(); 
-            loadShouts(); 
+            loadNums(); loadShouts();
         };
 
-        // --- SIDEBAR FEATURES (DARK MODE, LANGUAGE, SYSTEM INFO) ---
+        // --- SIDEBAR FEATURES ---
         function toggleDarkMode() {
             const isDark = !document.body.classList.contains('dark-mode');
             applyDarkMode(isDark);
@@ -323,44 +284,93 @@
             const text = document.getElementById('dm-text');
             if(isDark) {
                 document.body.classList.add('dark-mode');
-                icon.className = 'fas fa-sun';
-                text.innerText = "Light Mode";
+                icon.className = 'fas fa-sun'; text.innerText = "Light Mode";
             } else {
                 document.body.classList.remove('dark-mode');
-                icon.className = 'fas fa-moon';
-                text.innerText = "Dark Mode";
+                icon.className = 'fas fa-moon'; text.innerText = "Dark Mode";
             }
         }
 
-        let isTagalog = false;
         function changeLanguage() {
-            isTagalog = !isTagalog;
-            const langText = document.getElementById('lang-text');
-            if(isTagalog) {
-                langText.innerText = "Switch to English";
-                document.getElementById('nav-title').innerText = "SISTEMA NG EVENT SA ISU";
-                document.getElementById('title-standings').innerHTML = '<i class="fas fa-chart-line"></i> Kasalukuyang Iskor';
-                document.getElementById('title-wall').innerHTML = '<i class="fas fa-comment-dots"></i> Saloobin ng Mag-aaral';
-                document.getElementById('title-hotline').innerHTML = '<i class="fas fa-phone-alt"></i> Listahan ng Emergency';
-                document.getElementById('shoutInput').placeholder = "Sumigaw dito...";
-            } else {
-                langText.innerText = "Change Language";
-                document.getElementById('nav-title').innerText = "ISU ONLINE EVENT SYSTEM";
-                document.getElementById('title-standings').innerHTML = '<i class="fas fa-chart-line"></i> Live Department Standings';
-                document.getElementById('title-wall').innerHTML = '<i class="fas fa-comment-dots"></i> Freedom Wall';
-                document.getElementById('title-hotline').innerHTML = '<i class="fas fa-phone-alt"></i> Emergency Directory';
-                document.getElementById('shoutInput').placeholder = "Cheer here...";
-            }
+            const title = document.getElementById('nav-title');
+            title.innerText = (title.innerText.includes("ONLINE")) ? "SISTEMA NG EVENT SA ISU" : "ISU ONLINE EVENT SYSTEM";
         }
 
         function showSystemInfo() {
-            alert("🌟 ISU EVENT HUB - ELITE GOLD\nVersion: 1.0.5 (W/ User Registration)\nDepartment: CCSICT Cabagan\nStatus: Secure Connection Active");
+            alert("ISU EVENT HUB v1.5\nStatus: Secure Connection Active\nDeveloped for: ISU Students");
         }
 
-        // --- CHART LOGIC ---
+        // --- CHART & WALL LOGIC ---
         function renderChart() {
             const ctx = document.getElementById('pointsChart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['CCSICT'
+                    labels: ['CCSICT', 'CTE', 'CBA', 'CAES', 'CCJE'],
+                    datasets: [{
+                        label: 'Live Points',
+                        data: [1200, 1100, 900, 850, 150],
+                        backgroundColor: '#2d5a27',
+                        borderColor: '#facc15',
+                        borderWidth: 2
+                    }]
+                },
+                options: { maintainAspectRatio: false }
+            });
+        }
+
+        function sendShout() {
+            const val = document.getElementById('shoutInput').value;
+            if(!val) return;
+            let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
+            shouts.push({ user: localStorage.getItem('currentUser'), text: val, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            localStorage.setItem('shouts', JSON.stringify(shouts));
+            document.getElementById('shoutInput').value = '';
+            loadShouts();
+        }
+
+        function loadShouts() {
+            const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
+            const box = document.getElementById('shout-box');
+            box.innerHTML = shouts.map(s => `
+                <div style="background:var(--card-bg); padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px;">
+                    <b>${s.user}:</b> ${s.text} <span style="float:right; opacity:0.5;">${s.time}</span>
+                </div>
+            `).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function editPhone(id) {
+            const n = prompt("Enter new number:");
+            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
+        }
+
+        function loadNums() {
+            ['clinic', 'security'].forEach(k => {
+                const s = localStorage.getItem('num-'+k);
+                if(s) { document.getElementById('num-'+k).innerText = s; }
+            });
+        }
+
+        function editAdmin() {
+            const name = prompt("Change Display Name:");
+            if(name) { 
+                document.getElementById('admin-name').innerText = name; 
+                localStorage.setItem('currentUser', name); 
+            }
+        }
+
+        function previewImg(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { 
+                    document.getElementById('logo-preview').src = e.target.result; 
+                    localStorage.setItem('adminPic', e.target.result); 
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+    </html>
+    
