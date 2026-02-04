@@ -12,7 +12,12 @@
             --bg: #f0f2f5; --card-bg: #ffffff; --text: #2c3e50; 
         }
 
-        body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); }
+        /* DARK MODE OVERRIDE */
+        body.dark-mode {
+            --bg: #121212; --card-bg: #1e1e1e; --text: #e0e0e0;
+        }
+
+        body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); transition: 0.3s; }
         
         /* HEADER */
         .header { 
@@ -29,15 +34,15 @@
         }
         .sidebar.active { left: 0; }
         .sidebar-header { background: var(--isu-green); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--isu-gold); }
-        .sidebar-item { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; font-weight: 500; }
-        .sidebar-item:hover { background: #f8f9fa; color: var(--isu-green); border-right: 4px solid var(--isu-gold); }
+        .sidebar-item { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; font-weight: 500; color: var(--text); }
+        .sidebar-item:hover { background: rgba(250, 204, 21, 0.1); color: var(--isu-green); border-right: 4px solid var(--isu-gold); }
 
         /* MAIN CONTAINER */
         .container { max-width: 98%; margin: 20px auto; padding: 0 15px; }
 
         /* ADMIN CARD */
         .admin-card { 
-            background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
+            background: var(--card-bg); padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
             display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border-left: 10px solid var(--isu-gold);
         }
@@ -48,17 +53,18 @@
 
         /* GOLD BORDER CARDS */
         .glass-card { 
-            background: white; border-radius: 15px; padding: 20px; 
+            background: var(--card-bg); border-radius: 15px; padding: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
             border: 2px solid var(--isu-gold); 
             transition: transform 0.3s ease;
         }
         .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
+        body.dark-mode .section-title { color: var(--isu-gold); }
 
         /* NAV MENU */
         .nav-menu { display: flex; flex-direction: column; gap: 10px; }
         .nav-item { 
-            background: white; padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
+            background: var(--card-bg); padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom: 4px solid var(--isu-gold);
             font-size: 11px; font-weight: bold; color: var(--text); transition: 0.3s;
         }
@@ -69,17 +75,18 @@
         .chart-container { height: 320px; position: relative; }
 
         /* WALL & HOTLINES */
-        .wall-box { height: 180px; overflow-y: auto; background: #fdfdfd; padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
+        .wall-box { height: 180px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
+        body.dark-mode .wall-box { background: #252525; border-color: #444; }
         
         .hotline-item { 
-            background: #fffdf5; border: 1px solid #f9f1d0; padding: 10px; border-radius: 10px; 
+            background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.2); padding: 10px; border-radius: 10px; 
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
         }
         .hotline-item i { color: #d9534f; font-size: 16px; }
-        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 10; }
+        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: var(--isu-green); cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 10; }
         .hotline-info b { font-size: 12px; display: block; }
-        .hotline-info a { font-size: 11px; color: #555; font-weight: 500; text-decoration: none; display: block; }
-        .hotline-info a:hover { color: var(--isu-green); text-decoration: underline; }
+        .hotline-info a { font-size: 11px; color: var(--text); font-weight: 500; text-decoration: none; display: block; opacity: 0.8; }
+        .hotline-info a:hover { color: var(--isu-green); text-decoration: underline; opacity: 1; }
 
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
@@ -88,17 +95,17 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
-        <div class="sidebar-item" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</div>
-        <div class="sidebar-item"><i class="fas fa-language"></i> Change Language</div>
-        <div class="sidebar-item active"><i class="fas fa-info-circle"></i> System Info</div>
+        <div class="sidebar-item" onclick="toggleDarkMode()"><i id="dm-icon" class="fas fa-moon"></i> <span id="dm-text">Dark Mode</span></div>
+        <div class="sidebar-item" onclick="changeLanguage()"><i class="fas fa-language"></i> <span id="lang-text">Change Language</span></div>
+        <div class="sidebar-item" onclick="showSystemInfo()"><i class="fas fa-info-circle"></i> System Info</div>
         <div class="sidebar-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Dashboard</div>
         <div class="sidebar-item" onclick="toggleMenu()" style="color:red;"><i class="fas fa-times"></i> Close</div>
     </div>
 
     <div class="header">
         <div class="header-left">
-            <i class="fas fa-bars menu-btn" onclick="toggleMenu()"></i>
-            <span style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
+            <i class="fas fa-bars menu-btn" onclick="toggleMenu()" style="cursor:pointer;"></i>
+            <span id="nav-title" style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
         </div>
         <div id="clock" style="font-family: monospace; font-weight: bold; font-size: 14px;">00:00:00 PM</div>
     </div>
@@ -109,24 +116,24 @@
             <input type="file" id="img-input" style="display:none;" onchange="previewImg(this)">
             <div>
                 <h3 id="admin-name" style="margin:0; font-size: 18px;">Admin Dashboard</h3>
-                <p style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
+                <p id="admin-sub" style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
                 <a href="#" onclick="editAdmin()" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Profile</a>
             </div>
         </div>
 
         <div class="main-wrapper">
             <div class="nav-menu">
-                <a href="calendar.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
-                <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
-                <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
-                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
-                <a href="voting.html" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
-                <a href="attendance.html" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
-                <a href="lostfound.html" class="nav-item"><i class="fas fa-search"></i><span>LOST & FOUND</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-search"></i><span>LOST & FOUND</span></a>
             </div>
 
             <div class="glass-card">
-                <div class="section-title"><i class="fas fa-chart-line"></i> Live Department Standings</div>
+                <div class="section-title" id="title-standings"><i class="fas fa-chart-line"></i> Live Department Standings</div>
                 <div class="chart-container">
                     <canvas id="pointsChart"></canvas>
                 </div>
@@ -134,7 +141,7 @@
 
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div class="glass-card">
-                    <div class="section-title"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
+                    <div class="section-title" id="title-wall"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
                     <div id="shout-box" class="wall-box"></div>
                     <div style="display:flex; gap:5px;">
                         <input type="text" id="shoutInput" style="flex:1; padding:8px; border-radius:5px; border:1px solid #ddd;" placeholder="Cheer here...">
@@ -143,7 +150,7 @@
                 </div>
 
                 <div class="glass-card">
-                    <div class="section-title"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
+                    <div class="section-title" id="title-hotline"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
                         <i class="fas fa-ambulance"></i>
@@ -170,17 +177,80 @@
     </div>
 
     <script>
+        // --- CORE FUNCTIONS ---
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
         window.onload = function() {
+            // Load saved settings
             if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
+            if(localStorage.getItem('darkMode') === 'true') applyDarkMode(true);
+            
             loadNums(); 
-            loadShouts(); // Load previous posts
+            loadShouts(); 
             renderChart();
         };
 
+        // --- SIDEBAR FEATURE: DARK MODE ---
+        function toggleDarkMode() {
+            const isDark = !document.body.classList.contains('dark-mode');
+            applyDarkMode(isDark);
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        function applyDarkMode(isDark) {
+            const icon = document.getElementById('dm-icon');
+            const text = document.getElementById('dm-text');
+            if(isDark) {
+                document.body.classList.add('dark-mode');
+                icon.className = 'fas fa-sun';
+                text.innerText = "Light Mode";
+            } else {
+                document.body.classList.remove('dark-mode');
+                icon.className = 'fas fa-moon';
+                text.innerText = "Dark Mode";
+            }
+        }
+
+        // --- SIDEBAR FEATURE: LANGUAGE ---
+        let isTagalog = false;
+        function changeLanguage() {
+            isTagalog = !isTagalog;
+            const langText = document.getElementById('lang-text');
+            
+            if(isTagalog) {
+                langText.innerText = "Switch to English";
+                document.getElementById('nav-title').innerText = "SISTEMA NG EVENT SA ISU";
+                document.getElementById('title-standings').innerHTML = '<i class="fas fa-chart-line"></i> Kasalukuyang Iskor';
+                document.getElementById('title-wall').innerHTML = '<i class="fas fa-comment-dots"></i> Saloobin ng Mag-aaral';
+                document.getElementById('title-hotline').innerHTML = '<i class="fas fa-phone-alt"></i> Listahan ng Emergency';
+                document.getElementById('shoutInput').placeholder = "Sumigaw dito...";
+            } else {
+                langText.innerText = "Change Language";
+                document.getElementById('nav-title').innerText = "ISU ONLINE EVENT SYSTEM";
+                document.getElementById('title-standings').innerHTML = '<i class="fas fa-chart-line"></i> Live Department Standings';
+                document.getElementById('title-wall').innerHTML = '<i class="fas fa-comment-dots"></i> Freedom Wall';
+                document.getElementById('title-hotline').innerHTML = '<i class="fas fa-phone-alt"></i> Emergency Directory';
+                document.getElementById('shoutInput').placeholder = "Cheer here...";
+            }
+        }
+
+        // --- SIDEBAR FEATURE: SYSTEM INFO ---
+        function showSystemInfo() {
+            const info = `
+🌟 ISU EVENT HUB - ELITE GOLD
+-----------------------------------
+Version: 1.0.4
+Department: CCSICT Cabagan
+Developer: Admin / Student Org
+Status: Active & Secure
+Last Updated: Feb 2026
+            `;
+            alert(info);
+        }
+
+        // --- CHART LOGIC ---
         function renderChart() {
             const ctx = document.getElementById('pointsChart').getContext('2d');
             new Chart(ctx, {
@@ -196,44 +266,26 @@
                         borderRadius: 5
                     }]
                 },
-                options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-            });
-        }
-
-        function editPhone(id) {
-            const n = prompt("Enter new number for " + id + ":");
-            if(n) { 
-                localStorage.setItem('num-'+id, n); 
-                loadNums(); 
-            }
-        }
-
-        function loadNums() {
-            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
-                const s = localStorage.getItem('num-'+k);
-                if(s) {
-                    const el = document.getElementById('num-'+k);
-                    el.innerText = s;
-                    el.href = "tel:" + s.replace(/\D/g,''); // Removes non-digits for tel link
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { labels: { color: isDarkMode() ? '#fff' : '#333' } } },
+                    scales: { 
+                        y: { beginAtZero: true, ticks: { color: isDarkMode() ? '#bbb' : '#333' } },
+                        x: { ticks: { color: isDarkMode() ? '#bbb' : '#333' } }
+                    } 
                 }
             });
         }
+        function isDarkMode() { return document.body.classList.contains('dark-mode'); }
 
-        // SAVE & LOAD FREEDOM WALL FUNCTIONS
+        // --- FREEDOM WALL LOGIC ---
         function sendShout() {
             const val = document.getElementById('shoutInput').value;
             if(!val) return;
-            
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const newPost = { text: val, time: time };
-            
-            // Get existing shouts
             let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            shouts.push(newPost);
-            
-            // Save to localStorage
+            shouts.push({ text: val, time: time });
             localStorage.setItem('shouts', JSON.stringify(shouts));
-            
             document.getElementById('shoutInput').value = '';
             loadShouts();
         }
@@ -242,22 +294,47 @@
             const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
             const box = document.getElementById('shout-box');
             box.innerHTML = shouts.map(s => `
-                <div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="background:var(--card-bg); padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                     <b>User:</b> ${s.text} <span style="float:right; font-size:9px; color:#999;">${s.time}</span>
                 </div>
             `).join('');
             box.scrollTop = box.scrollHeight;
         }
 
+        // --- DIRECTORY & PROFILE LOGIC ---
+        function editPhone(id) {
+            const n = prompt("Enter new number:");
+            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
+        }
+
+        function loadNums() {
+            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
+                const s = localStorage.getItem('num-'+k);
+                if(s) {
+                    const el = document.getElementById('num-'+k);
+                    el.innerText = s;
+                    el.href = "tel:" + s.replace(/\D/g,'');
+                }
+            });
+        }
+
         function editAdmin() {
             const name = prompt("Change Admin Name:");
-            if(name) { document.getElementById('admin-name').innerText = name; localStorage.setItem('adminName', name); }
+            if(name) { 
+                document.getElementById('admin-name').innerText = name; 
+                localStorage.setItem('adminName', name); 
+            }
         }
 
         function previewImg(input) {
-            const reader = new FileReader();
-            reader.onload = e => { document.getElementById('logo-preview').src = e.target.result; localStorage.setItem('adminPic', e.target.result); }
-            reader.readAsDataURL(input.files[0]);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { 
+                    document.getElementById('logo-preview').src = e.target.result; 
+                    localStorage.setItem('adminPic', e.target.result); 
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 </body>
