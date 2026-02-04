@@ -209,7 +209,6 @@
 
     <script>
         /* --- SESSION SECURITY CHECK --- */
-        // Itatago ang login UI agad kung may active session na
         if (localStorage.getItem('isLoggedIn') === 'true') {
             document.getElementById('auth-overlay').style.display = 'none';
         }
@@ -238,7 +237,7 @@
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('currentUser', user);
                 document.getElementById('auth-overlay').style.display = 'none';
-                document.getElementById('admin-name').innerText = user + " Dashboard";
+                // Hindi na natin pinapalitan ang innerText dito para manatiling "Admin Dashboard"
             } else {
                 alert("Invalid Username or Password!");
             }
@@ -299,12 +298,7 @@
         }
 
         window.onload = function() {
-            // Restore Session View
-            if(localStorage.getItem('isLoggedIn') === 'true') {
-                const user = localStorage.getItem('currentUser');
-                document.getElementById('admin-name').innerText = user + " Dashboard";
-            }
-
+            // Restore session settings but KEEP "Admin Dashboard" label
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
             
@@ -369,8 +363,9 @@
         }
 
         function editAdmin() {
-            const name = prompt("Change Admin Name:");
-            if(name) { document.getElementById('admin-name').innerText = name; localStorage.setItem('currentUser', name); }
+            // Option to change the text if really needed, but defaults to Admin Dashboard
+            const name = prompt("Change Dashboard Title:", "Admin Dashboard");
+            if(name) { document.getElementById('admin-name').innerText = name; }
         }
 
         function previewImg(input) {
