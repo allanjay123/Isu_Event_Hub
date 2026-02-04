@@ -12,6 +12,30 @@
             --bg: #f0f2f5; --card-bg: #ffffff; --text: #2c3e50; 
         }
 
+        /* LOGIN OVERLAY STYLES */
+        #auth-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--isu-green); z-index: 5000;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .auth-card {
+            background: white; padding: 30px; border-radius: 15px;
+            width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center; border-top: 5px solid var(--isu-gold);
+        }
+        .auth-card input {
+            width: 100%; padding: 12px; margin: 10px 0;
+            border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+        }
+        .auth-btn {
+            width: 100%; padding: 12px; background: var(--isu-green);
+            color: white; border: none; border-radius: 8px; cursor: pointer;
+            font-weight: bold; margin-top: 10px;
+        }
+        .auth-btn:hover { background: #1e3d1a; }
+        .switch-auth { font-size: 12px; margin-top: 15px; cursor: pointer; color: #666; }
+        .hidden { display: none !important; }
+
         body.dark-mode { --bg: #1a1a1a; --card-bg: #2d2d2d; --text: #f0f0f0; }
         body.dark-mode .glass-card, body.dark-mode .admin-card, body.dark-mode .sidebar { background: var(--card-bg); color: var(--text); }
         body.dark-mode .nav-item { background: #3d3d3d; color: white; }
@@ -79,12 +103,33 @@
 </head>
 <body>
 
+    <div id="auth-overlay">
+        <div class="auth-card" id="login-form">
+            <i class="fas fa-university" style="font-size: 40px; color: var(--isu-green); margin-bottom: 10px;"></i>
+            <h2>User Login</h2>
+            <input type="text" id="login-user" placeholder="Username">
+            <input type="password" id="login-pass" placeholder="Password">
+            <button class="auth-btn" onclick="handleLogin()">Log In</button>
+            <div class="switch-auth" onclick="toggleAuthForm()">Don't have an account? Register</div>
+        </div>
+
+        <div class="auth-card hidden" id="register-form">
+            <i class="fas fa-user-plus" style="font-size: 40px; color: var(--isu-green); margin-bottom: 10px;"></i>
+            <h2>Register</h2>
+            <input type="text" id="reg-user" placeholder="Choose Username">
+            <input type="password" id="reg-pass" placeholder="Create Password">
+            <button class="auth-btn" onclick="handleRegister()">Register</button>
+            <div class="switch-auth" onclick="toggleAuthForm()">Already have an account? Login</div>
+        </div>
+    </div>
+
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
         <div class="sidebar-item" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</div>
         <div class="sidebar-item" onclick="changeLang()"><i class="fas fa-language"></i> Change Language (EN/TG)</div>
         <div class="sidebar-item" onclick="showInfo()"><i class="fas fa-info-circle"></i> System Info</div>
         <div class="sidebar-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Dashboard</div>
+        <div class="sidebar-item" onclick="handleLogout()" style="color:orange;"><i class="fas fa-sign-out-alt"></i> Log Out</div>
         <div class="sidebar-item" onclick="toggleMenu()" style="color:red;"><i class="fas fa-times"></i> Close</div>
     </div>
 
@@ -163,6 +208,43 @@
     </div>
 
     <script>
+        // --- LOGIN & REGISTER LOGIC ---
+        function toggleAuthForm() {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('register-form').classList.toggle('hidden');
+        }
+
+        function handleRegister() {
+            const user = document.getElementById('reg-user').value;
+            const pass = document.getElementById('reg-pass').value;
+            if(!user || !pass) return alert("Please fill all fields");
+            
+            localStorage.setItem(`user_${user}`, pass);
+            alert("Registration Successful! Please login.");
+            toggleAuthForm();
+        }
+
+        function handleLogin() {
+            const user = document.getElementById('login-user').value;
+            const pass = document.getElementById('login-pass').value;
+            const savedPass = localStorage.getItem(`user_${user}`);
+
+            if(savedPass && savedPass === pass) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', user);
+                document.getElementById('auth-overlay').classList.add('hidden');
+                document.getElementById('admin-name').innerText = user + " Dashboard";
+            } else {
+                alert("Invalid Username or Password!");
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            location.reload();
+        }
+
+        // --- PRE-EXISTING FEATURES ---
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
@@ -192,7 +274,6 @@
             document.querySelector('.l-clinic').innerText = t.clinic;
             document.querySelector('.l-security').innerText = t.security;
             
-            // Sidebar buttons translation
             document.querySelector('.txt-cal').innerText = t.cal;
             document.querySelector('.txt-reg').innerText = t.reg;
             document.querySelector('.txt-act').innerText = t.act;
@@ -210,11 +291,16 @@
         }
 
         function showInfo() {
-            alert("ISU Event Hub v2.6\nCabagan Campus Edition\nAll Modules Integrated.");
+            alert("ISU Event Hub v2.7\nCabagan Campus Edition\nSecure Login Active.");
         }
 
         window.onload = function() {
-            if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
+            // Check Session
+            if(localStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('auth-overlay').classList.add('hidden');
+                document.getElementById('admin-name').innerText = localStorage.getItem('currentUser') + " Dashboard";
+            }
+
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
             loadNums(); 
@@ -279,7 +365,7 @@
 
         function editAdmin() {
             const name = prompt("Change Admin Name:");
-            if(name) { document.getElementById('admin-name').innerText = name; localStorage.setItem('adminName', name); }
+            if(name) { document.getElementById('admin-name').innerText = name; localStorage.setItem('currentUser', name); }
         }
 
         function previewImg(input) {
