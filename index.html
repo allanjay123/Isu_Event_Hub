@@ -12,21 +12,18 @@
             --bg: #f0f2f5; --card-bg: #ffffff; --text: #2c3e50; 
         }
 
-        /* DARK MODE STYLES */
         body.dark-mode { --bg: #1a1a1a; --card-bg: #2d2d2d; --text: #f0f0f0; }
         body.dark-mode .glass-card, body.dark-mode .admin-card, body.dark-mode .sidebar { background: var(--card-bg); color: var(--text); }
         body.dark-mode .nav-item { background: #3d3d3d; color: white; }
 
         body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); transition: 0.3s; }
         
-        /* HEADER */
         .header { 
             background: linear-gradient(135deg, var(--isu-green), #1e3d1a); color: white; 
             padding: 12px 40px; display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000;
         }
 
-        /* SIDEBAR */
         .sidebar {
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
             background: var(--card-bg); box-shadow: 5px 0 15px rgba(0,0,0,0.1);
@@ -36,9 +33,7 @@
         .sidebar-header { background: var(--isu-green); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--isu-gold); }
         .sidebar-item { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; font-weight: 500; }
         .sidebar-item:hover { background: #f8f9fa; color: var(--isu-green); border-right: 4px solid var(--isu-gold); }
-        body.dark-mode .sidebar-item:hover { background: #444; }
 
-        /* MAIN CONTAINER */
         .container { max-width: 98%; margin: 20px auto; padding: 0 15px; }
 
         .admin-card { 
@@ -64,18 +59,15 @@
             font-size: 11px; font-weight: bold; color: var(--text); transition: 0.3s;
         }
         .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
-        .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
         .chart-container { height: 320px; position: relative; }
 
         .wall-box { height: 180px; overflow-y: auto; background: #fdfdfd; padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
-        body.dark-mode .wall-box { background: #1a1a1a; border-color: #444; }
-
+        
         .hotline-item { 
             background: #fffdf5; border: 1px solid #f9f1d0; padding: 10px; border-radius: 10px; 
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
         }
-        body.dark-mode .hotline-item { background: #3d3d3d; border-color: #555; }
         .hotline-item i { color: #d9534f; font-size: 16px; }
         .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 10; }
         .hotline-info b { font-size: 12px; display: block; }
@@ -89,7 +81,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
         <div class="sidebar-item" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</div>
-        <div class="sidebar-item" onclick="changeLang()"><i class="fas fa-language"></i> Change Language</div>
+        <div class="sidebar-item" onclick="changeLang()"><i class="fas fa-language"></i> Change Language (EN/TG)</div>
         <div class="sidebar-item" onclick="showInfo()"><i class="fas fa-info-circle"></i> System Info</div>
         <div class="sidebar-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Dashboard</div>
         <div class="sidebar-item" onclick="toggleMenu()" style="color:red;"><i class="fas fa-times"></i> Close</div>
@@ -98,7 +90,7 @@
     <div class="header">
         <div class="header-left">
             <i class="fas fa-bars menu-btn" onclick="toggleMenu()" style="cursor:pointer;"></i>
-            <span style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
+            <span id="main-title" style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
         </div>
         <div id="clock" style="font-family: monospace; font-weight: bold; font-size: 14px;">00:00:00 PM</div>
     </div>
@@ -109,20 +101,17 @@
             <input type="file" id="img-input" style="display:none;" onchange="previewImg(this)">
             <div>
                 <h3 id="admin-name" style="margin:0; font-size: 18px;">Admin Dashboard</h3>
-                <p id="sub-text" style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
+                <p style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
                 <a href="#" onclick="editAdmin()" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Profile</a>
             </div>
         </div>
 
         <div class="main-wrapper">
             <div class="nav-menu">
-                <a href="calendar.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
-                <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
-                <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
-                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
-                <a href="voting.html" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
-                <a href="attendance.html" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
-                <a href="lostfound.html" class="nav-item"><i class="fas fa-search"></i><span>LOST & FOUND</span></a>
+                <a href="calendar.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span class="txt-cal">CALENDAR</span></a>
+                <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span class="txt-reg">REGISTRATION</span></a>
+                <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span class="txt-act">ACTIVITIES</span></a>
+                <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i><span class="txt-lead">LEADERBOARD</span></a>
             </div>
 
             <div class="glass-card">
@@ -147,12 +136,22 @@
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
                         <i class="fas fa-ambulance"></i>
-                        <div class="hotline-info"><b>Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                        <div class="hotline-info"><b class="l-clinic">Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
                     </div>
                     <div class="hotline-item">
                         <span class="edit-btn" onclick="editPhone('security')">edit</span>
                         <i class="fas fa-shield-alt"></i>
-                        <div class="hotline-info"><b>Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
+                        <div class="hotline-info"><b class="l-security">Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
+                    </div>
+                    <div class="hotline-item">
+                        <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
+                        <i class="fas fa-user-shield"></i>
+                        <div class="hotline-info"><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
+                    </div>
+                    <div class="hotline-item">
+                        <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
+                        <i class="fas fa-fire-extinguisher"></i>
+                        <div class="hotline-info"><b>BFP Cabagan</b><a id="num-bfp" href="tel:117">117 / (078) 123-4567</a></div>
                     </div>
                 </div>
             </div>
@@ -163,31 +162,38 @@
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        // --- SIDEBAR FEATURES ---
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
+        // --- LANGUAGE TOGGLE LOGIC ---
+        let isTagalog = false;
+        function changeLang() {
+            isTagalog = !isTagalog;
+            const t = {
+                title: isTagalog ? "SISTEMA NG ONLINE EVENT SA ISU" : "ISU ONLINE EVENT SYSTEM",
+                standing: isTagalog ? "Kasalukuyang Standing ng Departamento" : "Live Department Standings",
+                wall: isTagalog ? "Freedom Wall (Sulat Dito)" : "Freedom Wall",
+                directory: isTagalog ? "Direktoryo ng Emergency" : "Emergency Directory",
+                clinic: isTagalog ? "Klinika ng Campus" : "Campus Clinic",
+                security: isTagalog ? "Seguridad" : "Security"
+            };
+            
+            document.getElementById('main-title').innerText = t.title;
+            document.getElementById('standing-title').innerHTML = `<i class="fas fa-chart-line"></i> ${t.standing}`;
+            document.getElementById('wall-title').innerHTML = `<i class="fas fa-comment-dots"></i> ${t.wall}`;
+            document.getElementById('hotline-title').innerHTML = `<i class="fas fa-phone-alt"></i> ${t.directory}`;
+            document.querySelector('.l-clinic').innerText = t.clinic;
+            document.querySelector('.l-security').innerText = t.security;
+
+            alert(isTagalog ? "Wika: Tagalog" : "Language: English");
         }
 
-        function changeLang() {
-            const current = document.getElementById('standing-title').innerText;
-            if(current.includes('Live')) {
-                document.getElementById('standing-title').innerHTML = '<i class="fas fa-chart-line"></i> Kasalukuyang Standing';
-                document.getElementById('wall-title').innerHTML = '<i class="fas fa-comment-dots"></i> Freedom Wall';
-                document.getElementById('hotline-title').innerHTML = '<i class="fas fa-phone-alt"></i> Listahan ng Numero';
-                alert("Language changed to Filipino");
-            } else {
-                document.getElementById('standing-title').innerHTML = '<i class="fas fa-chart-line"></i> Live Department Standings';
-                alert("Language changed to English");
-            }
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
         }
 
         function showInfo() {
-            alert("ISU Event Hub v2.0\nDeveloped for Isabela State University - Cabagan\nStatus: 100% Functional");
+            alert("ISU Event Hub v2.5\nCabagan Campus Edition\nAll Systems Operational.");
         }
 
-        // --- CORE FEATURES ---
         window.onload = function() {
             if(localStorage.getItem('adminName')) document.getElementById('admin-name').innerText = localStorage.getItem('adminName');
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
@@ -204,7 +210,7 @@
                 data: {
                     labels: ['CCSICT', 'CTE', 'CBA', 'CAES', 'CCJE'],
                     datasets: [{
-                        label: 'Live Points',
+                        label: 'Points',
                         data: [1200, 1100, 900, 850, 150],
                         backgroundColor: 'rgba(45, 90, 39, 0.85)',
                         borderColor: '#facc15',
@@ -222,7 +228,7 @@
         }
 
         function loadNums() {
-            ['clinic', 'security'].forEach(k => {
+            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
                 const s = localStorage.getItem('num-'+k);
                 if(s) {
                     const el = document.getElementById('num-'+k);
@@ -265,4 +271,3 @@
     </script>
 </body>
 </html>
-                                                                                                         
