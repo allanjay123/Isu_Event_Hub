@@ -12,17 +12,14 @@
             --bg: #f0f2f5; --card-bg: #ffffff; --text: #2c3e50; 
         }
 
-        /* DARK MODE OVERRIDE */
         body.dark-mode {
             --bg: #121212; --card-bg: #1e1e1e; --text: #e0e0e0;
         }
 
         body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); transition: 0.3s; }
         
-        /* --- LOGIN FIX: Hide Dashboard by default to prevent blink --- */
         #dashboard-wrapper { display: none; }
         
-        /* AUTH OVERLAY DESIGN */
         #auth-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, var(--isu-green), #1e3d1a);
@@ -43,14 +40,12 @@
         }
         .switch-auth { margin-top: 15px; font-size: 13px; color: #666; cursor: pointer; text-decoration: underline; }
 
-        /* HEADER */
         .header { 
             background: linear-gradient(135deg, var(--isu-green), #1e3d1a); color: white; 
             padding: 12px 40px; display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000;
         }
 
-        /* SIDEBAR */
         .sidebar {
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
             background: var(--card-bg); box-shadow: 5px 0 15px rgba(0,0,0,0.1);
@@ -61,10 +56,8 @@
         .sidebar-item { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; font-weight: 500; color: var(--text); }
         .sidebar-item:hover { background: rgba(250, 204, 21, 0.1); color: var(--isu-green); border-right: 4px solid var(--isu-gold); }
 
-        /* MAIN CONTAINER */
         .container { max-width: 98%; margin: 20px auto; padding: 0 15px; }
 
-        /* ADMIN CARD */
         .admin-card { 
             background: var(--card-bg); padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
             display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
@@ -72,10 +65,8 @@
         }
         #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
 
-        /* 3-COLUMN LAYOUT */
         .main-wrapper { display: grid; grid-template-columns: 200px 1fr 340px; gap: 20px; }
 
-        /* GOLD BORDER CARDS */
         .glass-card { 
             background: var(--card-bg); border-radius: 15px; padding: 20px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
@@ -83,34 +74,30 @@
             transition: transform 0.3s ease;
         }
         .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
-        body.dark-mode .section-title { color: var(--isu-gold); }
 
-        /* NAV MENU */
         .nav-menu { display: flex; flex-direction: column; gap: 10px; }
         .nav-item { 
             background: var(--card-bg); padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom: 4px solid var(--isu-gold);
-            font-size: 11px; font-weight: bold; color: var(--text); transition: 0.3s;
+            font-size: 11px; font-weight: bold; color: var(--text); transition: 0.3s; cursor: pointer;
         }
         .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
         .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
-        /* CHART AREA */
         .chart-container { height: 320px; position: relative; }
 
         /* WALL & HOTLINES */
         .wall-box { height: 180px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
-        body.dark-mode .wall-box { background: #252525; border-color: #444; }
-        
         .hotline-item { 
             background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.2); padding: 10px; border-radius: 10px; 
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
         }
-        .hotline-item i { color: #d9534f; font-size: 16px; }
-        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: var(--isu-green); cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 10; }
-        .hotline-info b { font-size: 12px; display: block; }
-        .hotline-info a { font-size: 11px; color: var(--text); font-weight: 500; text-decoration: none; display: block; opacity: 0.8; }
-        .hotline-info a:hover { color: var(--isu-green); text-decoration: underline; opacity: 1; }
+        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: var(--isu-green); cursor: pointer; text-decoration: underline; font-weight: bold; }
+
+        /* --- NAVIGATION CONTENT FIX --- */
+        .content-section { display: none; animation: fadeIn 0.4s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
@@ -126,7 +113,6 @@
             <button onclick="handleLogin()">LOGIN</button>
             <div class="switch-auth" onclick="toggleAuth(true)">No account? Register here</div>
         </div>
-
         <div class="auth-box" id="register-form" style="display: none;">
             <i class="fas fa-user-plus" style="font-size: 50px; color: var(--isu-green); margin-bottom: 10px;"></i>
             <h2>REGISTER</h2>
@@ -170,25 +156,57 @@
 
             <div class="main-wrapper">
                 <div class="nav-menu">
-                    <a href="#" class="nav-item"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></a>
-                    <a href="#" class="nav-item"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></a>
-                    <a href="#" class="nav-item"><i class="fas fa-running"></i><span>ACTIVITIES</span></a>
-                    <a href="#" class="nav-item"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></a>
-                    <a href="#" class="nav-item"><i class="fas fa-poll"></i><span>VOTING</span></a>
-                    <a href="#" class="nav-item"><i class="fas fa-id-card"></i><span>ATTENDANCE</span></a>
-                    <a href="#" class="nav-item"><i class="fas fa-search"></i><span>LOST & FOUND</span></a>
+                    <div class="nav-item" onclick="showSection('standing-section')"><i class="fas fa-chart-bar"></i><span>DASHBOARD</span></div>
+                    <div class="nav-item" onclick="showSection('calendar-section')"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></div>
+                    <div class="nav-item" onclick="showSection('register-section')"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></div>
+                    <div class="nav-item" onclick="showSection('activity-section')"><i class="fas fa-running"></i><span>ACTIVITIES</span></div>
+                    <div class="nav-item" onclick="showSection('voting-section')"><i class="fas fa-poll"></i><span>VOTING</span></div>
+                    <div class="nav-item" onclick="showSection('lost-section')"><i class="fas fa-search"></i><span>LOST & FOUND</span></div>
                 </div>
 
-                <div class="glass-card">
-                    <div class="section-title" id="title-standings"><i class="fas fa-chart-line"></i> Live Department Standings</div>
-                    <div class="chart-container">
-                        <canvas id="pointsChart"></canvas>
+                <div class="content-area">
+                    
+                    <div id="standing-section" class="content-section active glass-card">
+                        <div class="section-title"><i class="fas fa-chart-line"></i> Live Department Standings</div>
+                        <div class="chart-container">
+                            <canvas id="pointsChart"></canvas>
+                        </div>
                     </div>
+
+                    <div id="calendar-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-calendar-alt"></i> Event Calendar</div>
+                        <p>📅 February 2026: Intramurals Week (Feb 15-20)</p>
+                        <p>📅 March 2026: Foundation Day</p>
+                    </div>
+
+                    <div id="register-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-user-plus"></i> Event Registration</div>
+                        <p>No active registrations at the moment.</p>
+                    </div>
+
+                    <div id="activity-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-running"></i> Upcoming Activities</div>
+                        <ul>
+                            <li>Basketball Finals - Gymnasium</li>
+                            <li>Quiz Bee - CCSICT Hall</li>
+                        </ul>
+                    </div>
+
+                    <div id="voting-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-poll"></i> Student Voting</div>
+                        <p>Voting for Mr. & Ms. ISU is now OPEN.</p>
+                    </div>
+
+                    <div id="lost-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-search"></i> Lost & Found</div>
+                        <p>🔑 Found: Car keys near Canteen.</p>
+                    </div>
+
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     <div class="glass-card">
-                        <div class="section-title" id="title-wall"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
+                        <div class="section-title"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
                         <div id="shout-box" class="wall-box"></div>
                         <div style="display:flex; gap:5px;">
                             <input type="text" id="shoutInput" style="flex:1; padding:8px; border-radius:5px; border:1px solid #ddd;" placeholder="Cheer here...">
@@ -197,26 +215,14 @@
                     </div>
 
                     <div class="glass-card">
-                        <div class="section-title" id="title-hotline"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
+                        <div class="section-title"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
                         <div class="hotline-item">
-                            <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
                             <i class="fas fa-ambulance"></i>
-                            <div class="hotline-info"><b>Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                            <div class="hotline-info"><b>Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
                         </div>
                         <div class="hotline-item">
-                            <span class="edit-btn" onclick="editPhone('security')">edit</span>
                             <i class="fas fa-shield-alt"></i>
                             <div class="hotline-info"><b>Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
-                        </div>
-                        <div class="hotline-item">
-                            <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
-                            <i class="fas fa-user-shield"></i>
-                            <div class="hotline-info"><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
-                        </div>
-                        <div class="hotline-item">
-                            <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
-                            <i class="fas fa-fire-extinguisher"></i>
-                            <div class="hotline-info"><b>BFP Cabagan</b><a id="num-bfp" href="tel:117">117 / (078) 123-4567</a></div>
                         </div>
                     </div>
                 </div>
@@ -225,36 +231,42 @@
     </div>
 
     <script>
-        // --- AUTH LOGIC (NEW) ---
+        // --- NAVIGATION FIX ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            if(window.innerWidth < 1024) toggleMenu(); // Auto close menu on mobile
+        }
+
+        // --- AUTH LOGIC ---
         function toggleAuth(showReg) {
             document.getElementById('login-form').style.display = showReg ? 'none' : 'block';
             document.getElementById('register-form').style.display = showReg ? 'block' : 'none';
         }
 
         function handleRegister() {
-            const name = document.getElementById('reg-name').value.trim();
-            const id = document.getElementById('reg-id').value.trim();
-            const pass = document.getElementById('reg-pass').value.trim();
-            if(!name || !id || !pass) { alert("Fill all fields!"); return; }
+            const name = document.getElementById('reg-name').value;
+            const id = document.getElementById('reg-id').value;
+            const pass = document.getElementById('reg-pass').value;
+            if(!name || !id || !pass) return alert("Fill all fields");
             let users = JSON.parse(localStorage.getItem('isu_db_users')) || [];
-            if(users.some(u => u.id === id)) { alert("ID already registered!"); return; }
             users.push({name, id, pass});
             localStorage.setItem('isu_db_users', JSON.stringify(users));
-            alert("Registration Successful!");
-            toggleAuth(false);
+            alert("Registered!"); toggleAuth(false);
         }
 
         function handleLogin() {
-            const userIn = document.getElementById('login-user').value.trim().toLowerCase();
-            const passIn = document.getElementById('login-pass').value.trim();
+            const userIn = document.getElementById('login-user').value.toLowerCase();
+            const passIn = document.getElementById('login-pass').value;
             const users = JSON.parse(localStorage.getItem('isu_db_users')) || [];
-            // Admin backdoor
-            if(userIn === "admin" && passIn === "isu123") {
-                loginDone("System Admin"); return;
-            }
-            const found = users.find(u => (u.id.toLowerCase() === userIn || u.name.toLowerCase() === userIn) && u.pass === passIn);
-            if(found) { loginDone(found.name); } 
-            else { alert("Wrong credentials!"); }
+            
+            if(userIn === "admin" && passIn === "isu123") { loginDone("System Admin"); return; }
+            
+            const found = users.find(u => u.id === userIn && u.pass === passIn);
+            if(found) loginDone(found.name);
+            else alert("Invalid Login");
         }
 
         function loginDone(name) {
@@ -268,94 +280,20 @@
             location.reload();
         }
 
-        // --- CORE FUNCTIONS (MODIFIED TO CHECK LOGIN) ---
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
-
+        // --- LOAD CORE ---
         window.onload = function() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            
-            if(isLoggedIn) {
-                // Show Dashboard, Hide Auth
+            if(localStorage.getItem('isLoggedIn') === 'true') {
                 document.getElementById('auth-overlay').style.display = 'none';
                 document.getElementById('dashboard-wrapper').style.display = 'block';
-                
-                // Set the name from login
                 document.getElementById('admin-name').innerText = localStorage.getItem('activeUser');
-                
-                // Continue with original loading
-                if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
-                if(localStorage.getItem('darkMode') === 'true') applyDarkMode(true);
-                
-                loadNums(); 
-                loadShouts(); 
                 renderChart();
-            } else {
-                // Show Auth, Hide Dashboard
-                document.getElementById('auth-overlay').style.display = 'flex';
-                document.getElementById('dashboard-wrapper').style.display = 'none';
+                loadShouts();
             }
         };
 
-        // --- SIDEBAR FEATURE: DARK MODE ---
-        function toggleDarkMode() {
-            const isDark = !document.body.classList.contains('dark-mode');
-            applyDarkMode(isDark);
-            localStorage.setItem('darkMode', isDark);
-        }
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        function applyDarkMode(isDark) {
-            const icon = document.getElementById('dm-icon');
-            const text = document.getElementById('dm-text');
-            if(isDark) {
-                document.body.classList.add('dark-mode');
-                if(icon) icon.className = 'fas fa-sun';
-                if(text) text.innerText = "Light Mode";
-            } else {
-                document.body.classList.remove('dark-mode');
-                if(icon) icon.className = 'fas fa-moon';
-                if(text) text.innerText = "Dark Mode";
-            }
-        }
-
-        // --- SIDEBAR FEATURE: LANGUAGE ---
-        let isTagalog = false;
-        function changeLanguage() {
-            isTagalog = !isTagalog;
-            const langText = document.getElementById('lang-text');
-            
-            if(isTagalog) {
-                langText.innerText = "Switch to English";
-                document.getElementById('nav-title').innerText = "SISTEMA NG EVENT SA ISU";
-                document.getElementById('title-standings').innerHTML = '<i class="fas fa-chart-line"></i> Kasalukuyang Iskor';
-                document.getElementById('title-wall').innerHTML = '<i class="fas fa-comment-dots"></i> Saloobin ng Mag-aaral';
-                document.getElementById('title-hotline').innerHTML = '<i class="fas fa-phone-alt"></i> Listahan ng Emergency';
-                document.getElementById('shoutInput').placeholder = "Sumigaw dito...";
-            } else {
-                langText.innerText = "Change Language";
-                document.getElementById('nav-title').innerText = "ISU ONLINE EVENT SYSTEM";
-                document.getElementById('title-standings').innerHTML = '<i class="fas fa-chart-line"></i> Live Department Standings';
-                document.getElementById('title-wall').innerHTML = '<i class="fas fa-comment-dots"></i> Freedom Wall';
-                document.getElementById('title-hotline').innerHTML = '<i class="fas fa-phone-alt"></i> Emergency Directory';
-                document.getElementById('shoutInput').placeholder = "Cheer here...";
-            }
-        }
-
-        // --- SIDEBAR FEATURE: SYSTEM INFO ---
-        function showSystemInfo() {
-            const info = `
-🌟 ISU EVENT HUB - ELITE GOLD
------------------------------------
-Version: 1.0.4
-Department: CCSICT Cabagan
-Developer: Admin / Student Org
-Status: Active & Secure
-Last Updated: Feb 2026
-            `;
-            alert(info);
-        }
-
-        // --- CHART LOGIC ---
         function renderChart() {
             const ctx = document.getElementById('pointsChart').getContext('2d');
             new Chart(ctx, {
@@ -365,31 +303,19 @@ Last Updated: Feb 2026
                     datasets: [{
                         label: 'Live Points',
                         data: [1200, 1100, 900, 850, 150],
-                        backgroundColor: 'rgba(45, 90, 39, 0.85)',
+                        backgroundColor: '#2d5a27',
                         borderColor: '#facc15',
-                        borderWidth: 2,
-                        borderRadius: 5
+                        borderWidth: 2
                     }]
-                },
-                options: { 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { labels: { color: isDarkMode() ? '#fff' : '#333' } } },
-                    scales: { 
-                        y: { beginAtZero: true, ticks: { color: isDarkMode() ? '#bbb' : '#333' } },
-                        x: { ticks: { color: isDarkMode() ? '#bbb' : '#333' } }
-                    } 
                 }
             });
         }
-        function isDarkMode() { return document.body.classList.contains('dark-mode'); }
 
-        // --- FREEDOM WALL LOGIC ---
         function sendShout() {
             const val = document.getElementById('shoutInput').value;
             if(!val) return;
-            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            shouts.push({ text: val, time: time });
+            shouts.push({ text: val, time: new Date().toLocaleTimeString() });
             localStorage.setItem('shouts', JSON.stringify(shouts));
             document.getElementById('shoutInput').value = '';
             loadShouts();
@@ -397,52 +323,7 @@ Last Updated: Feb 2026
 
         function loadShouts() {
             const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            const box = document.getElementById('shout-box');
-            if(!box) return;
-            box.innerHTML = shouts.map(s => `
-                <div style="background:var(--card-bg); padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                    <b>User:</b> ${s.text} <span style="float:right; font-size:9px; color:#999;">${s.time}</span>
-                </div>
-            `).join('');
-            box.scrollTop = box.scrollHeight;
-        }
-
-        // --- DIRECTORY & PROFILE LOGIC ---
-        function editPhone(id) {
-            const n = prompt("Enter new number:");
-            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
-        }
-
-        function loadNums() {
-            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
-                const s = localStorage.getItem('num-'+k);
-                if(s) {
-                    const el = document.getElementById('num-'+k);
-                    if(el) {
-                        el.innerText = s;
-                        el.href = "tel:" + s.replace(/\D/g,'');
-                    }
-                }
-            });
-        }
-
-        function editAdmin() {
-            const name = prompt("Change Admin Name:");
-            if(name) { 
-                document.getElementById('admin-name').innerText = name; 
-                localStorage.setItem('activeUser', name); 
-            }
-        }
-
-        function previewImg(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => { 
-                    document.getElementById('logo-preview').src = e.target.result; 
-                    localStorage.setItem('adminPic', e.target.result); 
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
+            document.getElementById('shout-box').innerHTML = shouts.map(s => `<div><b>User:</b> ${s.text}</div>`).join('');
         }
     </script>
 </body>
