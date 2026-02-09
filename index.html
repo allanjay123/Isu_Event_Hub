@@ -23,7 +23,7 @@
             width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             text-align: center; border-top: 5px solid var(--isu-gold);
         }
-        .auth-card select, .auth-card input {
+        .auth-card input {
             width: 100%; padding: 12px; margin: 10px 0;
             border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
         }
@@ -35,9 +35,6 @@
         .auth-btn:hover { background: #1e3d1a; }
         .switch-auth { font-size: 12px; margin-top: 15px; cursor: pointer; color: #666; }
         .hidden { display: none !important; }
-
-        /* ROLE-BASED VISIBILITY */
-        .admin-only { display: none; }
 
         body.dark-mode { --bg: #1a1a1a; --card-bg: #2d2d2d; --text: #f0f0f0; }
         body.dark-mode .glass-card, body.dark-mode .admin-card, body.dark-mode .sidebar { background: var(--card-bg); color: var(--text); }
@@ -109,72 +106,65 @@
     <div id="auth-overlay">
         <div class="auth-card" id="login-form">
             <i class="fas fa-university" style="font-size: 40px; color: var(--isu-green); margin-bottom: 10px;"></i>
-            <h2>System Login</h2>
+            <h2>User Login</h2>
             <input type="text" id="login-user" placeholder="Username">
             <input type="password" id="login-pass" placeholder="Password">
-            <button class="auth-btn" onclick="DB.handleLogin()">Log In</button>
+            <button class="auth-btn" onclick="handleLogin()">Log In</button>
             <div class="switch-auth" onclick="toggleAuthForm()">Don't have an account? Register</div>
         </div>
 
         <div class="auth-card hidden" id="register-form">
             <i class="fas fa-user-plus" style="font-size: 40px; color: var(--isu-green); margin-bottom: 10px;"></i>
-            <h2>Register Account</h2>
-            <select id="reg-role">
-                <option value="user">Student / User</option>
-                <option value="admin">Administrator</option>
-            </select>
+            <h2>Register</h2>
             <input type="text" id="reg-user" placeholder="Choose Username">
             <input type="password" id="reg-pass" placeholder="Create Password">
-            <button class="auth-btn" onclick="DB.handleRegister()">Create Account</button>
+            <button class="auth-btn" onclick="handleRegister()">Register</button>
             <div class="switch-auth" onclick="toggleAuthForm()">Already have an account? Login</div>
         </div>
     </div>
 
     <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-university" style="font-size: 30px;"></i>
-            <h3>SYSTEM MENU</h3>
-        </div>
+        <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
         <div class="sidebar-item" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</div>
-        <div class="sidebar-item" onclick="changeLang()"><i class="fas fa-language"></i> Change Language</div>
-        <div class="sidebar-item admin-only" onclick="showInfo()"><i class="fas fa-info-circle"></i> System Info</div>
-        <div class="sidebar-item" onclick="DB.handleLogout()" style="color:orange;"><i class="fas fa-sign-out-alt"></i> Log Out</div>
+        <div class="sidebar-item" onclick="changeLang()"><i class="fas fa-language"></i> Change Language (EN/TG)</div>
+        <div class="sidebar-item" onclick="showInfo()"><i class="fas fa-info-circle"></i> System Info</div>
+        <div class="sidebar-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Dashboard</div>
+        <div class="sidebar-item" onclick="handleLogout()" style="color:orange;"><i class="fas fa-sign-out-alt"></i> Log Out</div>
         <div class="sidebar-item" onclick="toggleMenu()" style="color:red;"><i class="fas fa-times"></i> Close</div>
     </div>
 
     <div class="header">
         <div class="header-left">
             <i class="fas fa-bars menu-btn" onclick="toggleMenu()" style="cursor:pointer;"></i>
-            <span id="main-title" style="font-weight: bold; margin-left: 15px;">ISU ONLINE EVENT SYSTEM</span>
+            <span id="main-title" style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
         </div>
-        <div id="clock" style="font-family: monospace; font-weight: bold;">00:00:00 PM</div>
+        <div id="clock" style="font-family: monospace; font-weight: bold; font-size: 14px;">00:00:00 PM</div>
     </div>
 
     <div class="container">
         <div class="admin-card">
-            <img id="logo-preview" src="https://via.placeholder.com/65" onclick="document.getElementById('img-input').click()">
+            <img id="logo-preview" src="https://via.placeholder.com/65?text=LOGO" onclick="document.getElementById('img-input').click()">
             <input type="file" id="img-input" style="display:none;" onchange="previewImg(this)">
             <div>
-                <h3 id="dashboard-title" style="margin:0;">Admin Dashboard</h3>
+                <h3 id="admin-name" style="margin:0; font-size: 18px;">Admin Dashboard</h3>
                 <p style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
-                <a href="#" class="admin-only" onclick="editAdmin()" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Profile</a>
+                <a href="#" onclick="editAdmin()" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Profile</a>
             </div>
         </div>
 
         <div class="main-wrapper">
             <div class="nav-menu">
+                <a href="calendar.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span class="txt-cal">CALENDAR</span></a>
                 <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span class="txt-reg">REGISTRATION</span></a>
                 <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span class="txt-act">ACTIVITIES</span></a>
-                <a href="voting.html" class="nav-item"><i class="fas fa-poll"></i><span class="txt-vote">VOTING</span></a>
                 <a href="leaderboard.html" class="nav-item"><i class="fas fa-trophy"></i><span class="txt-lead">LEADERBOARD</span></a>
-                
-                <a href="calendar.html" class="nav-item admin-only"><i class="fas fa-calendar-alt"></i><span class="txt-cal">CALENDAR</span></a>
-                <a href="attendance.html" class="nav-item admin-only"><i class="fas fa-id-card"></i><span class="txt-attn">ATTENDANCE</span></a>
-                <a href="lostfound.html" class="nav-item admin-only"><i class="fas fa-search"></i><span class="txt-lost">LOST & FOUND</span></a>
+                <a href="voting.html" class="nav-item"><i class="fas fa-poll"></i><span class="txt-vote">VOTING</span></a>
+                <a href="attendance.html" class="nav-item"><i class="fas fa-id-card"></i><span class="txt-attn">ATTENDANCE</span></a>
+                <a href="lostfound.html" class="nav-item"><i class="fas fa-search"></i><span class="txt-lost">LOST & FOUND</span></a>
             </div>
 
             <div class="glass-card">
-                <div class="section-title"><i class="fas fa-chart-line"></i> Live Standings</div>
+                <div id="standing-title" class="section-title"><i class="fas fa-chart-line"></i> Live Department Standings</div>
                 <div class="chart-container">
                     <canvas id="pointsChart"></canvas>
                 </div>
@@ -182,108 +172,45 @@
 
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div class="glass-card">
-                    <div class="section-title"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
+                    <div id="wall-title" class="section-title"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
                     <div id="shout-box" class="wall-box"></div>
                     <div style="display:flex; gap:5px;">
-                        <input type="text" id="shoutInput" placeholder="Cheer here...">
-                        <button onclick="DB.sendShout()" style="background:var(--isu-green); color:white; border:none; padding:8px; border-radius:5px;">Post</button>
+                        <input type="text" id="shoutInput" style="flex:1; padding:8px; border-radius:5px; border:1px solid #ddd;" placeholder="Cheer here...">
+                        <button onclick="sendShout()" style="background:var(--isu-green); color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer;">Post</button>
                     </div>
                 </div>
 
                 <div class="glass-card">
-                    <div class="section-title"><i class="fas fa-phone-alt"></i> Emergency</div>
-                    <div id="hotline-list">
-                        </div>
+                    <div id="hotline-title" class="section-title"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
+                    <div class="hotline-item">
+                        <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
+                        <i class="fas fa-ambulance"></i>
+                        <div class="hotline-info"><b class="l-clinic">Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                    </div>
+                    <div class="hotline-item">
+                        <span class="edit-btn" onclick="editPhone('security')">edit</span>
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="hotline-info"><b class="l-security">Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
+                    </div>
+                    <div class="hotline-item">
+                        <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
+                        <i class="fas fa-user-shield"></i>
+                        <div class="hotline-info"><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
+                    </div>
+                    <div class="hotline-item">
+                        <span class="edit-btn" onclick="editPhone('bfp')">edit</span>
+                        <i class="fas fa-fire-extinguisher"></i>
+                        <div class="hotline-info"><b>BFP Cabagan</b><a id="num-bfp" href="tel:117">117 / (078) 123-4567</a></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        /* =========================================
-           DATABASE SYSTEM (LOCAL STORAGE WRAPPER)
-           =========================================
-        */
-        const DB = {
-            // AUTH DATABASE
-            handleRegister: function() {
-                const user = document.getElementById('reg-user').value;
-                const pass = document.getElementById('reg-pass').value;
-                const role = document.getElementById('reg-role').value;
-                
-                if(!user || !pass) return alert("Complete the fields!");
-                
-                let accounts = JSON.parse(localStorage.getItem('db_accounts')) || {};
-                if(accounts[user]) return alert("Username already exists!");
-
-                accounts[user] = { password: pass, role: role };
-                localStorage.setItem('db_accounts', JSON.stringify(accounts));
-                
-                alert("Account Saved to Database!");
-                toggleAuthForm();
-            },
-
-            handleLogin: function() {
-                const user = document.getElementById('login-user').value;
-                const pass = document.getElementById('login-pass').value;
-                let accounts = JSON.parse(localStorage.getItem('db_accounts')) || {};
-
-                if(accounts[user] && accounts[user].password === pass) {
-                    localStorage.setItem('session_active', 'true');
-                    localStorage.setItem('session_role', accounts[user].role);
-                    localStorage.setItem('session_user', user);
-                    location.reload();
-                } else {
-                    alert("Account not found or wrong password!");
-                }
-            },
-
-            handleLogout: function() {
-                localStorage.removeItem('session_active');
-                localStorage.removeItem('session_role');
-                location.reload();
-            },
-
-            // FREEDOM WALL DATABASE
-            sendShout: function() {
-                const text = document.getElementById('shoutInput').value;
-                const user = localStorage.getItem('session_user') || 'Guest';
-                if(!text) return;
-
-                let wall = JSON.parse(localStorage.getItem('db_wall')) || [];
-                wall.push({ user: user, text: text, time: new Date().toLocaleTimeString() });
-                localStorage.setItem('db_wall', JSON.stringify(wall));
-                
-                document.getElementById('shoutInput').value = '';
-                this.loadWall();
-            },
-
-            loadWall: function() {
-                const wall = JSON.parse(localStorage.getItem('db_wall')) || [];
-                document.getElementById('shout-box').innerHTML = wall.map(m => `
-                    <div style="border-bottom:1px solid #eee; padding:5px; font-size:12px;">
-                        <b>${m.user}:</b> ${m.text} <small style="color:#999; float:right;">${m.time}</small>
-                    </div>
-                `).join('');
-            }
-        };
-
-        /* =========================================
-           UI CONTROL LOGIC
-           =========================================
-        */
-        function applyRoleUI() {
-            const role = localStorage.getItem('session_role');
-            const adminEls = document.querySelectorAll('.admin-only');
-            const title = document.getElementById('dashboard-title');
-
-            if(role === 'admin') {
-                adminEls.forEach(el => el.style.display = 'block');
-                title.innerText = "Admin Dashboard";
-            } else {
-                adminEls.forEach(el => el.style.display = 'none');
-                title.innerText = "User Dashboard";
-            }
+        /* --- SESSION SECURITY CHECK --- */
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            document.getElementById('auth-overlay').style.display = 'none';
         }
 
         function toggleAuthForm() {
@@ -291,16 +218,93 @@
             document.getElementById('register-form').classList.toggle('hidden');
         }
 
+        function handleRegister() {
+            const user = document.getElementById('reg-user').value;
+            const pass = document.getElementById('reg-pass').value;
+            if(!user || !pass) return alert("Please fill all fields");
+            
+            localStorage.setItem(`user_${user}`, pass);
+            alert("Registration Successful! Please login.");
+            toggleAuthForm();
+        }
+
+        function handleLogin() {
+            const user = document.getElementById('login-user').value;
+            const pass = document.getElementById('login-pass').value;
+            const savedPass = localStorage.getItem(`user_${user}`);
+
+            if(savedPass && savedPass === pass) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', user);
+                document.getElementById('auth-overlay').style.display = 'none';
+                // Hindi na natin pinapalitan ang innerText dito para manatiling "Admin Dashboard"
+            } else {
+                alert("Invalid Username or Password!");
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            location.reload();
+        }
+
+        /* --- DASHBOARD LOGIC --- */
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+
+        let isTagalog = false;
+        function changeLang() {
+            isTagalog = !isTagalog;
+            const t = {
+                title: isTagalog ? "SISTEMA NG ONLINE EVENT SA ISU" : "ISU ONLINE EVENT SYSTEM",
+                standing: isTagalog ? "Kasalukuyang Standing ng Departamento" : "Live Department Standings",
+                wall: isTagalog ? "Freedom Wall (Sulat Dito)" : "Freedom Wall",
+                directory: isTagalog ? "Direktoryo ng Emergency" : "Emergency Directory",
+                clinic: isTagalog ? "Klinika ng Campus" : "Campus Clinic",
+                security: isTagalog ? "Seguridad" : "Security",
+                cal: isTagalog ? "KALENDARYO" : "CALENDAR",
+                reg: isTagalog ? "REHISTRO" : "REGISTRATION",
+                act: isTagalog ? "AKTIBIDAD" : "ACTIVITIES",
+                lead: isTagalog ? "LEADERBOARD" : "LEADERBOARD",
+                vote: isTagalog ? "BOTOHAN" : "VOTING",
+                attn: isTagalog ? "ATENDANS" : "ATTENDANCE",
+                lost: isTagalog ? "NAWALA/NAKIT-AN" : "LOST & FOUND"
+            };
+            
+            document.getElementById('main-title').innerText = t.title;
+            document.getElementById('standing-title').innerHTML = `<i class="fas fa-chart-line"></i> ${t.standing}`;
+            document.getElementById('wall-title').innerHTML = `<i class="fas fa-comment-dots"></i> ${t.wall}`;
+            document.getElementById('hotline-title').innerHTML = `<i class="fas fa-phone-alt"></i> ${t.directory}`;
+            document.querySelector('.l-clinic').innerText = t.clinic;
+            document.querySelector('.l-security').innerText = t.security;
+            
+            document.querySelector('.txt-cal').innerText = t.cal;
+            document.querySelector('.txt-reg').innerText = t.reg;
+            document.querySelector('.txt-act').innerText = t.act;
+            document.querySelector('.txt-lead').innerText = t.lead;
+            document.querySelector('.txt-vote').innerText = t.vote;
+            document.querySelector('.txt-attn').innerText = t.attn;
+            document.querySelector('.txt-lost').innerText = t.lost;
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+
+        function showInfo() {
+            alert("ISU Event Hub v2.8\nSystem Status: Online\nSession: Active");
+        }
 
         window.onload = function() {
-            if(localStorage.getItem('session_active') === 'true') {
-                document.getElementById('auth-overlay').style.display = 'none';
-                applyRoleUI();
-            }
-            DB.loadWall();
+            // Restore session settings but KEEP "Admin Dashboard" label
+            if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
+            if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+            
+            loadNums(); 
+            loadShouts();
             renderChart();
-            setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
         };
 
         function renderChart() {
@@ -310,15 +314,68 @@
                 data: {
                     labels: ['CCSICT', 'CTE', 'CBA', 'CAES', 'CCJE'],
                     datasets: [{
-                        label: 'Live Points',
+                        label: 'Points',
                         data: [1200, 1100, 900, 850, 150],
-                        backgroundColor: '#2d5a27'
+                        backgroundColor: 'rgba(45, 90, 39, 0.85)',
+                        borderColor: '#facc15',
+                        borderWidth: 2,
+                        borderRadius: 5
                     }]
                 },
                 options: { maintainAspectRatio: false }
             });
         }
-    </script>
+
+        function editPhone(id) {
+            const n = prompt("Enter new number for " + id + ":");
+            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
+        }
+
+        function loadNums() {
+            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
+                const s = localStorage.getItem('num-'+k);
+                if(s) {
+                    const el = document.getElementById('num-'+k);
+                    el.innerText = s;
+                    el.href = "tel:" + s.replace(/\D/g,'');
+                }
+            });
+        }
+
+        function sendShout() {
+            const val = document.getElementById('shoutInput').value;
+            if(!val) return;
+            let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
+            shouts.push({ text: val, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            localStorage.setItem('shouts', JSON.stringify(shouts));
+            document.getElementById('shoutInput').value = '';
+            loadShouts();
+        }
+
+        function loadShouts() {
+            const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
+            document.getElementById('shout-box').innerHTML = shouts.map(s => `
+                <div style="background:white; padding:8px; border-radius:5px; margin-bottom:5px; border-left:4px solid var(--isu-gold); font-size:12px; color:black;">
+                    <b>User:</b> ${s.text} <span style="float:right; font-size:9px; color:#999;">${s.time}</span>
+                </div>
+            `).join('');
+            document.getElementById('shout-box').scrollTop = document.getElementById('shout-box').scrollHeight;
+        }
+
+        function editAdmin() {
+
+// Option to change the text if really needed, but defaults to Admin Dashboard const name = prompt("Change Dashboard Title:", "Admin Dashboard"); if(name) { document.getEle mentById('admin-name').innerText = name; } }
+
+function previewImg(input) {
+
+const reader = new FileReader();
+
+reader.onload = e => { document.getElementById('logo-preview').src = e.target.result; localStorage.setItem('adminPic', e.target.result); } }
+
+reader.readAsDataURL (input.files[0]);
+
+</script>
+
 </body>
-                        </html>
-                        
+
+</html>
