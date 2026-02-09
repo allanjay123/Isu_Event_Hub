@@ -12,55 +12,45 @@
             --bg: #f0f2f5; --card-bg: #ffffff; --text: #2c3e50; 
         }
 
-        /* SESSION GUARD CSS - PINAKA-IMPORTANTE */
-        #auth-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--isu-green); z-index: 5000;
-            display: flex; align-items: center; justify-content: center;
+        /* DARK MODE OVERRIDE */
+        body.dark-mode {
+            --bg: #121212; --card-bg: #1e1e1e; --text: #e0e0e0;
         }
-        
-        /* ROLE DISPLAY LOGIC - Naka-set sa !important para hindi ma-override */
-        .admin-only, .user-only { display: none !important; }
-        
-        /* Ipakita lang ang tama sa role na naka-save */
-        body.role-admin .admin-only { display: block !important; }
-        body.role-admin .nav-item.admin-only { display: block !important; }
-        
-        body.role-user .user-only { display: block !important; }
-        body.role-user .nav-item.user-only { display: block !important; }
-
-        /* Login Card Styles */
-        .auth-card {
-            background: white; padding: 30px; border-radius: 15px;
-            width: 350px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            text-align: center; border-top: 5px solid var(--isu-gold);
-        }
-        .auth-card input {
-            width: 100%; padding: 12px; margin: 10px 0;
-            border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
-        }
-        .auth-btn {
-            width: 100%; padding: 12px; background: var(--isu-green);
-            color: white; border: none; border-radius: 8px; cursor: pointer;
-            font-weight: bold; margin-top: 10px;
-        }
-        .auth-btn:hover { background: #1e3d1a; }
-        .switch-auth { font-size: 12px; margin-top: 15px; cursor: pointer; color: #666; }
-        .hidden { display: none !important; }
-
-        /* Dashboard General Styles */
-        body.dark-mode { --bg: #1a1a1a; --card-bg: #2d2d2d; --text: #f0f0f0; }
-        body.dark-mode .glass-card, body.dark-mode .admin-card, body.dark-mode .sidebar { background: var(--card-bg); color: var(--text); }
-        body.dark-mode .nav-item { background: #3d3d3d; color: white; }
 
         body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); transition: 0.3s; }
         
+        /* AUTH SCREEN */
+        #auth-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--isu-green), #1e3d1a);
+            display: flex; align-items: center; justify-content: center; z-index: 9999;
+        }
+        .auth-container {
+            background: var(--card-bg); padding: 30px; border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 100%; max-width: 400px;
+            text-align: center; border-top: 5px solid var(--isu-gold);
+        }
+        .auth-input {
+            width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd;
+            border-radius: 8px; box-sizing: border-box; outline: none;
+        }
+        .auth-btn {
+            width: 100%; padding: 12px; background: var(--isu-green); color: white;
+            border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px;
+        }
+        .toggle-link { margin-top: 15px; display: block; font-size: 13px; color: #666; cursor: pointer; text-decoration: underline; }
+
+        /* DASHBOARD (HIDDEN UNTIL LOGIN) */
+        #main-dashboard { display: none; }
+
+        /* HEADER */
         .header { 
             background: linear-gradient(135deg, var(--isu-green), #1e3d1a); color: white; 
             padding: 12px 40px; display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000;
         }
 
+        /* SIDEBAR */
         .sidebar {
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
             background: var(--card-bg); box-shadow: 5px 0 15px rgba(0,0,0,0.1);
@@ -68,249 +58,261 @@
         }
         .sidebar.active { left: 0; }
         .sidebar-header { background: var(--isu-green); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--isu-gold); }
-        .sidebar-item { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; font-weight: 500; }
-        .sidebar-item:hover { background: #f8f9fa; color: var(--isu-green); border-right: 4px solid var(--isu-gold); }
+        .sidebar-item { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; font-weight: 500; color: var(--text); }
+        .sidebar-item:hover { background: rgba(250, 204, 21, 0.1); color: var(--isu-green); border-right: 4px solid var(--isu-gold); }
 
+        /* MAIN CONTAINER */
         .container { max-width: 98%; margin: 20px auto; padding: 0 15px; }
 
         .admin-card { 
-            background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
+            background: var(--card-bg); padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
             display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border-left: 10px solid var(--isu-gold);
         }
         #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
 
+        /* 3-COLUMN LAYOUT */
         .main-wrapper { display: grid; grid-template-columns: 200px 1fr 340px; gap: 20px; }
 
+        /* GLASS CARD & SECTIONS */
         .glass-card { 
-            background: white; border-radius: 15px; padding: 20px; 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
-            border: 2px solid var(--isu-gold); margin-bottom: 20px;
+            background: var(--card-bg); border-radius: 15px; padding: 20px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05); border: 2px solid var(--isu-gold); 
+            transition: 0.3s;
         }
-        .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
+        body.dark-mode .section-title { color: var(--isu-gold); }
+
+        /* NAV MENU */
         .nav-menu { display: flex; flex-direction: column; gap: 10px; }
         .nav-item { 
-            background: white; padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
+            background: var(--card-bg); padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom: 4px solid var(--isu-gold);
-            font-size: 11px; font-weight: bold; color: var(--text); transition: 0.3s;
+            font-size: 11px; font-weight: bold; color: var(--text); cursor: pointer; transition: 0.3s;
         }
         .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
         .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
         .chart-container { height: 320px; position: relative; }
-        .wall-box { height: 180px; overflow-y: auto; background: #fdfdfd; padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
-        
-        .hotline-item { 
-            background: #fffdf5; border: 1px solid #f9f1d0; padding: 10px; border-radius: 10px; 
-            display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
-        }
-        .hotline-item i { color: #d9534f; font-size: 16px; }
-        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 10; }
-        .hotline-info b { font-size: 12px; display: block; }
-        .hotline-info a { font-size: 11px; color: #0044ff; font-weight: bold; text-decoration: underline; display: block; }
 
-        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } .nav-item { width: 100px; } }
+        /* WALL & HOTLINES */
+        .wall-box { height: 180px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
+        .hotline-item { background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.2); padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative; }
+        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: var(--isu-green); cursor: pointer; text-decoration: underline; font-weight: bold; }
+
+        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
-
-    <script>
-        // --- INSTANT GUARD SCRIPT ---
-        // Ito ang pumipigil sa login/flicker habang naglo-load ang page
-        (function() {
-            const loggedIn = localStorage.getItem('isLoggedIn');
-            const role = localStorage.getItem('sessionRole');
-            if (loggedIn === 'true') {
-                // I-inject ang CSS agad para tago ang login
-                document.write(`<style>#auth-overlay { display: none !important; }</style>`);
-                // I-set ang role sa body class agad
-                document.documentElement.className = 'role-' + role; 
-            }
-        })();
-    </script>
 </head>
-<body id="main-body">
+<body>
 
-    <div id="auth-overlay">
-        <div class="auth-card" id="login-form">
-            <i class="fas fa-university" style="font-size: 40px; color: var(--isu-green); margin-bottom: 10px;"></i>
-            <h2 id="login-title">System Login</h2>
-            <input type="text" id="login-user" placeholder="Username / ID Number">
-            <input type="password" id="login-pass" placeholder="Password">
-            <button class="auth-btn" onclick="handleLogin()">Log In</button>
-            <div class="switch-auth" onclick="toggleAuthForm()">Don't have an account? Register Student</div>
+    <div id="auth-screen">
+        <div id="login-form" class="auth-container">
+            <i class="fas fa-university" style="font-size: 40px; color: var(--isu-green);"></i>
+            <h2>ISU Login</h2>
+            <input type="text" id="log-id" class="auth-input" placeholder="Student ID">
+            <input type="password" id="log-pass" class="auth-input" placeholder="Password">
+            <button class="auth-btn" onclick="handleLogin()">LOGIN</button>
+            <span class="toggle-link" onclick="toggleAuth(false)">No account? Register here</span>
         </div>
-
-        <div class="auth-card hidden" id="register-form">
-            <i class="fas fa-user-plus" style="font-size: 40px; color: var(--isu-green); margin-bottom: 10px;"></i>
-            <h2>Student Registration</h2>
-            <input type="text" id="reg-fullname" placeholder="Full Name">
-            <input type="text" id="reg-id" placeholder="ID Number">
-            <input type="text" id="reg-user" placeholder="Create Username">
-            <input type="password" id="reg-pass" placeholder="Create Password">
-            <button class="auth-btn" onclick="handleRegister()">Register</button>
-            <div class="switch-auth" onclick="toggleAuthForm()">Already have an account? Login</div>
+        <div id="register-form" class="auth-container" style="display: none;">
+            <i class="fas fa-user-plus" style="font-size: 40px; color: var(--isu-green);"></i>
+            <h2>Register</h2>
+            <input type="text" id="reg-name" class="auth-input" placeholder="Full Name">
+            <input type="text" id="reg-id" class="auth-input" placeholder="Student ID">
+            <input type="password" id="reg-pass" class="auth-input" placeholder="Password">
+            <button class="auth-btn" onclick="handleRegister()">CREATE ACCOUNT</button>
+            <span class="toggle-link" onclick="toggleAuth(true)">Have account? Login</span>
         </div>
     </div>
 
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
-        <div class="sidebar-item" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</div>
-        <div class="sidebar-item" onclick="changeLang()"><i class="fas fa-language"></i> Change Language (EN/TG)</div>
-        <div class="sidebar-item" onclick="showInfo()"><i class="fas fa-info-circle"></i> System Info</div>
-        <div class="sidebar-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Dashboard</div>
-        <div class="sidebar-item" onclick="handleLogout()" style="color:orange;"><i class="fas fa-sign-out-alt"></i> Log Out</div>
-        <div class="sidebar-item" onclick="toggleMenu()" style="color:red;"><i class="fas fa-times"></i> Close</div>
-    </div>
-
-    <div class="header">
-        <div class="header-left">
-            <i class="fas fa-bars menu-btn" onclick="toggleMenu()" style="cursor:pointer;"></i>
-            <span id="main-title" style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
+    <div id="main-dashboard">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
+            <div class="sidebar-item" onclick="toggleDarkMode()"><i id="dm-icon" class="fas fa-moon"></i> <span id="dm-text">Dark Mode</span></div>
+            <div class="sidebar-item" onclick="changeLanguage()"><i class="fas fa-language"></i> <span id="lang-text">Change Language</span></div>
+            <div class="sidebar-item" onclick="showSystemInfo()"><i class="fas fa-info-circle"></i> System Info</div>
+            <div class="sidebar-item" onclick="logout()" style="color:orange;"><i class="fas fa-sign-out-alt"></i> Logout</div>
+            <div class="sidebar-item" onclick="toggleMenu()" style="color:red;"><i class="fas fa-times"></i> Close</div>
         </div>
-        <div id="clock" style="font-family: monospace; font-weight: bold; font-size: 14px;">00:00:00 PM</div>
-    </div>
 
-    <div class="container">
-        <div class="admin-card">
-            <img id="logo-preview" src="https://via.placeholder.com/65?text=USER" onclick="document.getElementById('img-input').click()">
-            <input type="file" id="img-input" style="display:none;" onchange="previewImg(this)">
-            <div>
-                <h3 id="display-name" style="margin:0; font-size: 18px;">Welcome!</h3>
-                <p id="display-role" style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
-                <a href="#" onclick="editAdmin()" class="admin-only" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Dashboard Title</a>
+        <div class="header">
+            <div class="header-left">
+                <i class="fas fa-bars menu-btn" onclick="toggleMenu()" style="cursor:pointer;"></i>
+                <span id="nav-title" style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
             </div>
+            <div id="clock" style="font-family: monospace; font-weight: bold; font-size: 14px;">00:00:00 PM</div>
         </div>
 
-        <div class="main-wrapper">
-            <div class="nav-menu">
-                <a href="calendar.html" class="nav-item admin-only"><i class="fas fa-calendar-alt"></i><span class="txt-cal">CALENDAR</span></a>
-                <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span class="txt-reg">REGISTRATION</span></a>
-                <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span class="txt-act">ACTIVITIES</span></a>
-                <a href="leaderboard.html" class="nav-item admin-only"><i class="fas fa-trophy"></i><span class="txt-lead">LEADERBOARD</span></a>
-                <a href="voting.html" class="nav-item admin-only"><i class="fas fa-poll"></i><span class="txt-vote">VOTING</span></a>
-                <a href="attendance.html" class="nav-item admin-only"><i class="fas fa-id-card"></i><span class="txt-attn">ATTENDANCE</span></a>
-                <a href="lostfound.html" class="nav-item admin-only"><i class="fas fa-search"></i><span class="txt-lost">LOST & FOUND</span></a>
-            </div>
-
-            <div class="glass-card">
-                <div id="standing-title" class="section-title"><i class="fas fa-chart-line"></i> Live Department Standings</div>
-                <div class="chart-container">
-                    <canvas id="pointsChart"></canvas>
+        <div class="container">
+            <div class="admin-card">
+                <img id="logo-preview" src="https://via.placeholder.com/65?text=LOGO" onclick="document.getElementById('img-input').click()">
+                <input type="file" id="img-input" style="display:none;" onchange="previewImg(this)">
+                <div>
+                    <h3 id="admin-name" style="margin:0; font-size: 18px;">Welcome User</h3>
+                    <p id="admin-sub" style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
+                    <a href="#" onclick="editAdmin()" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Profile</a>
                 </div>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div class="glass-card">
-                    <div id="wall-title" class="section-title"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
-                    <div id="shout-box" class="wall-box"></div>
-                    <div style="display:flex; gap:5px;">
-                        <input type="text" id="shoutInput" style="flex:1; padding:8px; border-radius:5px; border:1px solid #ddd;" placeholder="Cheer here...">
-                        <button onclick="sendShout()" style="background:var(--isu-green); color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer;">Post</button>
+            <div class="main-wrapper">
+                <div class="nav-menu">
+                    <div class="nav-item" onclick="showSection('standing-section')"><i class="fas fa-chart-line"></i><span>DASHBOARD</span></div>
+                    <div class="nav-item" onclick="showSection('calendar-section')"><i class="fas fa-calendar-alt"></i><span>CALENDAR</span></div>
+                    <div class="nav-item" onclick="showSection('registration-section')"><i class="fas fa-user-plus"></i><span>REGISTRATION</span></div>
+                    <div class="nav-item" onclick="showSection('activities-section')"><i class="fas fa-running"></i><span>ACTIVITIES</span></div>
+                    <div class="nav-item" onclick="showSection('leaderboard-section')"><i class="fas fa-trophy"></i><span>LEADERBOARD</span></div>
+                    <div class="nav-item" onclick="showSection('voting-section')"><i class="fas fa-poll"></i><span>VOTING</span></div>
+                    <div class="nav-item" onclick="showSection('lost-found-section')"><i class="fas fa-search"></i><span>LOST & FOUND</span></div>
+                </div>
+
+                <div id="content-display">
+                    <div id="standing-section" class="content-section active glass-card">
+                        <div class="section-title"><i class="fas fa-chart-line"></i> Live Department Standings</div>
+                        <div class="chart-container">
+                            <canvas id="pointsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="calendar-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-calendar-alt"></i> Event Calendar</div>
+                        <p>📅 <b>Feb 15-20:</b> Intramurals Week 2026</p>
+                        <p>📅 <b>Mar 10:</b> University Foundation Day</p>
+                    </div>
+
+                    <div id="registration-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-user-plus"></i> Event Registration</div>
+                        <p>Select an event to join:</p>
+                        <select class="auth-input">
+                            <option>Basketball Men's</option>
+                            <option>Chess Tournament</option>
+                            <option>Quiz Bee</option>
+                        </select>
+                        <button class="auth-btn">Register Now</button>
+                    </div>
+
+                    <div id="activities-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-running"></i> Current Activities</div>
+                        <ul>
+                            <li>Ongoing: Men's Volleyball - Court 1</li>
+                            <li>Upcoming: Mobile Legends Finals - 2PM</li>
+                        </ul>
+                    </div>
+
+                    <div id="leaderboard-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-trophy"></i> Official Leaderboard</div>
+                        <p>🥇 CCSICT - 1200 pts</p>
+                        <p>🥈 CTE - 1100 pts</p>
+                        <p>🥉 CBA - 900 pts</p>
+                    </div>
+
+                    <div id="voting-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-poll"></i> Student Voting</div>
+                        <p>Vote for your favorite candidate in Mr. & Ms. ISU 2026.</p>
+                        <button class="auth-btn">Go to Voting Portal</button>
+                    </div>
+
+                    <div id="lost-found-section" class="content-section glass-card">
+                        <div class="section-title"><i class="fas fa-search"></i> Lost & Found</div>
+                        <p>🔑 Found: Car keys at the Gymnasium entrance.</p>
+                        <p>📱 Lost: Blue Samsung phone at the Canteen.</p>
                     </div>
                 </div>
 
-                <div class="glass-card">
-                    <div id="hotline-title" class="section-title"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
-                    <div class="hotline-item">
-                        <span class="edit-btn admin-only" onclick="editPhone('clinic')">edit</span>
-                        <i class="fas fa-ambulance"></i>
-                        <div class="hotline-info"><b class="l-clinic">Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="glass-card">
+                        <div class="section-title" id="title-wall"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
+                        <div id="shout-box" class="wall-box"></div>
+                        <div style="display:flex; gap:5px;">
+                            <input type="text" id="shoutInput" style="flex:1; padding:8px; border-radius:5px; border:1px solid #ddd;" placeholder="Cheer here...">
+                            <button onclick="sendShout()" style="background:var(--isu-green); color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer;">Post</button>
+                        </div>
                     </div>
-                    <div class="hotline-item">
-                        <span class="edit-btn admin-only" onclick="editPhone('security')">edit</span>
-                        <i class="fas fa-shield-alt"></i>
-                        <div class="hotline-info"><b class="l-security">Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
-                    </div>
-                    <div class="hotline-item admin-only">
-                        <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
-                        <i class="fas fa-user-shield"></i>
-                        <div class="hotline-info"><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
+
+                    <div class="glass-card">
+                        <div class="section-title" id="title-hotline"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
+                        <div class="hotline-item">
+                            <span class="edit-btn" onclick="editPhone('clinic')">edit</span>
+                            <i class="fas fa-ambulance"></i>
+                            <div class="hotline-info"><b>Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                        </div>
+                        <div class="hotline-item">
+                            <span class="edit-btn" onclick="editPhone('security')">edit</span>
+                            <i class="fas fa-shield-alt"></i>
+                            <div class="hotline-info"><b>Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    
 
     <script>
-        // STATIC ADMIN SETUP
-        if(!localStorage.getItem('user_admin')) {
-            localStorage.setItem('user_admin', 'admin123');
-            localStorage.setItem('profile_admin', JSON.stringify({fullname: "System Administrator", id: "00-0000", role: "admin"}));
+        // --- NAVIGATION LOGIC ---
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(window.innerWidth < 1024) toggleMenu();
         }
 
-        function toggleAuthForm() {
-            document.getElementById('login-form').classList.toggle('hidden');
-            document.getElementById('register-form').classList.toggle('hidden');
+        // --- AUTH LOGIC ---
+        function toggleAuth(isLogin) {
+            document.getElementById('login-form').style.display = isLogin ? 'block' : 'none';
+            document.getElementById('register-form').style.display = isLogin ? 'none' : 'block';
         }
 
         function handleRegister() {
-            const fullname = document.getElementById('reg-fullname').value;
-            const idnum = document.getElementById('reg-id').value;
-            const user = document.getElementById('reg-user').value;
+            const name = document.getElementById('reg-name').value;
+            const id = document.getElementById('reg-id').value;
             const pass = document.getElementById('reg-pass').value;
-            if(!fullname || !idnum || !user || !pass) return alert("Please fill all fields");
-            localStorage.setItem(`user_${user}`, pass);
-            localStorage.setItem(`profile_${user}`, JSON.stringify({fullname: fullname, id: idnum, role: 'user'}));
-            alert("Registration Successful! Please login.");
-            toggleAuthForm();
+            if(!name || !id || !pass) return alert("Fill all fields");
+            
+            let users = JSON.parse(localStorage.getItem('isu_users')) || [];
+            users.push({name, id, pass});
+            localStorage.setItem('isu_users', JSON.stringify(users));
+            alert("Success! Please Login.");
+            toggleAuth(true);
         }
 
         function handleLogin() {
-            const user = document.getElementById('login-user').value;
-            const pass = document.getElementById('login-pass').value;
-            const savedPass = localStorage.getItem(`user_${user}`);
-            if(savedPass && savedPass === pass) {
-                const profile = JSON.parse(localStorage.getItem(`profile_${user}`));
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('sessionRole', profile.role);
-                localStorage.setItem('sessionName', profile.fullname);
-                location.reload(); // Refresh to apply body class
-            } else {
-                alert("Invalid Username or Password!");
-            }
+            const id = document.getElementById('log-id').value;
+            const pass = document.getElementById('log-pass').value;
+            const users = JSON.parse(localStorage.getItem('isu_users')) || [];
+            
+            if(id === "admin" && pass === "1234") { loginDone("Admin User"); return; }
+            const user = users.find(u => u.id === id && u.pass === pass);
+            if(user) loginDone(user.name);
+            else alert("Invalid credentials!");
         }
 
-        function handleLogout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('sessionRole');
-            localStorage.removeItem('sessionName');
+        function loginDone(name) {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('currentUser', name);
             location.reload();
         }
 
-        function applyRoleSettings(role, name) {
-            document.body.classList.remove('role-admin', 'role-user');
-            document.body.classList.add('role-' + role);
-            document.getElementById('display-name').innerText = name;
-            document.getElementById('display-role').innerText = (role === 'admin' ? "System Administrator" : "ISU Student");
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            location.reload();
         }
+
+        // --- CORE FUNCTIONS ---
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
         window.onload = function() {
-            const loggedIn = localStorage.getItem('isLoggedIn');
-            const role = localStorage.getItem('sessionRole');
-            const name = localStorage.getItem('sessionName');
-
-            if (loggedIn === 'true') {
-                document.getElementById('auth-overlay').style.display = 'none';
-                applyRoleSettings(role, name);
+            if(localStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-dashboard').style.display = 'block';
+                document.getElementById('admin-name').innerText = localStorage.getItem('currentUser');
             }
-
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
-            if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
-            
-            setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
-            renderChart();
-            loadNums();
-            loadShouts();
+            if(localStorage.getItem('darkMode') === 'true') applyDarkMode(true);
+            loadNums(); loadShouts(); renderChart();
         };
-
-        // UI Functions
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        }
 
         function renderChart() {
             const ctx = document.getElementById('pointsChart').getContext('2d');
@@ -319,53 +321,101 @@
                 data: {
                     labels: ['CCSICT', 'CTE', 'CBA', 'CAES', 'CCJE'],
                     datasets: [{
-                        label: 'Points',
+                        label: 'Live Points',
                         data: [1200, 1100, 900, 850, 150],
-                        backgroundColor: 'rgba(45, 90, 39, 0.85)',
+                        backgroundColor: '#2d5a27',
                         borderColor: '#facc15',
                         borderWidth: 2
                     }]
-                },
-                options: { maintainAspectRatio: false }
+                }
             });
+        }
+
+        function toggleDarkMode() {
+            const isDark = !document.body.classList.contains('dark-mode');
+            applyDarkMode(isDark);
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        function applyDarkMode(isDark) {
+            const icon = document.getElementById('dm-icon');
+            const text = document.getElementById('dm-text');
+            if(isDark) {
+                document.body.classList.add('dark-mode');
+                icon.className = 'fas fa-sun';
+                text.innerText = "Light Mode";
+            } else {
+                document.body.classList.remove('dark-mode');
+                icon.className = 'fas fa-moon';
+                text.innerText = "Dark Mode";
+            }
         }
 
         function sendShout() {
             const val = document.getElementById('shoutInput').value;
             if(!val) return;
             let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            shouts.push({ user: localStorage.getItem('sessionName') || "Guest", text: val, time: new Date().toLocaleTimeString() });
+            shouts.push({ text: val, time: new Date().toLocaleTimeString() });
             localStorage.setItem('shouts', JSON.stringify(shouts));
             document.getElementById('shoutInput').value = '';
             loadShouts();
         }
 
         function loadShouts() {
-            const s = JSON.parse(localStorage.getItem('shouts')) || [];
-            document.getElementById('shout-box').innerHTML = s.map(x => `<div><b>${x.user}:</b> ${x.text}</div>`).join('');
-        }
 
-        function editPhone(id) {
-            const n = prompt("New number:");
-            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
-        }
+const shouts =
 
-        function loadNums() {
-            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
-                const s = localStorage.getItem('num-'+k);
-                if(s) document.getElementById('num-'+k).innerText = s;
-            });
-        }
+JSON.parse(localStorage.getItem('shouts')) || [];
 
-        function previewImg(input) {
-            const reader = new FileReader();
-            reader.onload = e => { 
-                document.getElementById('logo-preview').src = e.target.result; 
-                localStorage.setItem('adminPic', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
+document.getElementById('shout-box').innerHTML = shouts.map(s => '<div><b>User:</b> ${s.text}</div>').join("); }
+
+function editPhone(id) {
+
+const n = prompt("Enter new number:");
+
+if(n) { localStorage.setItem('num-'+id, n); loadNums(); } }
+
+function loadNums() {
+
+['clinic', 'security'].forEach(k => {
+
+const s =
+
+localStorage.getItem('num-'+k);
+
+if(s)
+
+{ document.getElementById('num-'+k).innerText = s; }
+
+});
+
         }
-    </script>
+  function previewImg(input) {
+
+if (input.files && input.files[0]) {
+
+const reader = new FileReader();
+
+reader.onload = e => {
+
+document.getElementById('logo-preview').src =
+
+e.target.result;
+
+localStorage.setItem('adminPic',
+
+e.target.result);
+
+}
+
+reader.readAsDataURL (input.files[0]);
+
+ }
+
+}
+
+</script>
+
 </body>
-                    </html>
-                    
+
+</html>          
