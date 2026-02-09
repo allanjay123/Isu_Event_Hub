@@ -32,7 +32,7 @@
         }
         .auth-input {
             width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd;
-            border-radius: 8px; box-sizing: border-box; outline: none; background: white; color: black;
+            border-radius: 8px; box-sizing: border-box; outline: none;
         }
         .auth-btn {
             width: 100%; padding: 12px; background: var(--isu-green); color: white;
@@ -100,20 +100,12 @@
         .chart-container { height: 320px; position: relative; }
 
         /* WALL & HOTLINES */
-        .wall-box { height: 180px; overflow-y: auto; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #ddd; margin-bottom: 10px; color: var(--text); }
+        .wall-box { height: 180px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
         .hotline-item { background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.2); padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative; }
         .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: var(--isu-green); cursor: pointer; text-decoration: underline; font-weight: bold; }
 
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
     </style>
-    <script>
-        // --- REFRESH FIX: Instant Guard ---
-        (function() {
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                document.write('<style>#auth-screen { display: none !important; }</style>');
-            }
-        })();
-    </script>
 </head>
 <body>
 
@@ -278,14 +270,12 @@
             const name = document.getElementById('reg-name').value;
             const id = document.getElementById('reg-id').value;
             const pass = document.getElementById('reg-pass').value;
-            if(!name || !id || !pass) return alert("Please fill all fields");
+            if(!name || !id || !pass) return alert("Fill all fields");
             
             let users = JSON.parse(localStorage.getItem('isu_users')) || [];
-            if(users.some(u => u.id === id)) return alert("ID already registered!");
-            
             users.push({name, id, pass});
             localStorage.setItem('isu_users', JSON.stringify(users));
-            alert("Registration Success! You can now login.");
+            alert("Success! Please Login.");
             toggleAuth(true);
         }
 
@@ -294,12 +284,10 @@
             const pass = document.getElementById('log-pass').value;
             const users = JSON.parse(localStorage.getItem('isu_users')) || [];
             
-            // Test Admin account
             if(id === "admin" && pass === "1234") { loginDone("Admin User"); return; }
-            
             const user = users.find(u => u.id === id && u.pass === pass);
             if(user) loginDone(user.name);
-            else alert("Invalid ID or Password!");
+            else alert("Invalid credentials!");
         }
 
         function loginDone(name) {
@@ -310,7 +298,6 @@
 
         function logout() {
             localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('currentUser');
             location.reload();
         }
 
@@ -322,11 +309,10 @@
             if(localStorage.getItem('isLoggedIn') === 'true') {
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('main-dashboard').style.display = 'block';
-                document.getElementById('admin-name').innerText = localStorage.getItem('currentUser') || "User";
+                document.getElementById('admin-name').innerText = localStorage.getItem('currentUser');
             }
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             if(localStorage.getItem('darkMode') === 'true') applyDarkMode(true);
-            
             loadNums(); loadShouts(); renderChart();
         };
 
@@ -343,8 +329,7 @@
                         borderColor: '#facc15',
                         borderWidth: 2
                     }]
-                },
-                options: { maintainAspectRatio: false }
+                }
             });
         }
 
@@ -354,7 +339,7 @@
             localStorage.setItem('darkMode', isDark);
         }
 
-         function applyDarkMode(isDark) {
+        function applyDarkMode(isDark) {
             const icon = document.getElementById('dm-icon');
             const text = document.getElementById('dm-text');
             if(isDark) {
@@ -370,50 +355,69 @@
 
         function sendShout() {
             const val = document.getElementById('shoutInput').value;
-            const currentUser = localStorage.getItem('currentUser') || "Guest";
             if(!val) return;
             let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            shouts.push({ user: currentUser, text: val });
+            shouts.push({ text: val, time: new Date().toLocaleTimeString() });
             localStorage.setItem('shouts', JSON.stringify(shouts));
             document.getElementById('shoutInput').value = '';
             loadShouts();
         }
 
         function loadShouts() {
-            const shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            document.getElementById('shout-box').innerHTML = shouts.map(s => `<div><b>${s.user}:</b> ${s.text}</div>`).join('');
-        }
 
-        function editPhone(id) {
-            const n = prompt("Enter new number:");
-            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
-        }
+const shouts =
 
-        function loadNums() {
-            ['clinic', 'security'].forEach(k => {
-                const s = localStorage.getItem('num-'+k);
-                if(s) { document.getElementById('num-'+k).innerText = s; }
-            });
-        }
+JSON.parse(localStorage.getItem('shouts')) || [];
 
-        function previewImg(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    document.getElementById('logo-preview').src = e.target.result;
-                    localStorage.setItem('adminPic', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+document.getElementById('shout-box').innerHTML = shouts.map(s => '<div><b>User:</b> ${s.text}</div>').join("); }
 
-        function editAdmin() {
-            const newName = prompt("Enter new name:", localStorage.getItem('currentUser'));
-            if(newName) {
-                localStorage.setItem('currentUser', newName);
-                document.getElementById('admin-name').innerText = newName;
-            }
+function editPhone(id) {
+
+const n = prompt("Enter new number:");
+
+if(n) { localStorage.setItem('num-'+id, n); loadNums(); } }
+
+function loadNums() {
+
+['clinic', 'security'].forEach(k => {
+
+const s =
+
+localStorage.getItem('num-'+k);
+
+if(s)
+
+{ document.getElementById('num-'+k).innerText = s; }
+
+});
+
         }
-    </script>
+  function previewImg(input) {
+
+if (input.files && input.files[0]) {
+
+const reader = new FileReader();
+
+reader.onload = e => {
+
+document.getElementById('logo-preview').src =
+
+e.target.result;
+
+localStorage.setItem('adminPic',
+
+e.target.result);
+
+}
+
+reader.readAsDataURL (input.files[0]);
+
+ }
+
+}
+
+</script>
+
 </body>
+
 </html>
