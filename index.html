@@ -18,6 +18,9 @@
             background: var(--isu-green); z-index: 5000;
             display: flex; align-items: center; justify-content: center;
         }
+        /* CSS Class para siguradong tago */
+        .auth-hidden { display: none !important; }
+
         .auth-card {
             background: white; padding: 30px; border-radius: 15px;
             width: 350px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
@@ -211,16 +214,22 @@
     </div>
 
     <script>
-        /* --- DUAL LOGIN & REGISTRATION LOGIC --- */
-        
-        // Initial Admin Account (melchor admin / larry 1234)
-        const ADMIN_USER = "melchor admin";
-        const ADMIN_PASS = "larry 1234";
+        // ADMIN CREDENTIALS
+        const ADM_U = "melchor admin";
+        const ADM_P = "larry 1234";
 
-        if(!localStorage.getItem(`user_${ADMIN_USER}`)) {
-            localStorage.setItem(`user_${ADMIN_USER}`, ADMIN_PASS);
-            localStorage.setItem(`profile_${ADMIN_USER}`, JSON.stringify({fullname: "System Administrator", id: "00-0000", role: "admin"}));
+        // Pre-save Admin Account
+        if(!localStorage.getItem(`user_${ADM_U}`)) {
+            localStorage.setItem(`user_${ADM_U}`, ADM_P);
+            localStorage.setItem(`profile_${ADM_U}`, JSON.stringify({fullname: "System Administrator", id: "00-0000", role: "admin"}));
         }
+
+        // --- SESSION GUARD: RUNS IMMEDIATELY ---
+        (function checkSession() {
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                document.write('<style>#auth-overlay { display: none !important; }</style>');
+            }
+        })();
 
         function toggleAuthForm() {
             document.getElementById('login-form').classList.toggle('hidden');
@@ -237,9 +246,7 @@
             
             localStorage.setItem(`user_${user}`, pass);
             localStorage.setItem(`profile_${user}`, JSON.stringify({
-                fullname: fullname,
-                id: idnum,
-                role: 'user'
+                fullname: fullname, id: idnum, role: 'user'
             }));
             
             alert("Registration Successful! Please login.");
@@ -257,9 +264,8 @@
                 localStorage.setItem('sessionRole', profile.role);
                 localStorage.setItem('sessionName', profile.fullname);
                 
-                // Hide overlay immediately
-                document.getElementById('auth-overlay').style.display = 'none';
-                applyRoleSettings(profile.role, profile.fullname);
+                // Hide and Refresh
+                document.getElementById('auth-overlay').classList.add('auth-hidden');
                 location.reload(); 
             } else {
                 alert("Invalid Username or Password!");
@@ -275,40 +281,35 @@
         }
 
         function handleLogout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('sessionRole');
-            localStorage.removeItem('sessionName');
+            localStorage.clear(); // O i-clear lang ang specific keys
+            localStorage.setItem('isLoggedIn', 'false');
             location.reload();
         }
 
-        /* --- DASHBOARD CORE LOGIC --- */
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
-
+        // --- INITIALIZATION ---
         window.onload = function() {
-            // Check if user is already logged in to prevent login overlay from showing on refresh
             const loggedIn = localStorage.getItem('isLoggedIn');
             const role = localStorage.getItem('sessionRole');
             const name = localStorage.getItem('sessionName');
 
             if (loggedIn === 'true') {
-                document.getElementById('auth-overlay').classList.add('hidden'); // Use CSS class to hide
-                document.getElementById('auth-overlay').style.display = 'none'; // Extra safety
+                document.getElementById('auth-overlay').classList.add('auth-hidden');
                 applyRoleSettings(role, name);
             } else {
-                // If not logged in, ensure overlay is visible
+                document.getElementById('auth-overlay').classList.remove('auth-hidden');
                 document.getElementById('auth-overlay').style.display = 'flex';
             }
 
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
             if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
             
-            loadNums(); 
-            loadShouts();
-            renderChart();
+            loadNums(); loadShouts(); renderChart();
         };
 
-        // Standard Dashboard Functions
+        // DASHBOARD UTILS
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+
         let isTagalog = false;
         function changeLang() {
             isTagalog = !isTagalog;
@@ -316,17 +317,11 @@
                 title: isTagalog ? "SISTEMA NG ONLINE EVENT SA ISU" : "ISU ONLINE EVENT SYSTEM",
                 standing: isTagalog ? "Kasalukuyang Standing ng Departamento" : "Live Department Standings",
                 wall: isTagalog ? "Freedom Wall (Sulat Dito)" : "Freedom Wall",
-                directory: isTagalog ? "Direktoryo ng Emergency" : "Emergency Directory",
-                cal: isTagalog ? "KALENDARYO" : "CALENDAR",
-                reg: isTagalog ? "REHISTRO" : "REGISTRATION",
-                act: isTagalog ? "AKTIBIDAD" : "ACTIVITIES"
+                directory: isTagalog ? "Direktoryo ng Emergency" : "Emergency Directory"
             };
             document.getElementById('main-title').innerText = t.title;
             document.getElementById('standing-title').innerHTML = `<i class="fas fa-chart-line"></i> ${t.standing}`;
             document.getElementById('wall-title').innerHTML = `<i class="fas fa-comment-dots"></i> ${t.wall}`;
-            document.querySelector('.txt-cal').innerText = t.cal;
-            document.querySelector('.txt-reg').innerText = t.reg;
-            document.querySelector('.txt-act').innerText = t.act;
         }
 
         function toggleDarkMode() {
@@ -363,10 +358,7 @@
                 const s = localStorage.getItem('num-'+k);
                 if(s) {
                     const el = document.getElementById('num-'+k);
-                    if(el) {
-                        el.innerText = s;
-                        el.href = "tel:" + s.replace(/\D/g,'');
-                    }
+                    if(el) { el.innerText = s; el.href = "tel:" + s.replace(/\D/g,''); }
                 }
             });
         }
@@ -375,8 +367,7 @@
             const val = document.getElementById('shoutInput').value;
             if(!val) return;
             let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
-            const userSender = localStorage.getItem('sessionName') || "Guest";
-            shouts.push({ user: userSender, text: val, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            shouts.push({ user: localStorage.getItem('sessionName') || "Guest", text: val, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
             localStorage.setItem('shouts', JSON.stringify(shouts));
             document.getElementById('shoutInput').value = '';
             loadShouts();
@@ -404,7 +395,7 @@
         }
 
         function showInfo() {
-            alert("ISU Event Hub v3.1\nAdmin: Melchor\nRole: " + localStorage.getItem('sessionRole') + "\nStatus: Authorized");
+            alert("ISU Event Hub v3.2\nPersistence: Fixed\nRole: " + localStorage.getItem('sessionRole'));
         }
     </script>
 </body>
