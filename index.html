@@ -12,70 +12,118 @@
             --bg: #f0f2f5; --card-bg: #ffffff; --text: #2c3e50; 
         }
 
-        /* 1. SESSION GUARD CSS - PINAKA-IMPORTANTE PARA SA REFRESH */
+        /* SESSION GUARD CSS - PINAKA-IMPORTANTE */
         #auth-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--isu-green); z-index: 5000;
             display: flex; align-items: center; justify-content: center;
         }
         
-        /* Default: Itago ang lahat ng role-based elements */
+        /* ROLE DISPLAY LOGIC - Naka-set sa !important para hindi ma-override */
         .admin-only, .user-only { display: none !important; }
         
-        /* Ipakita LANG ang para sa Admin kung ang body ay may class na role-admin */
+        /* Ipakita lang ang tama sa role na naka-save */
         body.role-admin .admin-only { display: block !important; }
         body.role-admin .nav-item.admin-only { display: block !important; }
         
-        /* Ipakita LANG ang para sa User kung ang body ay may class na role-user */
         body.role-user .user-only { display: block !important; }
         body.role-user .nav-item.user-only { display: block !important; }
 
-        /* General Styles */
-        body.dark-mode { --bg: #1a1a1a; --card-bg: #2d2d2d; --text: #f0f0f0; }
-        body.dark-mode .glass-card, body.dark-mode .admin-card, body.dark-mode .sidebar { background: var(--card-bg); color: var(--text); }
-        body { background: var(--bg); font-family: 'Inter', sans-serif; margin: 0; color: var(--text); transition: 0.3s; }
-
-        .auth-card { background: white; padding: 30px; border-radius: 15px; width: 350px; text-align: center; border-top: 5px solid var(--isu-gold); }
-        .auth-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .auth-btn { width: 100%; padding: 12px; background: var(--isu-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* Login Card Styles */
+        .auth-card {
+            background: white; padding: 30px; border-radius: 15px;
+            width: 350px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center; border-top: 5px solid var(--isu-gold);
+        }
+        .auth-card input {
+            width: 100%; padding: 12px; margin: 10px 0;
+            border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+        }
+        .auth-btn {
+            width: 100%; padding: 12px; background: var(--isu-green);
+            color: white; border: none; border-radius: 8px; cursor: pointer;
+            font-weight: bold; margin-top: 10px;
+        }
+        .auth-btn:hover { background: #1e3d1a; }
+        .switch-auth { font-size: 12px; margin-top: 15px; cursor: pointer; color: #666; }
         .hidden { display: none !important; }
 
-        .header { background: linear-gradient(135deg, var(--isu-green), #1e3d1a); color: white; padding: 12px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--card-bg); transition: 0.4s; z-index: 2000; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+        /* Dashboard General Styles */
+        body.dark-mode { --bg: #1a1a1a; --card-bg: #2d2d2d; --text: #f0f0f0; }
+        body.dark-mode .glass-card, body.dark-mode .admin-card, body.dark-mode .sidebar { background: var(--card-bg); color: var(--text); }
+        body.dark-mode .nav-item { background: #3d3d3d; color: white; }
+
+        body { background: var(--bg); font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: var(--text); transition: 0.3s; }
+        
+        .header { 
+            background: linear-gradient(135deg, var(--isu-green), #1e3d1a); color: white; 
+            padding: 12px 40px; display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000;
+        }
+
+        .sidebar {
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+            background: var(--card-bg); box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            transition: 0.4s ease; z-index: 2000;
+        }
         .sidebar.active { left: 0; }
         .sidebar-header { background: var(--isu-green); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--isu-gold); }
-        .sidebar-item { padding: 15px 25px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 500; }
-        .sidebar-item:hover { background: #f8f9fa; color: var(--isu-green); }
+        .sidebar-item { padding: 15px 25px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; font-weight: 500; }
+        .sidebar-item:hover { background: #f8f9fa; color: var(--isu-green); border-right: 4px solid var(--isu-gold); }
 
         .container { max-width: 98%; margin: 20px auto; padding: 0 15px; }
-        .admin-card { background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 20px; border-left: 10px solid var(--isu-gold); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; }
+
+        .admin-card { 
+            background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; 
+            display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 10px solid var(--isu-gold);
+        }
+        #logo-preview { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--isu-gold); object-fit: cover; cursor: pointer; }
 
         .main-wrapper { display: grid; grid-template-columns: 200px 1fr 340px; gap: 20px; }
+
+        .glass-card { 
+            background: white; border-radius: 15px; padding: 20px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05); 
+            border: 2px solid var(--isu-gold); margin-bottom: 20px;
+        }
+        .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; }
+
         .nav-menu { display: flex; flex-direction: column; gap: 10px; }
-        .nav-item { background: white; padding: 12px; border-radius: 10px; text-decoration: none; text-align: center; color: var(--text); font-weight: bold; font-size: 11px; border-bottom: 4px solid var(--isu-gold); }
-        .nav-item:hover { background: var(--isu-green); color: white; }
+        .nav-item { 
+            background: white; padding: 12px; border-radius: 10px; text-decoration: none; text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom: 4px solid var(--isu-gold);
+            font-size: 11px; font-weight: bold; color: var(--text); transition: 0.3s;
+        }
+        .nav-item:hover { background: var(--isu-green); color: white; transform: scale(1.02); }
         .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
 
-        .glass-card { background: white; border-radius: 15px; padding: 20px; border: 2px solid var(--isu-gold); margin-bottom: 20px; }
-        .section-title { font-size: 14px; font-weight: 800; color: var(--isu-green); text-transform: uppercase; border-bottom: 2px solid var(--isu-gold); padding-bottom: 5px; margin-bottom: 15px; }
-        .wall-box { height: 180px; overflow-y: auto; background: #fdfdfd; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
+        .chart-container { height: 320px; position: relative; }
+        .wall-box { height: 180px; overflow-y: auto; background: #fdfdfd; padding: 10px; border-radius: 10px; font-size: 13px; border: 1px solid #eee; margin-bottom: 10px; }
         
-        .hotline-item { background: #fffdf5; border: 1px solid #f9f1d0; padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative; }
-        .edit-btn { position: absolute; right: 8px; top: 5px; font-size: 9px; cursor: pointer; color: var(--isu-green); text-decoration: underline; }
-        
-        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; } }
+        .hotline-item { 
+            background: #fffdf5; border: 1px solid #f9f1d0; padding: 10px; border-radius: 10px; 
+            display: flex; align-items: center; gap: 12px; margin-bottom: 8px; position: relative;
+        }
+        .hotline-item i { color: #d9534f; font-size: 16px; }
+        .edit-btn { position: absolute; top: 5px; right: 8px; font-size: 9px; color: #2d5a27; cursor: pointer; text-decoration: underline; font-weight: bold; z-index: 10; }
+        .hotline-info b { font-size: 12px; display: block; }
+        .hotline-info a { font-size: 11px; color: #0044ff; font-weight: bold; text-decoration: underline; display: block; }
+
+        @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } .nav-item { width: 100px; } }
     </style>
 
     <script>
-        // --- INSTANT EXECUTION GUARD ---
-        // Ito ang pumipigil sa login screen at user dashboard bago pa man mag-render ang page.
+        // --- INSTANT GUARD SCRIPT ---
+        // Ito ang pumipigil sa login/flicker habang naglo-load ang page
         (function() {
             const loggedIn = localStorage.getItem('isLoggedIn');
             const role = localStorage.getItem('sessionRole');
             if (loggedIn === 'true') {
-                // Itago agad ang login overlay gamit ang CSS injection
-                document.write('<style>#auth-overlay { display: none !important; }</style>');
+                // I-inject ang CSS agad para tago ang login
+                document.write(`<style>#auth-overlay { display: none !important; }</style>`);
+                // I-set ang role sa body class agad
+                document.documentElement.className = 'role-' + role; 
             }
         })();
     </script>
@@ -84,146 +132,112 @@
 
     <div id="auth-overlay">
         <div class="auth-card" id="login-form">
-            <i class="fas fa-university" style="font-size: 40px; color: var(--isu-green); mb: 10px;"></i>
-            <h2>System Login</h2>
+            <i class="fas fa-university" style="font-size: 40px; color: var(--isu-green); margin-bottom: 10px;"></i>
+            <h2 id="login-title">System Login</h2>
             <input type="text" id="login-user" placeholder="Username / ID Number">
             <input type="password" id="login-pass" placeholder="Password">
             <button class="auth-btn" onclick="handleLogin()">Log In</button>
-            <div style="margin-top:15px; font-size:12px; cursor:pointer;" onclick="toggleAuthForm()">Register Student</div>
+            <div class="switch-auth" onclick="toggleAuthForm()">Don't have an account? Register Student</div>
         </div>
 
         <div class="auth-card hidden" id="register-form">
+            <i class="fas fa-user-plus" style="font-size: 40px; color: var(--isu-green); margin-bottom: 10px;"></i>
             <h2>Student Registration</h2>
             <input type="text" id="reg-fullname" placeholder="Full Name">
             <input type="text" id="reg-id" placeholder="ID Number">
-            <input type="text" id="reg-user" placeholder="Username">
-            <input type="password" id="reg-pass" placeholder="Password">
+            <input type="text" id="reg-user" placeholder="Create Username">
+            <input type="password" id="reg-pass" placeholder="Create Password">
             <button class="auth-btn" onclick="handleRegister()">Register</button>
-            <div style="margin-top:15px; font-size:12px; cursor:pointer;" onclick="toggleAuthForm()">Back to Login</div>
+            <div class="switch-auth" onclick="toggleAuthForm()">Already have an account? Login</div>
         </div>
     </div>
 
     <div class="sidebar" id="sidebar">
-        <div class="sidebar-header"><h3>SYSTEM MENU</h3></div>
+        <div class="sidebar-header"><i class="fas fa-university" style="font-size: 30px;"></i><h3>SYSTEM MENU</h3></div>
         <div class="sidebar-item" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</div>
-        <div class="sidebar-item" onclick="handleLogout()" style="color:red;"><i class="fas fa-sign-out-alt"></i> Log Out</div>
-        <div class="sidebar-item" onclick="toggleMenu()">Close Menu</div>
+        <div class="sidebar-item" onclick="changeLang()"><i class="fas fa-language"></i> Change Language (EN/TG)</div>
+        <div class="sidebar-item" onclick="showInfo()"><i class="fas fa-info-circle"></i> System Info</div>
+        <div class="sidebar-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Dashboard</div>
+        <div class="sidebar-item" onclick="handleLogout()" style="color:orange;"><i class="fas fa-sign-out-alt"></i> Log Out</div>
+        <div class="sidebar-item" onclick="toggleMenu()" style="color:red;"><i class="fas fa-times"></i> Close</div>
     </div>
 
     <div class="header">
-        <div><i class="fas fa-bars" onclick="toggleMenu()" style="cursor:pointer;"></i> <span id="main-title">ISU ONLINE EVENT SYSTEM</span></div>
-        <div id="clock">00:00:00 PM</div>
+        <div class="header-left">
+            <i class="fas fa-bars menu-btn" onclick="toggleMenu()" style="cursor:pointer;"></i>
+            <span id="main-title" style="font-weight: bold; margin-left: 15px; letter-spacing: 1px;">ISU ONLINE EVENT SYSTEM</span>
+        </div>
+        <div id="clock" style="font-family: monospace; font-weight: bold; font-size: 14px;">00:00:00 PM</div>
     </div>
 
     <div class="container">
         <div class="admin-card">
-            <img id="logo-preview" src="https://via.placeholder.com/65?text=ISU" onclick="document.getElementById('img-input').click()">
+            <img id="logo-preview" src="https://via.placeholder.com/65?text=USER" onclick="document.getElementById('img-input').click()">
             <input type="file" id="img-input" style="display:none;" onchange="previewImg(this)">
             <div>
-                <h3 id="display-name" style="margin:0;">Welcome!</h3>
-                <p id="display-role" style="margin:2px 0; font-size: 12px;"></p>
-                <button class="admin-only" onclick="editAdminTitle()" style="font-size:10px;">Edit Title</button>
+                <h3 id="display-name" style="margin:0; font-size: 18px;">Welcome!</h3>
+                <p id="display-role" style="margin:2px 0; font-size: 12px; color: #666;">Isabela State University - Cabagan</p>
+                <a href="#" onclick="editAdmin()" class="admin-only" style="font-size: 10px; color: var(--isu-green); font-weight: bold;">Edit Dashboard Title</a>
             </div>
         </div>
 
         <div class="main-wrapper">
             <div class="nav-menu">
-                <a href="#" class="nav-item admin-only"><i class="fas fa-calendar-alt"></i>CALENDAR</a>
-                <a href="#" class="nav-item admin-only"><i class="fas fa-trophy"></i>LEADERBOARD</a>
-                <a href="#" class="nav-item admin-only"><i class="fas fa-poll"></i>VOTING</a>
-                <a href="#" class="nav-item admin-only"><i class="fas fa-id-card"></i>ATTENDANCE</a>
-                
-                <a href="#" class="nav-item"><i class="fas fa-user-plus"></i>REGISTRATION</a>
-                <a href="#" class="nav-item"><i class="fas fa-running"></i>ACTIVITIES</a>
-                <a href="#" class="nav-item admin-only"><i class="fas fa-search"></i>LOST & FOUND</a>
+                <a href="calendar.html" class="nav-item admin-only"><i class="fas fa-calendar-alt"></i><span class="txt-cal">CALENDAR</span></a>
+                <a href="registration.html" class="nav-item"><i class="fas fa-user-plus"></i><span class="txt-reg">REGISTRATION</span></a>
+                <a href="activities.html" class="nav-item"><i class="fas fa-running"></i><span class="txt-act">ACTIVITIES</span></a>
+                <a href="leaderboard.html" class="nav-item admin-only"><i class="fas fa-trophy"></i><span class="txt-lead">LEADERBOARD</span></a>
+                <a href="voting.html" class="nav-item admin-only"><i class="fas fa-poll"></i><span class="txt-vote">VOTING</span></a>
+                <a href="attendance.html" class="nav-item admin-only"><i class="fas fa-id-card"></i><span class="txt-attn">ATTENDANCE</span></a>
+                <a href="lostfound.html" class="nav-item admin-only"><i class="fas fa-search"></i><span class="txt-lost">LOST & FOUND</span></a>
             </div>
 
             <div class="glass-card">
-                <div class="section-title">Department Standings</div>
-                <div style="height: 300px;"><canvas id="pointsChart"></canvas></div>
+                <div id="standing-title" class="section-title"><i class="fas fa-chart-line"></i> Live Department Standings</div>
+                <div class="chart-container">
+                    <canvas id="pointsChart"></canvas>
+                </div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div class="glass-card">
-                    <div class="section-title">Freedom Wall</div>
+                    <div id="wall-title" class="section-title"><i class="fas fa-comment-dots"></i> Freedom Wall</div>
                     <div id="shout-box" class="wall-box"></div>
-                    <div style="display:flex; margin-top:10px; gap:5px;">
-                        <input type="text" id="shoutInput" style="flex:1; padding:5px;" placeholder="Post a message...">
-                        <button onclick="sendShout()">Post</button>
+                    <div style="display:flex; gap:5px;">
+                        <input type="text" id="shoutInput" style="flex:1; padding:8px; border-radius:5px; border:1px solid #ddd;" placeholder="Cheer here...">
+                        <button onclick="sendShout()" style="background:var(--isu-green); color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer;">Post</button>
                     </div>
                 </div>
 
                 <div class="glass-card">
-                    <div class="section-title">Emergency Directory</div>
+                    <div id="hotline-title" class="section-title"><i class="fas fa-phone-alt"></i> Emergency Directory</div>
                     <div class="hotline-item">
                         <span class="edit-btn admin-only" onclick="editPhone('clinic')">edit</span>
                         <i class="fas fa-ambulance"></i>
-                        <div><b>Clinic:</b> <a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
+                        <div class="hotline-info"><b class="l-clinic">Campus Clinic</b><a id="num-clinic" href="tel:09123456789">0912-345-6789</a></div>
                     </div>
                     <div class="hotline-item">
-                        <span class="edit-btn admin-only" onclick="editPhone('pnp')">edit</span>
+                        <span class="edit-btn admin-only" onclick="editPhone('security')">edit</span>
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="hotline-info"><b class="l-security">Security</b><a id="num-security" href="tel:09223334444">0922-333-4444</a></div>
+                    </div>
+                    <div class="hotline-item admin-only">
+                        <span class="edit-btn" onclick="editPhone('pnp')">edit</span>
                         <i class="fas fa-user-shield"></i>
-                        <div><b>PNP Cabagan:</b> <a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
-                    </div>
-                    <div class="hotline-item">
-                        <span class="edit-btn admin-only" onclick="editPhone('bfp')">edit</span>
-                        <i class="fas fa-fire-extinguisher"></i>
-                        <div><b>BFP Cabagan:</b> <a id="num-bfp" href="tel:117">117 / (078) 123-4567</a></div>
+                        <div class="hotline-info"><b>PNP Cabagan</b><a id="num-pnp" href="tel:09887776655">0988-777-6655</a></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    
+
     <script>
-        const ADM_U = "melchor admin";
-        const ADM_P = "larry 1234";
-
-        // Initial Admin Setup
-        if(!localStorage.getItem(`user_${ADM_U}`)) {
-            localStorage.setItem(`user_${ADM_U}`, ADM_P);
-            localStorage.setItem(`profile_${ADM_U}`, JSON.stringify({fullname: "Melchor (Admin)", role: "admin"}));
-        }
-
-        function handleLogin() {
-            const u = document.getElementById('login-user').value;
-            const p = document.getElementById('login-pass').value;
-            const savedP = localStorage.getItem(`user_${u}`);
-
-            if(savedP === p) {
-                const profile = JSON.parse(localStorage.getItem(`profile_${u}`));
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('sessionRole', profile.role);
-                localStorage.setItem('sessionName', profile.fullname);
-                location.reload(); // Refresh para ma-apply ang role classes
-            } else {
-                alert("Maling login details!");
-            }
-        }
-
-        window.onload = function() {
-            const loggedIn = localStorage.getItem('isLoggedIn');
-            const role = localStorage.getItem('sessionRole');
-            const name = localStorage.getItem('sessionName');
-
-            if (loggedIn === 'true') {
-                // I-apply ang role sa body class para sa CSS Guard
-                document.body.classList.add('role-' + role);
-                document.getElementById('display-name').innerText = name;
-                document.getElementById('display-role').innerText = (role === 'admin' ? "System Administrator" : "Student");
-                
-                // Siguradong tago ang login
-                document.getElementById('auth-overlay').classList.add('hidden');
-            }
-
-            // Load extra features
-            loadNums(); loadShouts(); renderChart();
-            setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
-        };
-
-        function handleLogout() {
-            localStorage.setItem('isLoggedIn', 'false');
-            location.reload();
+        // STATIC ADMIN SETUP
+        if(!localStorage.getItem('user_admin')) {
+            localStorage.setItem('user_admin', 'admin123');
+            localStorage.setItem('profile_admin', JSON.stringify({fullname: "System Administrator", id: "00-0000", role: "admin"}));
         }
 
         function toggleAuthForm() {
@@ -232,14 +246,70 @@
         }
 
         function handleRegister() {
-            const u = document.getElementById('reg-user').value;
-            const p = document.getElementById('reg-pass').value;
-            const f = document.getElementById('reg-fullname').value;
-            if(!u || !p) return alert("Punan lahat!");
-            localStorage.setItem(`user_${u}`, p);
-            localStorage.setItem(`profile_${u}`, JSON.stringify({fullname: f, role: 'user'}));
-            alert("Registered! Login na.");
+            const fullname = document.getElementById('reg-fullname').value;
+            const idnum = document.getElementById('reg-id').value;
+            const user = document.getElementById('reg-user').value;
+            const pass = document.getElementById('reg-pass').value;
+            if(!fullname || !idnum || !user || !pass) return alert("Please fill all fields");
+            localStorage.setItem(`user_${user}`, pass);
+            localStorage.setItem(`profile_${user}`, JSON.stringify({fullname: fullname, id: idnum, role: 'user'}));
+            alert("Registration Successful! Please login.");
             toggleAuthForm();
+        }
+
+        function handleLogin() {
+            const user = document.getElementById('login-user').value;
+            const pass = document.getElementById('login-pass').value;
+            const savedPass = localStorage.getItem(`user_${user}`);
+            if(savedPass && savedPass === pass) {
+                const profile = JSON.parse(localStorage.getItem(`profile_${user}`));
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('sessionRole', profile.role);
+                localStorage.setItem('sessionName', profile.fullname);
+                location.reload(); // Refresh to apply body class
+            } else {
+                alert("Invalid Username or Password!");
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('sessionRole');
+            localStorage.removeItem('sessionName');
+            location.reload();
+        }
+
+        function applyRoleSettings(role, name) {
+            document.body.classList.remove('role-admin', 'role-user');
+            document.body.classList.add('role-' + role);
+            document.getElementById('display-name').innerText = name;
+            document.getElementById('display-role').innerText = (role === 'admin' ? "System Administrator" : "ISU Student");
+        }
+
+        window.onload = function() {
+            const loggedIn = localStorage.getItem('isLoggedIn');
+            const role = localStorage.getItem('sessionRole');
+            const name = localStorage.getItem('sessionName');
+
+            if (loggedIn === 'true') {
+                document.getElementById('auth-overlay').style.display = 'none';
+                applyRoleSettings(role, name);
+            }
+
+            if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
+            if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+            
+            setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+            renderChart();
+            loadNums();
+            loadShouts();
+        };
+
+        // UI Functions
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
         }
 
         function renderChart() {
@@ -248,42 +318,54 @@
                 type: 'bar',
                 data: {
                     labels: ['CCSICT', 'CTE', 'CBA', 'CAES', 'CCJE'],
-                    datasets: [{ label: 'Points', data: [1200, 1100, 900, 850, 400], backgroundColor: '#2d5a27' }]
+                    datasets: [{
+                        label: 'Points',
+                        data: [1200, 1100, 900, 850, 150],
+                        backgroundColor: 'rgba(45, 90, 39, 0.85)',
+                        borderColor: '#facc15',
+                        borderWidth: 2
+                    }]
                 },
                 options: { maintainAspectRatio: false }
             });
         }
 
-        function editPhone(id) {
-            const n = prompt("Bagong number:");
-            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
-        }
-
-        function loadNums() {
-            ['clinic', 'pnp', 'bfp'].forEach(k => {
-                const s = localStorage.getItem('num-'+k);
-                if(s) { document.getElementById('num-'+k).innerText = s; }
-            });
-        }
-
         function sendShout() {
-            const v = document.getElementById('shoutInput').value;
-            if(!v) return;
-            let s = JSON.parse(localStorage.getItem('shouts')) || [];
-            s.push({ name: localStorage.getItem('sessionName'), msg: v });
-            localStorage.setItem('shouts', JSON.stringify(s));
-            document.getElementById('shoutInput').value = "";
+            const val = document.getElementById('shoutInput').value;
+            if(!val) return;
+            let shouts = JSON.parse(localStorage.getItem('shouts')) || [];
+            shouts.push({ user: localStorage.getItem('sessionName') || "Guest", text: val, time: new Date().toLocaleTimeString() });
+            localStorage.setItem('shouts', JSON.stringify(shouts));
+            document.getElementById('shoutInput').value = '';
             loadShouts();
         }
 
         function loadShouts() {
             const s = JSON.parse(localStorage.getItem('shouts')) || [];
-            document.getElementById('shout-box').innerHTML = s.map(x => `<div><b>${x.name}:</b> ${x.msg}</div>`).join('');
+            document.getElementById('shout-box').innerHTML = s.map(x => `<div><b>${x.user}:</b> ${x.text}</div>`).join('');
         }
 
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
+        function editPhone(id) {
+            const n = prompt("New number:");
+            if(n) { localStorage.setItem('num-'+id, n); loadNums(); }
+        }
+
+        function loadNums() {
+            ['clinic', 'security', 'pnp', 'bfp'].forEach(k => {
+                const s = localStorage.getItem('num-'+k);
+                if(s) document.getElementById('num-'+k).innerText = s;
+            });
+        }
+
+        function previewImg(input) {
+            const reader = new FileReader();
+            reader.onload = e => { 
+                document.getElementById('logo-preview').src = e.target.result; 
+                localStorage.setItem('adminPic', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
     </script>
 </body>
-            </html>
-            
+                            </html>
+                            
