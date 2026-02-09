@@ -107,7 +107,7 @@
         @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; } .nav-item { width: 100px; } }
     </style>
 </head>
-<body>
+<body id="main-body">
 
     <div id="auth-overlay">
         <div class="auth-card" id="login-form">
@@ -213,10 +213,13 @@
     <script>
         /* --- DUAL LOGIN & REGISTRATION LOGIC --- */
         
-        // Initial Admin Account (Static)
-        if(!localStorage.getItem('user_admin')) {
-            localStorage.setItem('user_admin', 'admin123');
-            localStorage.setItem('profile_admin', JSON.stringify({fullname: "System Administrator", id: "00-0000", role: "admin"}));
+        // Initial Admin Account (melchor admin / larry 1234)
+        const ADMIN_USER = "melchor admin";
+        const ADMIN_PASS = "larry 1234";
+
+        if(!localStorage.getItem(`user_${ADMIN_USER}`)) {
+            localStorage.setItem(`user_${ADMIN_USER}`, ADMIN_PASS);
+            localStorage.setItem(`profile_${ADMIN_USER}`, JSON.stringify({fullname: "System Administrator", id: "00-0000", role: "admin"}));
         }
 
         function toggleAuthForm() {
@@ -254,17 +257,19 @@
                 localStorage.setItem('sessionRole', profile.role);
                 localStorage.setItem('sessionName', profile.fullname);
                 
+                // Hide overlay immediately
                 document.getElementById('auth-overlay').style.display = 'none';
                 applyRoleSettings(profile.role, profile.fullname);
-                location.reload(); // Refresh to apply role classes to body
+                location.reload(); 
             } else {
                 alert("Invalid Username or Password!");
             }
         }
 
         function applyRoleSettings(role, name) {
-            document.body.classList.remove('role-admin', 'role-user');
-            document.body.classList.add('role-' + role);
+            const body = document.getElementById('main-body');
+            body.classList.remove('role-admin', 'role-user');
+            body.classList.add('role-' + role);
             document.getElementById('display-name').innerText = name;
             document.getElementById('display-role').innerText = (role === 'admin' ? "System Administrator" : "ISU Student");
         }
@@ -281,13 +286,18 @@
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
         window.onload = function() {
+            // Check if user is already logged in to prevent login overlay from showing on refresh
             const loggedIn = localStorage.getItem('isLoggedIn');
             const role = localStorage.getItem('sessionRole');
             const name = localStorage.getItem('sessionName');
 
             if (loggedIn === 'true') {
-                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('auth-overlay').classList.add('hidden'); // Use CSS class to hide
+                document.getElementById('auth-overlay').style.display = 'none'; // Extra safety
                 applyRoleSettings(role, name);
+            } else {
+                // If not logged in, ensure overlay is visible
+                document.getElementById('auth-overlay').style.display = 'flex';
             }
 
             if(localStorage.getItem('adminPic')) document.getElementById('logo-preview').src = localStorage.getItem('adminPic');
@@ -394,7 +404,7 @@
         }
 
         function showInfo() {
-            alert("ISU Event Hub v3.0\nRole: " + localStorage.getItem('sessionRole') + "\nStatus: Authorized");
+            alert("ISU Event Hub v3.1\nAdmin: Melchor\nRole: " + localStorage.getItem('sessionRole') + "\nStatus: Authorized");
         }
     </script>
 </body>
